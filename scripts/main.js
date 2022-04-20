@@ -15,7 +15,8 @@ world.events.beforeChat.subscribe(eventData => {
 })
 
 world.events.playerJoin.subscribe(eventData => {
-    log("玩家加入");
+    const player = eventData.player
+    log(`§a${player} §r歡迎來到§kmdalkda`);
 })
 
 world.events.itemUse.subscribe(eventData => {

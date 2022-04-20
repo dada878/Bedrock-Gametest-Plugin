@@ -16,7 +16,10 @@ world.events.beforeChat.subscribe(eventData => {
 
 world.events.playerJoin.subscribe(eventData => {
     const player = eventData.player
-    log(`§a${player} §r歡迎來到§kmdalkda`);
+
+    log(`§e${player} §r歡迎來到§kmdalkda`);
+
+    cmd(`give "${player}" clock 0 1`)
 })
 
 world.events.itemUse.subscribe(eventData => {

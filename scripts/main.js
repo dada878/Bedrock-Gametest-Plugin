@@ -29,7 +29,7 @@ world.events.itemUse.subscribe(eventData => {
     fm.body("made by 冰川MCC");
     fm.button('§l§5稱號系統', 'textures/ui/mute_off.png');
     fm.button('§l§5家園系統', 'textures/ui/icon_recipe_item.png');
-    fm.button('§l§5玩家互傳', 'textures/ui/icon_import.png');
+    fm.button('§l§5玩家互傳', 'textures/ui/icon_multiplayer.png');
     fm.button('§l§5匯款系統', 'textures/ui/MCoin.png');
     if (player.hasTag("admin")) fm.button('§l§5管理員選單', 'textures/ui/dev_glyph_color.png');
 

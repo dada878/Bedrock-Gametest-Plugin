@@ -4,6 +4,8 @@ import {cmd, GetWorldPlayersName, log, logfor} from './lib/GametestFunctions.js'
 import {getData, setData} from './lib/JsonTagDB.js';
 import {ChangeChat, sendMessage} from './system/chat.js'
 import { AdminMenu } from "./system/admin.js";
+import {HomeSystem} from "./system/home.js"
+import { TpaSystem } from "./system/tpa.js";
 
 world.events.beforeChat.subscribe(eventData => {
     eventData.cancel = true;
@@ -35,6 +37,8 @@ world.events.itemUse.subscribe(eventData => {
 
     const FROM_RESPONSES = {
         0:ChangeChat,
+        1:HomeSystem,
+        2:TpaSystem,
         4:AdminMenu
     }
 

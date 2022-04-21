@@ -9,6 +9,7 @@ function AdminMenu(player) {
     fm.body("made by 冰川MCC");
     fm.button('§l§5給予稱號', 'textures/ui/mute_off.png');
     fm.button('§l§5移除稱號', 'textures/ui/mute_on.png');
+    fm.button('§l§5踢出玩家', 'textures/ui/smithing_icon.png');
 
     fm.show(player).then(response => {
         if (!response) return;

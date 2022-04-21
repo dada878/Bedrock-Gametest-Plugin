@@ -1,0 +1,12 @@
+{
+    "ActionForm": {
+        "title": "標題",
+        "body": "內容",
+        "buttons": {
+            "按鈕1": "say button1",
+            "按鈕2": "say button2"
+        },
+        "onClose": "kill @s"
+    }
+}
+

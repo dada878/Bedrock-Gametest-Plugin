@@ -113,3 +113,5 @@ function getHomes(player) {
     }
     return homes
 }
+
+export {HomeSystem};

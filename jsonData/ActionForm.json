@@ -6,7 +6,6 @@
             "按鈕1": "say button1",
             "按鈕2": "say button2"
         },
-        "onClose": "kill @s"
+        "onClose": "say close but not click any"
     }
 }
-

@@ -52,6 +52,22 @@ function GetPlayerTags(Playername) {
     }
 }
 
+function GetScores (target, scoreboard) {
+    try {
+        const scoreMessage = cmd(`scoreboard players operation "${target}" "${scoreboard}" = "${target}" "${scoreboard}"`);
+        const scoresRegEx = [...scoreMessage.matchAll(/\d+/g)];
+        const scores = scoresRegEx[scoresRegEx.length-1];
+    
+        return scores;
+
+    } catch {
+        return null;
+    }
+}
+function SetScores (target, scoreboard, scores) {
+    return cmd(`scoreboard players set "${target}" "${scoreboard}" ${scores}`);
+}
+
 function GetPlayerScoreboards (Playername) {
     try {
         let GetScoresMsg = Minecraft.Commands.run(`scoreboard players list "${Playername}"`,Minecraft.World.getDimension("overworld")).statusMessage;
@@ -68,7 +84,7 @@ function GetPlayerScoreboards (Playername) {
     }
 }
 
-export {GetPlayerTags, GetPlayerScoreboards, cmd, logfor, log, GetWorldPlayersName}
+export {GetPlayerTags, GetPlayerScoreboards, cmd, logfor, log, GetWorldPlayersName, GetScores, SetScores}
 
 /*
 GetPlayerScoreboards(playername) 回傳玩家所有記分板的字典

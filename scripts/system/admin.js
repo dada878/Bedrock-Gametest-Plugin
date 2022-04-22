@@ -7,6 +7,7 @@ function AdminMenu(player) {
     let fm = new ui.ActionFormData();
     fm.title("管理員選單");
     fm.body("made by 冰川MCC");
+    fm.button('§l§5插件設定', 'textures/ui/icon_random.png');
     fm.button('§l§5給予稱號', 'textures/ui/mute_off.png');
     fm.button('§l§5移除稱號', 'textures/ui/mute_on.png');
     fm.button('§l§5踢出玩家', 'textures/ui/smithing_icon.png');
@@ -24,6 +25,9 @@ function AdminMenu(player) {
         }
 
         if (response.selection == 0) {
+            
+        }
+        else if (response.selection == 1) {
             let fm = new ui.ModalFormData();
             fm.title("給予稱號");
             fm.dropdown("選擇目標玩家", playerNames);
@@ -40,7 +44,7 @@ function AdminMenu(player) {
                 setData(target,"hasTitles",hasTitles);
                 logfor(player.name,">> §a給予成功");
             })
-        } else if (response.selection == 1) {
+        } else if (response.selection == 2) {
             const worldPlayers = world.getPlayers();
             let players = [];
             let playerNames = [];

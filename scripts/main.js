@@ -1,6 +1,6 @@
 import { world } from "mojang-minecraft";
 import * as ui from 'mojang-minecraft-ui';
-import {cmd, GetScores, GetWorldPlayersName, log, logfor} from './lib/GametestFunctions.js';
+import {cmd, GetScores, log, logfor} from './lib/GametestFunctions.js';
 import {getData, setData} from './lib/JsonTagDB.js';
 import {ChangeChat, sendMessage} from './system/chat.js'
 import { AdminMenu } from "./system/admin.js";

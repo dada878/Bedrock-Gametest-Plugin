@@ -1,6 +1,6 @@
 import { world } from "mojang-minecraft";
 import * as ui from 'mojang-minecraft-ui';
-import { cmd, GetWorldPlayersName, log, logfor } from '../lib/GametestFunctions.js';
+import { cmd, log, logfor } from '../lib/GametestFunctions.js';
 
 export function HomeSystem(player) {
     let tags = player.getTags()

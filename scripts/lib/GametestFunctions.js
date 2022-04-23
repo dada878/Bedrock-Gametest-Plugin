@@ -32,14 +32,3 @@ export function GetScores (target, scoreboard) {
 export function SetScores (target, scoreboard, scores) {
     return cmd(`scoreboard players set "${target}" "${scoreboard}" ${scores}`);
 }
-
-/*
-GetPlayerScoreboards(playername) 回傳玩家所有記分板的字典
-GetPlayerTags(playername) 回傳玩家所有標籤的陣列
-cmd(command) 執行指令並回傳執行訊息
-log(messgae) 傳送給所有玩家titleraw訊息
-logfor(playername,messgae) 傳送給指定玩家titleraw訊息
-PosX(PlayerClass) 回傳處理過後的玩家X座標
-PosY(PlayerClass) 回傳處理過後的玩家Y座標
-PosZ(PlayerClass) 回傳處理過後的玩家Z座標
-*/

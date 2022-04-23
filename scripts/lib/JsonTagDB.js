@@ -1,7 +1,3 @@
-import { world } from "mojang-minecraft";
-import * as ui from 'mojang-minecraft-ui';
-import {cmd, GetWorldPlayersName, log, logfor} from '../lib/GametestFunctions.js';
-
 export function getData(player,key) {
     let db = checkDB(player);
     if (db["tagDB"][key] == undefined) db["tagDB"][key] = null;

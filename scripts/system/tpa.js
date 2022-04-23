@@ -1,6 +1,6 @@
 import { world } from "mojang-minecraft";
 import * as ui from 'mojang-minecraft-ui';
-import { cmd, GetWorldPlayersName, log, logfor } from '../lib/GametestFunctions.js';
+import { cmd, log, logfor } from '../lib/GametestFunctions.js';
 
 export function TpaSystem(player) {
     let fm = new ui.ModalFormData();

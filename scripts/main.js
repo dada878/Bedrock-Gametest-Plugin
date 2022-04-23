@@ -6,8 +6,12 @@ import {ChangeChat, sendMessage} from './system/chat.js'
 import { AdminMenu } from "./system/admin.js";
 import {HomeSystem} from "./system/home.js"
 import { TpaSystem } from "./system/tpa.js";
+import { SpawnTp } from "./system/spawnTp.js";
 
-// cmd("scoreboard objectives add plugin_setting dummy");
+// 嘗試創建記分板
+try {
+    cmd("scoreboard objectives add plugin_setting dummy");
+} catch {}
 
 world.events.beforeChat.subscribe(eventData => {
     eventData.cancel = true;
@@ -34,6 +38,7 @@ world.events.itemUse.subscribe(eventData => {
     if (player.hasTag("admin")) fm.button('§l§5管理員選單', 'textures/ui/dev_glyph_color.png');
 
     const FROM_RESPONSES = {
+        0:SpawnTp,
         1:ChangeChat,
         2:HomeSystem,
         3:TpaSystem,

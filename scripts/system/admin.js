@@ -1,6 +1,6 @@
 import { world } from "mojang-minecraft";
 import * as ui from 'mojang-minecraft-ui';
-import { cmd, GetWorldPlayersName, log, logfor } from '../lib/GametestFunctions.js';
+import { cmd, GetWorldPlayersName, log, logfor, SetScores } from '../lib/GametestFunctions.js';
 import {getData, setData} from '../lib/JsonTagDB';
 
 export function AdminMenu(player) {
@@ -25,7 +25,21 @@ export function AdminMenu(player) {
         }
 
         if (response.selection == 0) {
-            
+            let fm = new ui.ModalFormData();
+            fm.title("插件設定");
+            fm.textField("設定大廳座標(以空格分割xyz)","0 -60 0");
+
+            fm.show(player).then(response => {
+                if (!response) return;
+
+                const pos = response.formValues[0].split(" ");
+
+                SetScores("spawn-x","plugin_setting",pos[0]);
+                SetScores("spawn-y","plugin_setting",pos[1]);
+                SetScores("spawn-z","plugin_setting",pos[2]);
+
+                logfor(player, ">> §a座標設定成功");
+            })
         }
         else if (response.selection == 1) {
             let fm = new ui.ModalFormData();
@@ -88,6 +102,24 @@ export function AdminMenu(player) {
                     logfor(player.name, ">> §a移除成功");
                 })
             })
+        } else if (response.selection == 3) {
+            let fm = new ui.ModalFormData();
+            fm.title("踢人系統");
+            fm.dropdown("選擇要踢出的玩家", playerNames);
+            fm.textField("輸入理由(可留空)","");
+
+            fm.show(player).then(response => {
+                if (!response) return;
+                const kick_player = playerNames[response.formValues[0]];
+                const because = response.formValues[1];
+
+                cmd(`kick "${kick_player}" ${because}`);
+                logfor(player,">> §a踢出成功");
+            })
         }
     })
+}
+
+function give_rank() {
+    
 }

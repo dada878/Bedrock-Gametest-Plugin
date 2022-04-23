@@ -20,7 +20,7 @@ export function log(message) {
 export function GetScores (target, scoreboard) {
     try {
         const scoreMessage = cmd(`scoreboard players operation "${target}" "${scoreboard}" = "${target}" "${scoreboard}"`);
-        const scoresRegEx = [...scoreMessage.matchAll(/\d+/g)];
+        const scoresRegEx = [...scoreMessage.matchAll(/\d+|-\d+/g)];
         const scores = scoresRegEx[scoresRegEx.length-1];
     
         return scores;

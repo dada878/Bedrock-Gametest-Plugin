@@ -7,6 +7,7 @@ import { AdminMenu } from "./system/admin.js";
 import {HomeSystem} from "./system/home.js"
 import { TpaSystem } from "./system/tpa.js";
 import { SpawnTp } from "./system/spawnTp.js";
+import { WarpMenu } from "./system/warp.js";
 
 // 嘗試創建記分板
 try {
@@ -31,11 +32,24 @@ world.events.itemUse.subscribe(eventData => {
     let fm = new ui.ActionFormData();
     fm.title("玩家設定");
     fm.body("made by 冰川MCC");
-    fm.button('§l§5返回大廳', 'textures/ui/world_glyph_color.png');
-    fm.button('§l§5稱號系統', 'textures/ui/mute_off.png');
-    fm.button('§l§5家園系統', 'textures/ui/icon_recipe_item.png');
-    fm.button('§l§5玩家互傳', 'textures/ui/icon_multiplayer.png');
-    if (player.hasTag("admin")) fm.button('§l§5管理員選單', 'textures/ui/dev_glyph_color.png');
+
+    if (GetScores("spawnTp","plugin_setting") == 1) {
+        fm.button('§l§1返回大廳\n§r§4此功能已被管理員禁用', 'textures/ui/world_glyph_color.png');
+    } else fm.button('§l§1返回大廳', 'textures/ui/world_glyph_color.png');
+
+    if (GetScores("title","plugin_setting") == 1) {
+        fm.button('§l§1稱號系統\n§r§4此功能已被管理員禁用', 'textures/ui/mute_off.png');
+    } else fm.button('§l§1稱號系統', 'textures/ui/mute_off.png');
+
+    if (GetScores("home","plugin_setting") == 1) {
+        fm.button('§l§1家園系統\n§r§4此功能已被管理員禁用', 'textures/ui/icon_recipe_item.png');
+    } else fm.button('§l§1家園系統', 'textures/ui/icon_recipe_item.png');
+
+    if (GetScores("tpa","plugin_setting") == 1) {
+        fm.button('§l§1玩家互傳\n§r§4此功能已被管理員禁用', 'textures/ui/icon_multiplayer.png');
+    } else fm.button('§l§1玩家互傳', 'textures/ui/icon_multiplayer.png');
+
+    if (player.hasTag("admin")) fm.button('§l§1管理員選單', 'textures/ui/dev_glyph_color.png');
 
     const FROM_RESPONSES = {
         0:SpawnTp,

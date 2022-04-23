@@ -1,10 +1,12 @@
 import { world } from "mojang-minecraft";
 import * as ui from 'mojang-minecraft-ui';
-import { cmd, log, logfor } from '../lib/GametestFunctions.js';
+import { cmd, log, logfor, GetScores } from '../lib/GametestFunctions.js';
 import {getData, setData} from '../lib/JsonTagDB';
 
 export function ChangeChat(player) {
-    
+    if (GetScores("title","plugin_setting") == 1) {return logfor(player, ">> §c無法使用，此功能已被禁用")};
+
+
     checkTitle(player)
 
     let hasTitles = getData(player,"hasTitles");

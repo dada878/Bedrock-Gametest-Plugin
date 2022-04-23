@@ -1,8 +1,10 @@
 import { world } from "mojang-minecraft";
 import * as ui from 'mojang-minecraft-ui';
-import { cmd, log, logfor } from '../lib/GametestFunctions.js';
+import { cmd, log, logfor, GetScores } from '../lib/GametestFunctions.js';
 
 export function HomeSystem(player) {
+    if (GetScores("home","plugin_setting") == 1) {return logfor(player, ">> §c無法使用，此功能已被禁用")};
+
     let tags = player.getTags()
 
     let fm = new ui.ActionFormData();

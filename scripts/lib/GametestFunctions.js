@@ -1,10 +1,10 @@
 import * as Minecraft from 'mojang-minecraft';
 
-const cmd = function(command) {
+export function cmd(command) {
     return Minecraft.world.getDimension("overworld").runCommand(command).statusMessage
 };
   
-const logfor = function(player,message) {
+export function logfor(player,message) {
     if (typeof player != typeof "string") {
         player = player.name;
     }
@@ -12,7 +12,7 @@ const logfor = function(player,message) {
     Minecraft.world.getDimension("overworld").runCommand(`tellraw "${player}" {"rawtext":[{"text":"${okay_message}"}]}`)
 };
 
-const GetWorldPlayersName = function() {
+export function GetWorldPlayersName() {
     let callback = cmd("list")
 
     callback = callback.substring(callback.indexOf('\n')+1,callback.length)
@@ -32,12 +32,12 @@ const GetWorldPlayersName = function() {
     return result
 }
 
-const log = function(message) {
+export function log(message) {
     let okay_message = message.toString().replaceAll('\"',"''").replaceAll('\\',"/")
     Minecraft.world.getDimension("overworld").runCommand(`tellraw @a {"rawtext":[{"text":"${okay_message}"}]}`).statusMessage
 }
 
-function GetPlayerTags(Playername) {
+export function GetPlayerTags(Playername) {
     try {
         let GetTagsMsg = Minecraft.Commands.run(`tag "${Playername}" list`,Minecraft.World.getDimension("overworld")).statusMessage;
         let GetTagsListReg = /(:|：)(.*, ).*/
@@ -52,7 +52,7 @@ function GetPlayerTags(Playername) {
     }
 }
 
-function GetScores (target, scoreboard) {
+export function GetScores (target, scoreboard) {
     try {
         const scoreMessage = cmd(`scoreboard players operation "${target}" "${scoreboard}" = "${target}" "${scoreboard}"`);
         const scoresRegEx = [...scoreMessage.matchAll(/\d+/g)];
@@ -64,11 +64,11 @@ function GetScores (target, scoreboard) {
         return null;
     }
 }
-function SetScores (target, scoreboard, scores) {
+export function SetScores (target, scoreboard, scores) {
     return cmd(`scoreboard players set "${target}" "${scoreboard}" ${scores}`);
 }
 
-function GetPlayerScoreboards (Playername) {
+export function GetPlayerScoreboards (Playername) {
     try {
         let GetScoresMsg = Minecraft.Commands.run(`scoreboard players list "${Playername}"`,Minecraft.World.getDimension("overworld")).statusMessage;
         let GetScoresListReg = /- \S+(:|：) (\S+) \((\S+)\)/gi
@@ -83,9 +83,6 @@ function GetPlayerScoreboards (Playername) {
         return error
     }
 }
-
-export {GetPlayerTags, GetPlayerScoreboards, cmd, logfor, log, GetWorldPlayersName, GetScores, SetScores}
-
 /*
 GetPlayerScoreboards(playername) 回傳玩家所有記分板的字典
 GetPlayerTags(playername) 回傳玩家所有標籤的陣列

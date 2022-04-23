@@ -3,7 +3,7 @@ import * as ui from 'mojang-minecraft-ui';
 import { cmd, GetWorldPlayersName, log, logfor } from '../lib/GametestFunctions.js';
 import {getData, setData} from '../lib/JsonTagDB';
 
-function ChangeChat(player) {
+export function ChangeChat(player) {
     
     checkTitle(player)
 
@@ -24,7 +24,7 @@ function ChangeChat(player) {
     })
 }
 
-function sendMessage(player,message) {
+export function sendMessage(player,message) {
 
     checkTitle(player);
 
@@ -41,5 +41,3 @@ function checkTitle(player) {
         setData(player,"selectedTitle",getData(player,"hasTitles")[0]);
     }
 }
-
-export {ChangeChat, sendMessage}

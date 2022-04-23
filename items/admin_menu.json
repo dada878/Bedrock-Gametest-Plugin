@@ -2,17 +2,17 @@
 	"format_version": "1.16.100",
 	"minecraft:item": {
 		"description": {
-			"identifier": "mcc:menu",
+			"identifier": "mcc:admin_menu",
 			"category": "items"
 		},
 		"components": {
 			"minecraft:icon": {
-				"texture": "clock_item"
+				"texture": "compass_item"
 			},
 			"minecraft:max_stack_size": 1,
 			"minecraft:foil": true,
 			"minecraft:display_name": {
-				"value": "§e<<§b玩家選單§e>>"
+				"value": "§6<<§c管理員選單§6>>"
 			}
 		}
 	}

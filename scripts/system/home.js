@@ -2,7 +2,7 @@ import { world } from "mojang-minecraft";
 import * as ui from 'mojang-minecraft-ui';
 import { cmd, GetWorldPlayersName, log, logfor } from '../lib/GametestFunctions.js';
 
-function HomeSystem(player) {
+export function HomeSystem(player) {
     let tags = player.getTags()
 
     let fm = new ui.ActionFormData();
@@ -113,5 +113,3 @@ function getHomes(player) {
     }
     return homes
 }
-
-export {HomeSystem};

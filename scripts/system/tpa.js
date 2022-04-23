@@ -2,7 +2,7 @@ import { world } from "mojang-minecraft";
 import * as ui from 'mojang-minecraft-ui';
 import { cmd, GetWorldPlayersName, log, logfor } from '../lib/GametestFunctions.js';
 
-function TpaSystem(player) {
+export function TpaSystem(player) {
     let fm = new ui.ModalFormData();
     let players = world.getPlayers();
 
@@ -42,5 +42,3 @@ function TpaSystem(player) {
     })
     
 }
-
-export {TpaSystem};

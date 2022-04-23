@@ -3,7 +3,7 @@ import * as ui from 'mojang-minecraft-ui';
 import { cmd, GetWorldPlayersName, log, logfor } from '../lib/GametestFunctions.js';
 import {getData, setData} from '../lib/JsonTagDB';
 
-function AdminMenu(player) {
+export function AdminMenu(player) {
     let fm = new ui.ActionFormData();
     fm.title("管理員選單");
     fm.body("made by 冰川MCC");
@@ -91,5 +91,3 @@ function AdminMenu(player) {
         }
     })
 }
-
-export {AdminMenu};

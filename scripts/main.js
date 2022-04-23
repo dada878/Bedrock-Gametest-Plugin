@@ -27,11 +27,11 @@ world.events.itemUse.subscribe(eventData => {
     let player = eventData.source;
     let item = eventData.item;
 
-    if (item.id != "minecraft:clock") return;
+    if (item.id != "mcc:menu") return;
 
     let fm = new ui.ActionFormData();
-    fm.title("玩家設定");
-    fm.body("made by 冰川MCC");
+    fm.title("功能選單");
+    fm.body("這是一個功能非常強大的選單");
 
     if (GetScores("spawnTp","plugin_setting") == 1) {
         fm.button('§l§1返回大廳\n§r§4此功能已被管理員禁用', 'textures/ui/world_glyph_color.png');
@@ -65,4 +65,3 @@ world.events.itemUse.subscribe(eventData => {
         FROM_RESPONSES[response.selection](player);
     })
 })
-

@@ -1,9 +1,9 @@
 import { world } from "mojang-minecraft";
 import * as ui from 'mojang-minecraft-ui';
-import { cmd, log, logfor, GetScores } from '../lib/GametestFunctions.js';
+import { cmd, logfor, GetScores } from '../lib/GameLibrary.js';
 
 export function HomeSystem(player) {
-    if (GetScores("home","plugin_setting") == 1) {return logfor(player, ">> §c無法使用，此功能已被禁用")};
+    if (GetScores("home", "plugin_setting") == 1) { return logfor(player, ">> §c無法使用，此功能已被禁用") };
 
     let tags = player.getTags()
 
@@ -105,7 +105,7 @@ export function HomeSystem(player) {
 
 function getHomes(player) {
     let tags = player.getTags()
-    let homes = {"Homes":[],"Pos":[]}
+    let homes = { "Homes": [], "Pos": [] }
     for (let i in tags) {
         if (tags[i].startsWith('{"Home":{')) {
             let homeData = JSON.parse(tags[i])

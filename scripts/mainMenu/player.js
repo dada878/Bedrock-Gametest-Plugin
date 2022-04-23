@@ -1,5 +1,5 @@
 import * as ui from 'mojang-minecraft-ui';
-import { GetScores } from '../lib/GametestFunctions.js';
+import { GetScores } from '../lib/GameLibrary.js';
 
 import { ChangeChat } from '../system/chat.js'
 import { HomeSystem } from "../system/home.js"

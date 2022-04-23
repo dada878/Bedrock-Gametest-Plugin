@@ -1,6 +1,6 @@
 import { world } from "mojang-minecraft";
 import * as ui from 'mojang-minecraft-ui';
-import { cmd, GetScores, log, logfor, SetScores } from '../lib/GametestFunctions.js';
+import { cmd, GetScores, logfor, SetScores } from '../lib/GameLibrary.js';
 import { getData, setData } from '../lib/JsonTagDB';
 
 export function AdminMenu(player) {
@@ -28,23 +28,23 @@ export function AdminMenu(player) {
             case (0): {
 
                 const enableList = [
-                    (function(){if (GetScores("spawnTp","plugin_setting") == 0) {return false} else {return true}})(),
-                    (function(){if (GetScores("title","plugin_setting") == 0) {return false} else {return true}})(),
-                    (function(){if (GetScores("home","plugin_setting") == 0) {return false} else {return true}})(),
-                    (function(){if (GetScores("tpa","plugin_setting") == 0) {return false} else {return true}})(),
+                    (function () { if (GetScores("spawnTp", "plugin_setting") == 0) { return false } else { return true } })(),
+                    (function () { if (GetScores("title", "plugin_setting") == 0) { return false } else { return true } })(),
+                    (function () { if (GetScores("home", "plugin_setting") == 0) { return false } else { return true } })(),
+                    (function () { if (GetScores("tpa", "plugin_setting") == 0) { return false } else { return true } })(),
                 ]
 
-                const x = GetScores("spawn-x","plugin_setting") ?? 0;
-                const y = GetScores("spawn-y","plugin_setting") ?? 0;
-                const z = GetScores("spawn-z","plugin_setting") ?? 0;
-                
+                const x = GetScores("spawn-x", "plugin_setting") ?? 0;
+                const y = GetScores("spawn-y", "plugin_setting") ?? 0;
+                const z = GetScores("spawn-z", "plugin_setting") ?? 0;
+
                 let fm = new ui.ModalFormData();
                 fm.title("插件設定");
-                fm.textField("設定大廳座標(以空格隔開xyz)", "0 -60 0",`${x} ${y} ${z}`);
-                fm.toggle("禁用返回大廳",Boolean(enableList[0]));
-                fm.toggle("禁用稱號系統",Boolean(enableList[1]));
-                fm.toggle("禁用家園系統",Boolean(enableList[2]));
-                fm.toggle("禁用玩家互傳",Boolean(enableList[3]));
+                fm.textField("設定大廳座標(以空格隔開xyz)", "0 -60 0", `${x} ${y} ${z}`);
+                fm.toggle("禁用返回大廳", Boolean(enableList[0]));
+                fm.toggle("禁用稱號系統", Boolean(enableList[1]));
+                fm.toggle("禁用家園系統", Boolean(enableList[2]));
+                fm.toggle("禁用玩家互傳", Boolean(enableList[3]));
 
                 fm.show(player).then(response => {
                     if (!response) return;
@@ -56,17 +56,17 @@ export function AdminMenu(player) {
                     SetScores("spawn-z", "plugin_setting", pos[2]);
 
                     // 功能開關
-                    if (response.formValues[1]) { SetScores("spawnTp","plugin_setting",1) }
-                    else { SetScores("spawnTp","plugin_setting",0) }
+                    if (response.formValues[1]) { SetScores("spawnTp", "plugin_setting", 1) }
+                    else { SetScores("spawnTp", "plugin_setting", 0) }
 
-                    if (response.formValues[2]) { SetScores("title","plugin_setting",1) }
-                    else { SetScores("title","plugin_setting",0) }
+                    if (response.formValues[2]) { SetScores("title", "plugin_setting", 1) }
+                    else { SetScores("title", "plugin_setting", 0) }
 
-                    if (response.formValues[3]) { SetScores("home","plugin_setting",1) }
-                    else { SetScores("home","plugin_setting",0) }
+                    if (response.formValues[3]) { SetScores("home", "plugin_setting", 1) }
+                    else { SetScores("home", "plugin_setting", 0) }
 
-                    if (response.formValues[4]) { SetScores("tpa","plugin_setting",1) }
-                    else { SetScores("tpa","plugin_setting",0) }
+                    if (response.formValues[4]) { SetScores("tpa", "plugin_setting", 1) }
+                    else { SetScores("tpa", "plugin_setting", 0) }
 
                     logfor(player, ">> §a設定成功");
                 });

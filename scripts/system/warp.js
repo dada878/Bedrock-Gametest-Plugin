@@ -1,6 +1,6 @@
 import { world } from "mojang-minecraft";
 import * as ui from 'mojang-minecraft-ui';
-import { cmd, log, logfor } from '../lib/GametestFunctions.js';
+import { cmd, log, logfor } from '../lib/GameLibrary.js';
 
 export function WarpMenu(player) {
     fm = new ui.ActionFormData();

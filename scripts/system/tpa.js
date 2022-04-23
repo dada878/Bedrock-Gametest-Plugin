@@ -1,9 +1,9 @@
 import { world } from "mojang-minecraft";
 import * as ui from 'mojang-minecraft-ui';
-import { cmd, log, logfor, GetScores } from '../lib/GametestFunctions.js';
+import { cmd, logfor, GetScores } from '../lib/GameLibrary.js';
 
 export function TpaSystem(player) {
-    if (GetScores("tpa","plugin_setting") == 1) {return logfor(player, ">> §c無法使用，此功能已被禁用")};
+    if (GetScores("tpa", "plugin_setting") == 1) { return logfor(player, ">> §c無法使用，此功能已被禁用") };
 
 
     let fm = new ui.ModalFormData();
@@ -43,5 +43,5 @@ export function TpaSystem(player) {
             }
         })
     })
-    
+
 }

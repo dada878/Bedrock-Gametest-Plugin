@@ -37,7 +37,7 @@ export function PlayerMenu(player) {
 
     if (db.getData("money") == 1) {
         fm.button('§l§1經濟系統\n§r§4此功能已被管理員禁用', 'textures/ui/MCoin.png');
-    } else fm.button('§l§1玩家互傳', 'textures/ui/MCoin.png');
+    } else fm.button('§l§1經濟系統', 'textures/ui/MCoin.png');
 
     const FROM_RESPONSES = {
         0: SpawnTp,

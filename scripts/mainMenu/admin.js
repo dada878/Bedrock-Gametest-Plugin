@@ -1,6 +1,6 @@
 import { world } from "mojang-minecraft";
 import * as ui from 'mojang-minecraft-ui';
-import { cmd, GetScores, logfor, SetScores } from '../lib/GameLibrary.js';
+import { cmd, GetScores, log, logfor, SetScores } from '../lib/GameLibrary.js';
 import { getData, setData } from '../lib/JsonTagDB';
 
 import { WorldDB } from "../lib/WorldDB.js";
@@ -14,6 +14,7 @@ export function AdminMenu(player) {
     fm.button('§l§1給予稱號', 'textures/ui/mute_off.png');
     fm.button('§l§1移除稱號', 'textures/ui/mute_on.png');
     fm.button('§l§1踢出玩家', 'textures/ui/anvil_icon.png');
+    fm.button('§l§1管理傳送點', 'textures/ui/worldsIcon.png');
 
     fm.show(player).then(response => {
         if (!response) return;
@@ -31,10 +32,11 @@ export function AdminMenu(player) {
             case (0): {
 
                 const enableList = [
-                    (function () { if (db.getData("spawnTp") == 0) { return false } else { return true } })(),
-                    (function () { if (db.getData("title") == 0) { return false } else { return true } })(),
-                    (function () { if (db.getData("home") == 0) { return false } else { return true } })(),
-                    (function () { if (db.getData("tpa") == 0) { return false } else { return true } })(),
+                    (function () { if (db.getData("spawnTp") == 1) { return true } else { return false } })(),
+                    (function () { if (db.getData("title") == 1) { return true } else { return false } })(),
+                    (function () { if (db.getData("warp") == 1) { return true } else { return false } })(),
+                    (function () { if (db.getData("home") == 1) { return true } else { return false } })(),
+                    (function () { if (db.getData("tpa") == 1) { return true } else { return false } })(),
                 ]
 
                 const x = db.getData("spawn-x") ?? 0;
@@ -46,16 +48,12 @@ export function AdminMenu(player) {
                 fm.textField("設定大廳座標(以空格隔開xyz)", "0 -60 0", `${x} ${y} ${z}`);
                 fm.toggle("禁用返回大廳", Boolean(enableList[0]));
                 fm.toggle("禁用稱號系統", Boolean(enableList[1]));
-                fm.toggle("禁用家園系統", Boolean(enableList[2]));
-                fm.toggle("禁用玩家互傳", Boolean(enableList[3]));
+                fm.toggle("禁用世界傳送點", Boolean(enableList[2]));
+                fm.toggle("禁用家園系統", Boolean(enableList[3]));
+                fm.toggle("禁用玩家互傳", Boolean(enableList[4]));
 
                 fm.show(player).then(response => {
                     if (!response) return;
-
-                    try {
-                        db.setData("spawnTp",1)
-                    } catch(e) {log(e)}
-
 
                     // 座標設定
                     const pos = response.formValues[0].split(" ");
@@ -70,10 +68,13 @@ export function AdminMenu(player) {
                     if (response.formValues[2]) { db.setData("title", 1) }
                     else { db.setData("title", 0) }
 
-                    if (response.formValues[3]) { db.setData("home", 1) }
+                    if (response.formValues[3]) { db.setData("warp", 1) }
+                    else { db.setData("warp", 0) }
+
+                    if (response.formValues[4]) { db.setData("home", 1) }
                     else { db.setData("home", 0) }
 
-                    if (response.formValues[4]) { db.setData("tpa", 1) }
+                    if (response.formValues[5]) { db.setData("tpa", 1) }
                     else { db.setData("tpa", 0) }
 
                     logfor(player, ">> §a設定成功");
@@ -160,13 +161,78 @@ export function AdminMenu(player) {
                     logfor(player, ">> §a踢出成功");
                 })
                 break;
+            } case (4): {
+
+                let fm = new ui.ActionFormData();
+                fm.title("管理傳送點");
+                fm.body("快速刪除、添加傳送點！")
+                fm.button("§l§1添加傳送點");
+                fm.button("§l§1移除傳送點");
+
+                fm.show(player).then(response => {
+                    if (!response) return;
+
+                    const data = db.getData("warps");
+                    let warps;
+
+                    if (data == null) {
+                        warps = {};
+                    } else {
+                        warps = JSON.parse(data);
+                    }
+
+                    let warpNames = [];
+
+                    for (let i in warps) { warpNames.push(i); }
+
+                    if (response.selection == 0) {
+
+                        let fm = new ui.ModalFormData();
+                        fm.title("管理傳送點");
+                        fm.textField("傳送點名稱", "");
+                        fm.textField("傳送點座標(以空格隔開xyz)", "0 -60 53");
+
+                        fm.show(player).then(response => {
+                            if (!response) return;
+
+                            const warpName = response.formValues[0];
+                            const warpPos = response.formValues[1];
+
+                            warps[warpName] = warpPos;
+
+                            db.setData("warps", JSON.stringify(warps));
+                            logfor(player, ">> §a添加成功");
+                        })
+                    } else if (response.selection == 1) {
+
+                        if (data == null) { return logfor(player, ">> §c本世界沒有設定任何傳送點"); }
+
+                        let fm = new ui.ModalFormData();
+                        fm.title("移除傳送點");
+                        fm.dropdown("選擇要移除的傳送點", warpNames);
+
+                        fm.show(player).then(response => {
+                            if (!response) return;
+
+                            const warpName = warpNames[response.formValues[0]];
+
+                            delete warps[warpName];
+
+                            db.setData("warps", JSON.stringify(warps));
+                            logfor(player, ">> §a移除成功");
+                        })
+                    }
+
+                    const kick_player = playerNames[response.formValues[0]];
+                    const because = response.formValues[1];
+
+                    cmd(`kick "${kick_player}" ${because}`);
+                    logfor(player, ">> §a踢出成功");
+                })
+                break;
             } default: {
 
             }
         }
     })
-}
-
-function give_rank() {
-
 }

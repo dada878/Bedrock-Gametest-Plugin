@@ -4,6 +4,9 @@ import { sendMessage } from './system/chat.js'
 import { AdminMenu } from "./mainMenu/admin.js";
 import { PlayerMenu } from "./mainMenu/player.js";
 
+import { WorldDB } from "./lib/WorldDB.js";
+var db = new WorldDB("plugin_database");
+
 world.events.beforeChat.subscribe(eventData => {
     eventData.cancel = true;
     const player = eventData.sender;
@@ -19,3 +22,4 @@ world.events.itemUse.subscribe(eventData => {
     if (item.id == "mcc:menu") PlayerMenu(player);
     else if (item.id == "mcc:admin_menu") AdminMenu(player);
 })
+

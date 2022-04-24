@@ -1,13 +1,16 @@
-import { world } from "mojang-minecraft";
 import * as ui from 'mojang-minecraft-ui';
-import { cmd, GetWorldPlayersName, log, logfor } from '../lib/GametestFunctions.js';
-import {getData, setData} from '../lib/JsonTagDB';
+import { log, logfor, GetScores } from '../lib/GameLibrary.js';
+import { getData, setData } from '../lib/JsonTagDB';
 
-function ChangeChat(player) {
-    
+import { WorldDB } from "../lib/WorldDB.js";
+var db = new WorldDB("plugin_database");
+
+export function ChangeChat(player) {
+    if (db.getData("title") == 1) { return logfor(player, ">> §c無法使用，此功能已被禁用") };
+
     checkTitle(player)
 
-    let hasTitles = getData(player,"hasTitles");
+    let hasTitles = getData(player, "hasTitles");
 
     let fm = new ui.ModalFormData();
     fm.title("稱號系統");
@@ -18,28 +21,26 @@ function ChangeChat(player) {
 
         let tagId = response.formValues[0];
 
-        setData(player,"selectedTitle",hasTitles[tagId]);
+        setData(player, "selectedTitle", hasTitles[tagId]);
 
-        logfor(player.name,">> §a配戴成功")
+        logfor(player.name, ">> §a配戴成功")
     })
 }
 
-function sendMessage(player,message) {
+export function sendMessage(player, message) {
 
     checkTitle(player);
 
-    const title = getData(player,"selectedTitle");
+    const title = getData(player, "selectedTitle");
 
     log(`[${title}§r]${player.name} >> ${message}`);
 }
 
 function checkTitle(player) {
-    if (getData(player,"hasTitles") == null) {
-        setData(player,"hasTitles",["§a玩家"]);
+    if (getData(player, "hasTitles") == null) {
+        setData(player, "hasTitles", ["§a玩家"]);
     }
-    if (getData(player,"selectedTitle") == null) {
-        setData(player,"selectedTitle",getData(player,"hasTitles")[0]);
+    if (getData(player, "selectedTitle") == null) {
+        setData(player, "selectedTitle", getData(player, "hasTitles")[0]);
     }
 }
-
-export {ChangeChat, sendMessage}

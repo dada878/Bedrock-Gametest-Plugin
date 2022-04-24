@@ -1,8 +1,12 @@
 import { world } from "mojang-minecraft";
 import * as ui from 'mojang-minecraft-ui';
-import { cmd, GetWorldPlayersName, log, logfor } from '../lib/GametestFunctions.js';
+import { cmd, logfor, GetScores } from '../lib/GameLibrary.js';
+import { WorldDB } from "../lib/WorldDB.js";
+var db = new WorldDB("plugin_database");
 
-function HomeSystem(player) {
+export function HomeSystem(player) {
+    if (db.getData("home") == 1) { return logfor(player, ">> §c無法使用，此功能已被禁用") };
+
     let tags = player.getTags()
 
     let fm = new ui.ActionFormData();
@@ -103,7 +107,7 @@ function HomeSystem(player) {
 
 function getHomes(player) {
     let tags = player.getTags()
-    let homes = {"Homes":[],"Pos":[]}
+    let homes = { "Homes": [], "Pos": [] }
     for (let i in tags) {
         if (tags[i].startsWith('{"Home":{')) {
             let homeData = JSON.parse(tags[i])

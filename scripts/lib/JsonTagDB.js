@@ -1,14 +1,10 @@
-import { world } from "mojang-minecraft";
-import * as ui from 'mojang-minecraft-ui';
-import {cmd, GetWorldPlayersName, log, logfor} from '../lib/GametestFunctions.js';
-
-function getData(player,key) {
+export function getData(player,key) {
     let db = checkDB(player);
     if (db["tagDB"][key] == undefined) db["tagDB"][key] = null;
     return db["tagDB"][key];
 }
 
-function setData(player,key,value) {
+export function setData(player,key,value) {
     let db = checkDB(player);
     player.removeTag(JSON.stringify(db));
     db["tagDB"][key] = value;
@@ -35,5 +31,3 @@ function checkDB(player) {
 
     return DB;
 }
-
-export {getData, setData};

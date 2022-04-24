@@ -39,6 +39,10 @@ export function PlayerMenu(player) {
         fm.button('§l§1經濟系統\n§r§4此功能已被管理員禁用', 'textures/ui/MCoin.png');
     } else fm.button('§l§1經濟系統', 'textures/ui/MCoin.png');
 
+    if (db.getData("exp") == 1) {
+        fm.button('§l§1等級系統\n§r§4此功能已被管理員禁用', 'textures/ui/MCoin.png');
+    } else fm.button('§l§1等級系統', '');
+
     const FROM_RESPONSES = {
         0: SpawnTp,
         1: ChangeChat,

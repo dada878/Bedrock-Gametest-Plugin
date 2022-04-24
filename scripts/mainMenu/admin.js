@@ -3,6 +3,9 @@ import * as ui from 'mojang-minecraft-ui';
 import { cmd, GetScores, logfor, SetScores } from '../lib/GameLibrary.js';
 import { getData, setData } from '../lib/JsonTagDB';
 
+import { WorldDB } from "../lib/WorldDB.js";
+var db = new WorldDB("plugin_database");
+
 export function AdminMenu(player) {
     let fm = new ui.ActionFormData();
     fm.title("管理員選單");
@@ -28,15 +31,15 @@ export function AdminMenu(player) {
             case (0): {
 
                 const enableList = [
-                    (function () { if (GetScores("spawnTp", "plugin_setting") == 0) { return false } else { return true } })(),
-                    (function () { if (GetScores("title", "plugin_setting") == 0) { return false } else { return true } })(),
-                    (function () { if (GetScores("home", "plugin_setting") == 0) { return false } else { return true } })(),
-                    (function () { if (GetScores("tpa", "plugin_setting") == 0) { return false } else { return true } })(),
+                    (function () { if (db.getData("spawnTp") == 0) { return false } else { return true } })(),
+                    (function () { if (db.getData("title") == 0) { return false } else { return true } })(),
+                    (function () { if (db.getData("home") == 0) { return false } else { return true } })(),
+                    (function () { if (db.getData("tpa") == 0) { return false } else { return true } })(),
                 ]
 
-                const x = GetScores("spawn-x", "plugin_setting") ?? 0;
-                const y = GetScores("spawn-y", "plugin_setting") ?? 0;
-                const z = GetScores("spawn-z", "plugin_setting") ?? 0;
+                const x = db.getData("spawn-x") ?? 0;
+                const y = db.getData("spawn-y") ?? 0;
+                const z = db.getData("spawn-z") ?? 0;
 
                 let fm = new ui.ModalFormData();
                 fm.title("插件設定");
@@ -49,26 +52,32 @@ export function AdminMenu(player) {
                 fm.show(player).then(response => {
                     if (!response) return;
 
+                    try {
+                        db.setData("spawnTp",1)
+                    } catch(e) {log(e)}
+
+
                     // 座標設定
                     const pos = response.formValues[0].split(" ");
-                    SetScores("spawn-x", "plugin_setting", pos[0]);
-                    SetScores("spawn-y", "plugin_setting", pos[1]);
-                    SetScores("spawn-z", "plugin_setting", pos[2]);
+                    db.setData("spawn-x", pos[0]);
+                    db.setData("spawn-y", pos[1]);
+                    db.setData("spawn-z", pos[2]);
 
                     // 功能開關
-                    if (response.formValues[1]) { SetScores("spawnTp", "plugin_setting", 1) }
-                    else { SetScores("spawnTp", "plugin_setting", 0) }
+                    if (response.formValues[1]) { db.setData("spawnTp", 1) }
+                    else { db.setData("spawnTp", 0) }
 
-                    if (response.formValues[2]) { SetScores("title", "plugin_setting", 1) }
-                    else { SetScores("title", "plugin_setting", 0) }
+                    if (response.formValues[2]) { db.setData("title", 1) }
+                    else { db.setData("title", 0) }
 
-                    if (response.formValues[3]) { SetScores("home", "plugin_setting", 1) }
-                    else { SetScores("home", "plugin_setting", 0) }
+                    if (response.formValues[3]) { db.setData("home", 1) }
+                    else { db.setData("home", 0) }
 
-                    if (response.formValues[4]) { SetScores("tpa", "plugin_setting", 1) }
-                    else { SetScores("tpa", "plugin_setting", 0) }
+                    if (response.formValues[4]) { db.setData("tpa", 1) }
+                    else { db.setData("tpa", 0) }
 
                     logfor(player, ">> §a設定成功");
+
                 });
 
 

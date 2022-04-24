@@ -1,6 +1,6 @@
 import * as scores from "./ScoresFormat.js"
 import * as base64 from "./base64.js"
-import { cmd, GetScores } from "./GameLibrary.js";
+import { cmd, GetScores, log } from "./GameLibrary.js";
 
 export class WorldDB {
     constructor(name) {
@@ -9,19 +9,19 @@ export class WorldDB {
     }
 
     getData(key) {
+        let result = "";
         try {
-            let result = "";
-
-            for (let i in key) {
+            let i = 0;
+            while(true) {
                 const score = GetScores(`${base64.encode(key)}[${i}]`, this.name);
                 result += scores.decode(score);
+                i++;
             }
-
-            return result;
-        } catch { return null }
+        } catch {return result;}
     }
 
     setData(key, value) {
+        value = value.toString();
         for (let i in value) {
             cmd(`scoreboard players set "${base64.encode(key)}[${i}]" "${this.name}" ${scores.encode(value[i])}`)
         }

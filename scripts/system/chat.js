@@ -2,9 +2,11 @@ import * as ui from 'mojang-minecraft-ui';
 import { log, logfor, GetScores } from '../lib/GameLibrary.js';
 import { getData, setData } from '../lib/JsonTagDB';
 
-export function ChangeChat(player) {
-    if (GetScores("title", "plugin_setting") == 1) { return logfor(player, ">> §c無法使用，此功能已被禁用") };
+import { WorldDB } from "../lib/WorldDB.js";
+var db = new WorldDB("plugin_database");
 
+export function ChangeChat(player) {
+    if (db.getData("title") == 1) { return logfor(player, ">> §c無法使用，此功能已被禁用") };
 
     checkTitle(player)
 

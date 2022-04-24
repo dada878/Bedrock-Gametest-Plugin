@@ -1,12 +1,15 @@
 import { GetScores, logfor } from "../lib/GameLibrary";
+import { WorldDB } from "../lib/WorldDB.js";
+
+var db = new WorldDB("plugin_database");
 
 export function SpawnTp(player) {
 
-    if (GetScores("spawnTp", "plugin_setting") == 1) { return logfor(player, ">> §c無法使用，此功能已被禁用") };
+    if (db.getData("spawnTp") == 1) { return logfor(player, ">> §c無法使用，此功能已被禁用") };
 
-    const posX = GetScores("spawn-x", "plugin_setting");
-    const posY = GetScores("spawn-y", "plugin_setting");
-    const posZ = GetScores("spawn-z", "plugin_setting");
+    const posX = db.getData("spawn-x");
+    const posY = db.getData("spawn-y");
+    const posZ = db.getData("spawn-z");
 
     if (posX == null) return logfor(player, ">> §c大廳座標尚未被設定，請找管理員使用管理員選單配置");
 

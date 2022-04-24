@@ -1,9 +1,11 @@
 import { world } from "mojang-minecraft";
 import * as ui from 'mojang-minecraft-ui';
 import { cmd, logfor, GetScores } from '../lib/GameLibrary.js';
+import { WorldDB } from "../lib/WorldDB.js";
+var db = new WorldDB("plugin_database");
 
 export function TpaSystem(player) {
-    if (GetScores("tpa", "plugin_setting") == 1) { return logfor(player, ">> §c無法使用，此功能已被禁用") };
+    if (db.getData("tpa") == 1) { return logfor(player, ">> §c無法使用，此功能已被禁用") };
 
 
     let fm = new ui.ModalFormData();

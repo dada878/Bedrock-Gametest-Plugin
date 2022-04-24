@@ -12,18 +12,39 @@ export class WorldDB {
         let result = "";
         try {
             let i = 0;
-            while(true) {
-                const score = GetScores(`${base64.encode(key)}[${i}]`, this.name);
-                result += scores.decode(score);
+            while (true) {
+                const score = GetScores(`${base64.encode(`${key}[${i}]`)}`, this.name);
+                result += scores.decode(score.toString());
                 i++;
             }
-        } catch {return result;}
+        } catch (e) {
+            if (result == "" || result == null) {
+                return null;
+            } else {
+                return result;
+            }
+        }
+    }
+
+    checkData(key) {
+        const dataName = `${base64.encode(`${key}[${i}]`)}`;
+        cmd(`scoreboard players operation "${dataName}" "${this.name}" = "${dataName}" "${this.name}"`)
     }
 
     setData(key, value) {
-        value = value.toString();
-        for (let i in value) {
-            cmd(`scoreboard players set "${base64.encode(key)}[${i}]" "${this.name}" ${scores.encode(value[i])}`)
+        value = `${value}`;
+        let i = 0;
+        for (let j in value) {
+            const dataName = `${base64.encode(`${key}[${i}]`)}`;
+            cmd(`scoreboard players set "${dataName}" "${this.name}" ${scores.encode(value[i])}`);
+            i++;
+        }
+        while (true) {
+            try {
+                const dataName = `${base64.encode(`${key}[${i}]`)}`;
+                cmd(`scoreboard players reset "${dataName}" "${this.name}"`)
+                i++;
+            } catch { break }
         }
     }
 }

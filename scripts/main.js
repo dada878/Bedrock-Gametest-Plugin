@@ -4,6 +4,10 @@ import { sendMessage } from './system/chat.js'
 import { AdminMenu } from "./mainMenu/admin.js";
 import { PlayerMenu } from "./mainMenu/player.js";
 
+import * as base64 from "./lib/base64"
+import * as scores from "./lib/ScoresFormat"
+
+
 // 嘗試創建記分板
 try { cmd("scoreboard objectives add plugin_setting dummy"); } catch { }
 
@@ -11,6 +15,12 @@ world.events.beforeChat.subscribe(eventData => {
     eventData.cancel = true;
     const player = eventData.sender;
     const message = eventData.message;
+
+    const scoresEncode = scores.encode(message);
+    log(scoresEncode);
+    log(scoresEncode.length);
+
+    log(scores.decode(scoresEncode))
 
     sendMessage(player, message);
 })

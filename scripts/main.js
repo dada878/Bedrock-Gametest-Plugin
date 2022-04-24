@@ -10,7 +10,12 @@ world.events.beforeChat.subscribe(eventData => {
     const message = eventData.message;
 
     if(message == "-get"){
-        cmd(`give ${player.name} clock 1 0`)
+        cmd(`give ${player.name} mcc:menu 1 0`)
+    }
+    if("admin" in player.getTags){
+        if(message == "-getad"){
+            cmd(`give ${player.name} mcc:admin_menu 1 0`)
+        }
     }
 
     sendMessage(player,message);

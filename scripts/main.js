@@ -1,5 +1,5 @@
 import { world } from "mojang-minecraft";
-import { cmd, log } from './lib/GameLibrary.js';
+import { cmd, log, logfor } from './lib/GameLibrary.js';
 import { sendMessage } from './system/chat.js'
 import { AdminMenu } from "./mainMenu/admin.js";
 import { PlayerMenu } from "./mainMenu/player.js";
@@ -12,9 +12,13 @@ world.events.beforeChat.subscribe(eventData => {
     if(message == "-get"){
         cmd(`give ${player.name} mcc:menu 1 0`)
     }
-    if("admin" in player.getTags){
-        if(message == "-getad"){
+    
+    if(message == "-getad"){
+        if("admin" in player.getTags){
             cmd(`give ${player.name} mcc:admin_menu 1 0`)
+        }
+        else{
+            logfor(player,'§c您沒有權限! 需要 "admin" Tag')
         }
     }
 

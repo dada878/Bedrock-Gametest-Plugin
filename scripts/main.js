@@ -10,7 +10,7 @@ world.events.beforeChat.subscribe(eventData => {
     const message = eventData.message;
 
     if(message == "-get"){
-        cmd(`give ${player} clock 1 0`)
+        cmd(`give ${player.name} clock 1 0`)
     }
 
     sendMessage(player,message);

@@ -9,19 +9,18 @@ world.events.beforeChat.subscribe(eventData => {
     const player = eventData.sender;
     const message = eventData.message;
 
-<<<<<<< HEAD
+    if(message == "-get"){
+        cmd(`give ${player} clock 1 0`)
+    }
+
     sendMessage(player,message);
 })
 
 world.events.playerJoin.subscribe(eventData => {
     const player = eventData.player
 
-    log(`§e${player} §r歡迎來到§kmdalkda`);
-
-    cmd(`give "${player}" clock 0 1`)
-=======
     sendMessage(player, message);
->>>>>>> 447646f8fa6e077d0bf2743d4311a6af065dfe9d
+
 })
 
 world.events.itemUse.subscribe(eventData => {

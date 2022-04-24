@@ -14,7 +14,7 @@ world.events.beforeChat.subscribe(eventData => {
     }
     
     if(message == "-getad"){
-        if("admin" in player.getTags){
+        if("admin" in player.getTags()){
             cmd(`give ${player.name} mcc:admin_menu 1 0`)
         }
         else{

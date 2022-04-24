@@ -4,35 +4,31 @@ import { sendMessage } from './system/chat.js'
 import { AdminMenu } from "./mainMenu/admin.js";
 import { PlayerMenu } from "./mainMenu/player.js";
 
-import { WorldDB } from "./lib/WorldDB.js";
-var db = new WorldDB("plugin_database");
-
 world.events.beforeChat.subscribe(eventData => {
     eventData.cancel = true;
     const player = eventData.sender;
     const message = eventData.message;
 
-    if(message == "-get"){
-        cmd(`give ${player.name} mcc:menu 1 0`)
+    if (message == "-menu") {
+        cmd(`give ${player.name} mcc:menu 1 0`);
     }
-    
-    if(message == "-getad"){
-        if("admin" in player.getTags()){
-            cmd(`give ${player.name} mcc:admin_menu 1 0`)
+
+    if (message == "-menu2") {
+        if ("admin" in player.getTags()) {
+            cmd(`give ${player.name} mcc:admin_menu 1 0`);
         }
-        else{
-            logfor(player,'§c您沒有權限! 需要 "admin" Tag')
+        else {
+            logfor(player, '§c您沒有權限! 需要 "admin" Tag');
         }
     }
 
-    sendMessage(player,message);
+    sendMessage(player, message);
 })
 
 world.events.playerJoin.subscribe(eventData => {
-    const player = eventData.player
+    const player = eventData.player;
 
-    sendMessage(player, message);
-
+    /* 這個我先關閉 到時候再來討論或想想要做什麼 */
 })
 
 world.events.itemUse.subscribe(eventData => {

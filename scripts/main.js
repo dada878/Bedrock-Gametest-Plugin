@@ -4,8 +4,9 @@ import { sendMessage } from './system/chat.js'
 import { AdminMenu } from "./mainMenu/admin.js";
 import { PlayerMenu } from "./mainMenu/player.js";
 
-import * as base64 from "./lib/base64"
-import * as scores from "./lib/ScoresFormat"
+import * as base64 from "./lib/base64.js"
+import * as scores from "./lib/ScoresFormat.js"
+import { WorldDB } from "./lib/WorldDB.js";
 
 
 // 嘗試創建記分板
@@ -16,11 +17,16 @@ world.events.beforeChat.subscribe(eventData => {
     const player = eventData.sender;
     const message = eventData.message;
 
-    const scoresEncode = scores.encode(message);
-    log(scoresEncode);
-    log(scoresEncode.length);
+    // const scoresEncode = scores.encode(message);
+    // log(scoresEncode);
+    // log(scoresEncode.length);
 
-    log(scores.decode(scoresEncode))
+    // log(scores.decode(scoresEncode))
+
+    let db = new WorldDB("database");
+    db.setData("hello","早上好中國");
+
+    log(db.getData("hello"));
 
     sendMessage(player, message);
 })

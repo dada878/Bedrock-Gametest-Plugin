@@ -35,6 +35,8 @@ export function encode(string) {
 
 export function decode(string) {
 
+    string = string.toString();
+
     let twoChars = [];
     let result = "";
 

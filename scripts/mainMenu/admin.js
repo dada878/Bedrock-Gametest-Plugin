@@ -35,6 +35,7 @@ export function AdminMenu(player) {
                     (function () { if (db.getData("title") == 0) { return false } else { return true } })(),
                     (function () { if (db.getData("home") == 0) { return false } else { return true } })(),
                     (function () { if (db.getData("tpa") == 0) { return false } else { return true } })(),
+                    (function () { if (db.getData("JoinMsgOption") == 0) { return false } else { return true } })(),
                 ]
 
                 const x = db.getData("spawn-x") ?? 0;
@@ -44,10 +45,12 @@ export function AdminMenu(player) {
                 let fm = new ui.ModalFormData();
                 fm.title("插件設定");
                 fm.textField("設定大廳座標(以空格隔開xyz)", "0 -60 0", `${x} ${y} ${z}`);
+                fm.textField('輸入歡迎訊息 (將作為玩家加入時的用語)','');
                 fm.toggle("禁用返回大廳", Boolean(enableList[0]));
                 fm.toggle("禁用稱號系統", Boolean(enableList[1]));
                 fm.toggle("禁用家園系統", Boolean(enableList[2]));
                 fm.toggle("禁用玩家互傳", Boolean(enableList[3]));
+                fm.toggle("禁用歡迎訊息", Boolean(enableList[4]));
 
                 fm.show(player).then(response => {
                     if (!response) return;
@@ -63,18 +66,25 @@ export function AdminMenu(player) {
                     db.setData("spawn-y", pos[1]);
                     db.setData("spawn-z", pos[2]);
 
+                    // 加入訊息設定
+                    const msg = response.formValues[1]
+                    db.setData("JoinMessage",msg);
+
                     // 功能開關
-                    if (response.formValues[1]) { db.setData("spawnTp", 1) }
+                    if (response.formValues[2]) { db.setData("spawnTp", 1) }
                     else { db.setData("spawnTp", 0) }
 
-                    if (response.formValues[2]) { db.setData("title", 1) }
+                    if (response.formValues[3]) { db.setData("title", 1) }
                     else { db.setData("title", 0) }
 
-                    if (response.formValues[3]) { db.setData("home", 1) }
+                    if (response.formValues[4]) { db.setData("home", 1) }
                     else { db.setData("home", 0) }
 
-                    if (response.formValues[4]) { db.setData("tpa", 1) }
+                    if (response.formValues[5]) { db.setData("tpa", 1) }
                     else { db.setData("tpa", 0) }
+
+                    if (response.formValues[6]) { db.setData("JoinMessage", 1) }
+                    else { db.setData("JoinMsgOption", 0) }
 
                     logfor(player, ">> §a設定成功");
 
@@ -160,7 +170,7 @@ export function AdminMenu(player) {
                     logfor(player, ">> §a踢出成功");
                 })
                 break;
-            } default: {
+            }default: {
 
             }
         }
@@ -170,3 +180,5 @@ export function AdminMenu(player) {
 function give_rank() {
 
 }
+
+export { db }

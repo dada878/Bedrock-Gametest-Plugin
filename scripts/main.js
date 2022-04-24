@@ -3,6 +3,7 @@ import { cmd, log, logfor } from './lib/GameLibrary.js';
 import { sendMessage } from './system/chat.js'
 import { AdminMenu } from "./mainMenu/admin.js";
 import { PlayerMenu } from "./mainMenu/player.js";
+import { db } from "./mainMenu/admin.js";
 
 world.events.beforeChat.subscribe(eventData => {
     eventData.cancel = true;
@@ -10,25 +11,41 @@ world.events.beforeChat.subscribe(eventData => {
     const message = eventData.message;
 
     if(message == "-get"){
-        cmd(`give ${player.name} mcc:menu 1 0`)
+        cmd(`give ${player.name} mcc:menu 1 0`);
     }
     
     if(message == "-getad"){
-        if("admin" in player.getTags()){
-            cmd(`give ${player.name} mcc:admin_menu 1 0`)
+
+        if(player.getTags().indexOf("admin") != -1){
+            cmd(`give ${player.name} mcc:admin_menu 1 0`);
         }
+
         else{
-            logfor(player,'§c您沒有權限! 需要 "admin" Tag')
+            logfor(player,'§c您沒有權限! 需要 "admin" Tag');
         }
     }
 
-    sendMessage(player,message);
-})
+    if(message == "-getJoinMessage"){
+        logfor(player.name,db.getData("JoinMessage"));
+    }
+
+    else{
+        sendMessage(player,message);
+    }
+
+});
 
 world.events.playerJoin.subscribe(eventData => {
     const player = eventData.player
 
-    sendMessage(player, message);
+    const JoinMessage = {
+        "opening" : db.getData("JoinMsgOption"),
+        "msg" : db.getData("JoinMessage")
+    }
+    
+    if(JoinMessage["opening"] == 1){
+        logfor(player.name,JoinMessage["msg"])
+    }
 
 })
 

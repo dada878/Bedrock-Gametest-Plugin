@@ -10,47 +10,41 @@ world.events.beforeChat.subscribe(eventData => {
     const player = eventData.sender;
     const message = eventData.message;
 
+    // 發送訊息
+    if (!message.startsWith("-")) return sendMessage(player, message);
+
+    //輸入指令
     if (message == "-menu") {
+
         cmd(`give ${player.name} mcc:menu 1 0`);
+
+    } else if (message == "-menu2") {
+
+        if (!player.hasTag("admin")) return logfor(player, '§c您沒有權限! 需要 "admin" Tag');
+        cmd(`give ${player.name} mcc:admin_menu 1 0`);
+
+    } else if (message == "-getJoinMessage") {
+
+        logfor(player.name, db.getData("JoinMessage"));
+
+    } else {
+
+        logfor(player, ">> §c未知的指令")
+
     }
-    
-    else if(message == "-menu2"){
-
-        if(player.getTags().indexOf("admin") != -1){
-            cmd(`give ${player.name} mcc:admin_menu 1 0`);
-        }
-
-        else{
-            logfor(player,'§c您沒有權限! 需要 "admin" Tag');
-        }
-    }
-
-    else if(message == "-getJoinMessage"){
-        logfor(player.name,db.getData("JoinMessage"));
-    }
-
-    else{
-        sendMessage(player,message);
-    }
-
 });
 
 world.events.playerJoin.subscribe(eventData => {
     const player = eventData.player
 
-    const JoinMessage = {
-        "opening" : db.getData("JoinMsgOption"),
-        "msg" : db.getData("JoinMessage"),
-    }
-    
-    if(JoinMessage["opening"] == 1){
-        logfor(player.name,JoinMessage["msg"]);
+    const enable = db.getData("JoinMsgOption");
+    const msg = db.getData("JoinMessage");
+
+    if (enable == 1) {
+        logfor(player, msg);
     }
 
-    /* 這個我先關閉 到時候再來討論或想想要做什麼 */
 });
-
-
 
 world.events.itemUse.subscribe(eventData => {
     let player = eventData.source;

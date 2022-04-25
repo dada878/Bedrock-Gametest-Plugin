@@ -12,7 +12,7 @@ export function logfor(player,message) {
 };
 export function log(message) {
     let okay_message = `${message}`.replaceAll('\"',"''").replaceAll('\\',"/")
-    Minecraft.world.getDimension("overworld").runCommand(`tellraw @a {"rawtext":[{"text":"${okay_message}"}]}`).statusMessage
+    Minecraft.world.getDimension("overworld").runCommand(`tellraw @a {"rawtext":[{"text":"${okay_message}"}]}`)
 }
 export function GetScores (target, scoreboard) {
     try {

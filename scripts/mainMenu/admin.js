@@ -260,9 +260,10 @@ function give_rank() {
  * @param {object} axis - the axis of what you are converting
  */
 function toRelativePosition(string, player, axis = "x"){
-    if(string.match(/~[0-9]{1,}/)){
+    if(string.match(/~([0-9]{1,})?/)){
         var offset = string.slice(1) * 1 //避免情況
         if(offset) return Math.floor(player.location[axis]) + offset
+        return Math.floor(player.location[axis])
     }else return parseInt(string.replace(/~+/,""))
 }
 

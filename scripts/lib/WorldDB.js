@@ -47,4 +47,23 @@ export class WorldDB {
             } catch { break }
         }
     }
+
+    getNotbaseData(key){
+        const dataName = key.toString()
+
+        return GetScores(dataName,this.name)
+    }//只能設定數字
+
+    NotbaseData(key , value , type){
+        const dataName = key.toString()
+        const dataValue = Number(value)
+
+        if(type == "add"){
+            cmd(`scoreboard players add ${dataName} ${this.name} ${dataValue}`)
+        }
+        else if(type == "set"){
+            cmd(`scoreboard players set ${dataName} ${this.name} ${dataValue}`)
+        }
+    }//只能設定數字
+
 }

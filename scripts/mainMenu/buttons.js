@@ -3,6 +3,7 @@ import { HomeSystem } from "../system/home.js"
 import { TpaSystem } from "../system/tpa.js";
 import { SpawnTp } from "../system/spawnTp.js";
 import { WarpMenu } from "../system/warp.js";
+import { LevelSystem } from "../system/level.js";
 
 export const buttons = [
     {
@@ -45,7 +46,7 @@ export const buttons = [
         id: "exp",
         display: "等級系統",
         icon: "textures/items/experience_bottle.png",
-        handler: null
+        handler: LevelSystem
     },
 ];
 export const color = "§l§1";

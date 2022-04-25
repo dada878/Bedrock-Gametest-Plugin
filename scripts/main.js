@@ -4,6 +4,7 @@ import { sendMessage } from './system/chat.js'
 import { AdminMenu } from "./mainMenu/admin.js";
 import { PlayerMenu } from "./mainMenu/player.js";
 import { db } from "./mainMenu/admin.js";
+import { prefix } from "./config.js";
 
 world.events.beforeChat.subscribe(eventData => {
     eventData.cancel = true;
@@ -11,26 +12,33 @@ world.events.beforeChat.subscribe(eventData => {
     const message = eventData.message;
 
     // 發送訊息
-    if (!message.startsWith("-")) return sendMessage(player, message);
+    if (!message.startsWith(prefix)) return sendMessage(player, message);
 
-    //輸入指令
-    if (message == "-menu") {
-
-        cmd(`give ${player.name} mcc:menu 1 0`);
-
-    } else if (message == "-menu2") {
-
-        if (!player.hasTag("admin")) return logfor(player, '§c您沒有權限! 需要 "admin" Tag');
-        cmd(`give ${player.name} mcc:admin_menu 1 0`);
-
-    } else if (message == "-getJoinMessage") {
-
-        logfor(player.name, db.getData("JoinMessage"));
-
-    } else {
-
-        logfor(player, ">> §c未知的指令")
-
+    let command = message
+        .slice(prefix.length)
+        .split(/ +/)[0]
+        .toLowerCase(); 
+    
+    //
+    switch (command){
+        case "menu":{
+            cmd(`give ${player.name} mcc:menu 1 0`);
+            break;
+        }
+        case "admin_menu":{
+            if (!player.hasTag("admin")) return logfor(player.name, '§c您沒有權限! 需要 "admin" Tag');
+            cmd(`give ${player.name} mcc:admin_menu 1 0`);
+            break;
+        }
+        case "getjoinmotd":{
+            logfor(player.name, db.getData("JoinMessage"));
+            break;
+        }
+        default:{
+            logfor(player, ">> §c未知的指令");
+            break;
+        }
+        
     }
 });
 

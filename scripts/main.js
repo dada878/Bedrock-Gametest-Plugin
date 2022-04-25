@@ -6,6 +6,7 @@ import { PlayerMenu } from "./mainMenu/player.js";
 import { db } from "./mainMenu/admin.js";
 import { prefix } from "./config.js";
 import { expdb, leveldb } from "./system/level.js";
+import { level_difine } from "./lib/LevelDefine.js";
 
 world.events.beforeChat.subscribe(eventData => {
     eventData.cancel = true;
@@ -57,18 +58,25 @@ world.events.playerJoin.subscribe(eventData => {
 });
 
 world.events.blockBreak.subscribe(eventdata =>{
-    const player = eventdata.player
-    const block = eventdata.block
+    const player = eventdata.player;
+    const block = eventdata.block;
 
-    const exp = Math.random() * 100
+    const exp = Math.round(Math.random() * 100);
+    const player_level = leveldb.getNotbaseData(player);
+    const player_exp = expdb.getNotbaseData(player);
+
+    if (player_level == null){
+        player_level = 0;
+        leveldb.NotbaseData(player,0,"set");
+    }
 
     expdb.NotbaseData(player,exp,"add")
 
-    if (expdb.getNotbaseData(player) >= 100){
-        leveldb.NotbaseData(player,1,"set")
-    }
-    if (expdb.getNotbaseData(player) >= 300){
-        leveldb.NotbaseData(player,2,"set")
+    if (player_exp >= level_difine[player_level].exp){
+
+        leveldb.NotbaseData(player,level_difine[player_level].level,"set")
+        
+        logfor(player,level_difine[player_level].msg)
     }
 })
 

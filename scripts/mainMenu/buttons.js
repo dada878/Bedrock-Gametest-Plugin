@@ -43,7 +43,7 @@ export const buttons = [
         handler: null
     },
     {
-        id: "exp",
+        id: "level",
         display: "等級系統",
         icon: "textures/items/experience_bottle.png",
         handler: LevelSystem

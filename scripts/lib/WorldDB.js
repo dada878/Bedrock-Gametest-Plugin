@@ -49,13 +49,21 @@ export class WorldDB {
     }
 
     getNotbaseData(key){
-        const dataName = key.toString()
+        if (typeof key != typeof "string") {
+            key = key.name;
+        }
+        
+        const dataName = key
 
         return GetScores(dataName,this.name)
     }//只能設定數字
 
     NotbaseData(key , value , type){
-        const dataName = key.toString()
+        if (typeof key != typeof "string") {
+            key = key.name;
+        }
+
+        const dataName = key
         const dataValue = Number(value)
 
         if(type == "add"){

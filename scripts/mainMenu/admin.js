@@ -40,7 +40,7 @@ export function AdminMenu(player) {
                 fm.button('§l§1開關功能');
 
                 fm.show(player).then(response => {
-                    switch (response.selection) {
+                    switch (response.selection) { 
                         case (0): {
                             const x = db.getData("spawn-x") ?? 0;
                             const y = db.getData("spawn-y") ?? 0;
@@ -79,7 +79,6 @@ export function AdminMenu(player) {
                                     enableList[index] = false;
                                 }
                                 fm.toggle(`禁用${data.display}`, enableList[index]);
-                                logfor(player, ">> §a設定成功！");
                             });
 
                             fm.show(player).then(response => {

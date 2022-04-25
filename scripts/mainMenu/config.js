@@ -39,16 +39,16 @@ export const buttons = [
         id: "money",
         display: "經濟系統",
         icon: "textures/ui/MCoin.png",
-        handler: noone
+        handler: null
     },
     {
         id: "exp",
         display: "等級系統",
         icon: "textures/items/experience_bottle.png",
-        handler: noone
+        handler: null
     },
 ];
 export const color = "§l§1";
 export const disableColor = "§4";
 export const disableText = "此功能已被管理員禁用";
-export const disableIcon = "textures/ui/realms_red_x.png";
+export const disableIcon = "textures/blocks/barrier.png"; //textures/ui/realms_red_x.png

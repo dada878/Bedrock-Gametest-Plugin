@@ -6,7 +6,7 @@ import { getData, setData } from '../lib/JsonTagDB';
 import { WorldDB } from "../lib/WorldDB.js";
 var db = new WorldDB("plugin_database");
 
-import {buttons} from "./buttons.js";
+import { buttons } from "./buttons.js";
 
 export function AdminMenu(player) {
     let fm = new ui.ActionFormData();
@@ -91,6 +91,7 @@ export function AdminMenu(player) {
                         };
                     }
                 })
+                return;
                 break;
             }
             case (1): {

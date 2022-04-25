@@ -7,7 +7,7 @@ import { TpaSystem } from "../system/tpa.js";
 import { SpawnTp } from "../system/spawnTp.js";
 import { WarpMenu } from "../system/warp.js";
 
-import {buttons, color, disableColor, disableIcon, disableText} from "./config.js";
+import {buttons, color, disableColor, disableIcon, disableText} from "./buttons.js";
 
 const noone = ((player) => {logfor(player, ">> 本功能暫未開放！")})
 

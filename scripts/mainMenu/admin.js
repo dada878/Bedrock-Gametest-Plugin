@@ -6,6 +6,8 @@ import { getData, setData } from '../lib/JsonTagDB';
 import { WorldDB } from "../lib/WorldDB.js";
 var db = new WorldDB("plugin_database");
 
+import {buttons} from "./buttons.js";
+
 export function AdminMenu(player) {
     let fm = new ui.ActionFormData();
     fm.title("管理員選單");
@@ -30,69 +32,69 @@ export function AdminMenu(player) {
 
         switch (response.selection) {
             case (0): {
-
-                const enableList = [                  
-                    (function () { if (db.getData("JoinMsgOption") == 1) { return false } else { return true } })(),
-                    (function () { if (db.getData("spawnTp") == 1) { return true } else { return false } })(),
-                    (function () { if (db.getData("title") == 1) { return true } else { return false } })(),
-                    (function () { if (db.getData("warp") == 1) { return true } else { return false } })(),
-                    (function () { if (db.getData("home") == 1) { return true } else { return false } })(),
-                    (function () { if (db.getData("tpa") == 1) { return true } else { return false } })(),
-                ]
-
-                const x = db.getData("spawn-x") ?? 0;
-                const y = db.getData("spawn-y") ?? 0;
-                const z = db.getData("spawn-z") ?? 0;
-
-                let fm = new ui.ModalFormData();
-                fm.title("插件設定");
-                fm.textField("設定大廳座標(以空格隔開xyz)(支持使用~)", "0 -60 0", `${x} ${y} ${z}`);
-                fm.textField('輸入歡迎訊息 (將作為玩家加入時的用語)','');
-                fm.toggle("禁用返回大廳", Boolean(enableList[1]));
-                fm.toggle("禁用稱號系統", Boolean(enableList[2]));
-                fm.toggle("禁用家園系統", Boolean(enableList[4]));
-                fm.toggle("禁用玩家互傳", Boolean(enableList[5]));
-                fm.toggle("禁用歡迎訊息", Boolean(enableList[0]));
-                fm.toggle("禁用世界傳送點", Boolean(enableList[3]));
+                
+                let fm = new ui.ActionFormData();
+                fm.title("管理員選單");
+                fm.body("管理員專用，內有許多方便的功能");
+                fm.button('§l§1功能設置');
+                fm.button('§l§1開關功能');
 
                 fm.show(player).then(response => {
-                    if (!response) return;
+                    switch (response.selection) {
+                        case (0): {
 
-                    // 座標設定
-                    const pos = response.formValues[0].split(" ");
-                    db.setData("spawn-x", toRelativePosition(pos[0], player, "x"));
-                    db.setData("spawn-y", toRelativePosition(pos[1], player, "y"));
-                    db.setData("spawn-z", toRelativePosition(pos[2], player, "z"));
+                            const x = db.getData("spawn-x") ?? 0;
+                            const y = db.getData("spawn-y") ?? 0;
+                            const z = db.getData("spawn-z") ?? 0;
 
-                    // 加入訊息設定
-                    const msg = response.formValues[1]
-                    db.setData("JoinMessage",msg);
+                            let fm = new ui.ModalFormData();
+                            fm.title("功能設置");
+                            fm.textField("設定大廳座標(以空格隔開xyz)(支持使用~)", "0 -60 0", `${x} ${y} ${z}`);
+                            fm.textField('輸入歡迎訊息 (將作為玩家加入時的用語)','');
 
-                    // 功能開關
-                    if (response.formValues[2]) { db.setData("spawnTp", 1) }
-                    else { db.setData("spawnTp", 0) }
+                            fm.show(player).then(response => {
+                                if (!response) return;
 
-                    if (response.formValues[3]) { db.setData("title", 1) }
-                    else { db.setData("title", 0) }
+                                // 座標設定
+                                const pos = response.formValues[0].split(" ");
+                                db.setData("spawn-x", toRelativePosition(pos[0], player, "x"));
+                                db.setData("spawn-y", toRelativePosition(pos[1], player, "y"));
+                                db.setData("spawn-z", toRelativePosition(pos[2], player, "z"));
 
-                    if (response.formValues[3]) { db.setData("warp", 1) }
-                    else { db.setData("warp", 0) }
+                                // 加入訊息設定
+                                const msg = response.formValues[1]
+                                db.setData("JoinMessage",msg);
+                            })
+                            break;
+                        };
+                        case(1): {
+                            let isData = function(key){if (db.getData(key) == 1) {return false} else return true;};
+                            let boolCvt = function(key){if(key)return 1;else return 0;};
+                            let fm = new ui.ModalFormData();
+                            fm.title("開關功能");
+                            let enableList = [];
+                            buttons.forEach((data, index) => {
+                                if(isData(data.id)){
+                                    enableList[index] = true;
+                                }else{
+                                    enableList[index] = false;
+                                }
+                                fm.toggle(`禁用${data.display}`, enableList[index]);
+                                logfor(player, ">> §a設定成功！");
+                            });
 
-                    if (response.formValues[4]) { db.setData("home", 1) }
-                    else { db.setData("home", 0) }
-
-                    if (response.formValues[5]) { db.setData("tpa", 1) }
-                    else { db.setData("tpa", 0) }
-
-                    if (response.formValues[6]) { db.setData("JoinMessage", 1) }
-                    else { db.setData("JoinMsgOption", 0) }
-
-                    logfor(player, ">> §a設定成功");
-
-                });
-
-                break;
-            } case (1): {
+                            fm.show(player).then(response => {
+                                response.formValues.forEach((data, index) => {
+                                    db.setData(buttons[index].id, boolCvt(data))
+                                })
+                                logfor(player, ">> §a設定成功！");
+                            })
+                            break;
+                        };
+                    }
+                })
+            }
+            case (1): {
                 let fm = new ui.ModalFormData();
                 fm.title("給予稱號");
                 fm.dropdown("選擇目標玩家", playerNames);

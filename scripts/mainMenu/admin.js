@@ -46,7 +46,7 @@ export function AdminMenu(player) {
 
                 let fm = new ui.ModalFormData();
                 fm.title("插件設定");
-                fm.textField("設定大廳座標(以空格隔開xyz)", "0 -60 0", `${x} ${y} ${z}`);
+                fm.textField("設定大廳座標(以空格隔開xyz)(支持使用~)", "0 -60 0", `${x} ${y} ${z}`);
                 fm.textField('輸入歡迎訊息 (將作為玩家加入時的用語)','');
                 fm.toggle("禁用返回大廳", Boolean(enableList[1]));
                 fm.toggle("禁用稱號系統", Boolean(enableList[2]));
@@ -60,9 +60,9 @@ export function AdminMenu(player) {
 
                     // 座標設定
                     const pos = response.formValues[0].split(" ");
-                    db.setData("spawn-x", pos[0]);
-                    db.setData("spawn-y", pos[1]);
-                    db.setData("spawn-z", pos[2]);
+                    db.setData("spawn-x", toRelativePosition(pos[0], player, "x"));
+                    db.setData("spawn-y", toRelativePosition(pos[1], player, "y"));
+                    db.setData("spawn-z", toRelativePosition(pos[2], player, "z"));
 
                     // 加入訊息設定
                     const msg = response.formValues[1]
@@ -251,5 +251,20 @@ export function AdminMenu(player) {
 function give_rank() {
 
 }
+
+/**
+ * @name toRelativePosition
+ * @description
+ * @param {object} player - The player that have the Vec3
+ * @param {object} string - the string that we are parsing
+ * @param {object} axis - the axis of what you are converting
+ */
+function toRelativePosition(string, player, axis = "x"){
+    if(string.match(/~[0-9]{1,}/)){
+        var offset = string.slice(1) * 1 //避免情況
+        if(offset) return Math.floor(player.location[axis]) + offset
+    }else return parseInt(string.replace(/~+/,""))
+}
+
 
 export { db }

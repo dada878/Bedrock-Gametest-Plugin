@@ -15,6 +15,7 @@ world.events.beforeChat.subscribe(eventData => {
     if (!message.startsWith(prefix)) return sendMessage(player, message);
 
     let command = message
+        .trim()
         .slice(prefix.length)
         .split(/ +/)[0]
         .toLowerCase(); 

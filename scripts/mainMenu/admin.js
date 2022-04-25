@@ -42,7 +42,6 @@ export function AdminMenu(player) {
                 fm.show(player).then(response => {
                     switch (response.selection) {
                         case (0): {
-
                             const x = db.getData("spawn-x") ?? 0;
                             const y = db.getData("spawn-y") ?? 0;
                             const z = db.getData("spawn-z") ?? 0;
@@ -65,6 +64,7 @@ export function AdminMenu(player) {
                                 const msg = response.formValues[1]
                                 db.setData("JoinMessage",msg);
                             });
+                            break;
                         };
                         case(1): {
                             let isData = function(key){if (db.getData(key) == 1) {return false} else return true;};
@@ -88,6 +88,7 @@ export function AdminMenu(player) {
                                 })
                                 logfor(player, ">> §a設定成功！");
                             });
+                            break;
                         };
                     }
                 })

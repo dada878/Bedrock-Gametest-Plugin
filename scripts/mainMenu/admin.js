@@ -64,8 +64,7 @@ export function AdminMenu(player) {
                                 // 加入訊息設定
                                 const msg = response.formValues[1]
                                 db.setData("JoinMessage",msg);
-                            })
-                            break;
+                            });
                         };
                         case(1): {
                             let isData = function(key){if (db.getData(key) == 1) {return false} else return true;};
@@ -88,11 +87,11 @@ export function AdminMenu(player) {
                                     db.setData(buttons[index].id, boolCvt(data))
                                 })
                                 logfor(player, ">> §a設定成功！");
-                            })
-                            break;
+                            });
                         };
                     }
                 })
+                break;
             }
             case (1): {
                 let fm = new ui.ModalFormData();

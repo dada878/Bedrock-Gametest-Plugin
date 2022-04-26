@@ -14,13 +14,13 @@ world.events.beforeChat.subscribe(eventData => {
     // 發送訊息
     if (!message.startsWith(prefix)) return sendMessage(player, message);
 
+    //發送指令
     let command = message
         .trim()
         .slice(prefix.length)
         .split(/ +/)[0]
         .toLowerCase(); 
     
-    //
     switch (command){
         case "menu":{
             cmd(`give ${player.name} mcc:menu 1 0`);
@@ -62,6 +62,36 @@ world.events.itemUse.subscribe(eventData => {
     if (item.id == "mcc:menu") PlayerMenu(player);
     else if (item.id == "mcc:admin_menu") AdminMenu(player);
 });
+
+function enchantTest(player) {
+    
+    //測試
+    let inv = player.getComponent("inventory").container;
+    let item = inv.getItem(0);
+
+    let enchants = item.getComponent("enchantments").enchantments;
+
+    // for (let i in enchants) {
+    //     log(i)
+    //     log(i.constructor.name)
+    // }
+
+    let iterator = enchants[Symbol.iterator]()
+
+    log(iterator.constructor.name)
+    log(enchants.enchantmentType)
+
+    for (let i in iterator) {
+        log(i.constructor.name)
+        log(i)
+    }
+
+    for (let i in enchants) {
+        log(i.constructor.name)
+        log(i)
+    }
+
+}
 
 /*
 

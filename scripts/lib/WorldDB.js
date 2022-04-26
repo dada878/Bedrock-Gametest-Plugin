@@ -58,7 +58,7 @@ export class WorldDB {
         return GetScores(dataName,this.name)
     }
 
-    setRawData(key , value , type){
+    setRawData(key, value){
         if (typeof key != typeof "string") {
             key = key.name;
         }
@@ -68,7 +68,7 @@ export class WorldDB {
 
         cmd(`scoreboard players set ${dataName} ${this.name} ${dataValue}`)
     }
-    addRawData(key , value , type){
+    addRawData(key, value){
         if (typeof key != typeof "string") {
             key = key.name;
         }

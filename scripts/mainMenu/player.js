@@ -1,13 +1,6 @@
 import * as ui from 'mojang-minecraft-ui';
 import { GetScores, log, logfor } from '../lib/GameLibrary.js';
-
-import { ChangeChat } from '../system/chat.js'
-import { HomeSystem } from "../system/home.js"
-import { TpaSystem } from "../system/tpa.js";
-import { SpawnTp } from "../system/spawnTp.js";
-import { WarpMenu } from "../system/warp.js";
-
-import {buttons, color, disableColor, disableIcon, disableText} from "./config.js";
+import {buttons, color, disableColor, disableIcon, disableText} from "./buttons.js";
 
 const noone = ((player) => {logfor(player, ">> 本功能暫未開放！")})
 

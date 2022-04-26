@@ -3,6 +3,19 @@ import * as Minecraft from 'mojang-minecraft';
 export function cmd(command) {
     return Minecraft.world.getDimension("overworld").runCommand(command).statusMessage
 };
+export function rawcmd(command) {
+    Minecraft.world.getDimension("overworld").runCommand(command)
+};
+export function cmds(commands){
+    const conditionalRegex = /^%/;
+    if (conditionalRegex.test(commands[0])) return false;
+    let error = false;
+    commands.forEach(cmd => {
+        if (error && conditionalRegex.test(cmd)) return false;
+        error = rawcmd(cmd.replace(conditionalRegex, '')).error;
+    });
+    return true;
+}
 export function logfor(player,message) {
     if (typeof player != typeof "string") {
         player = player.name;

@@ -1,10 +1,12 @@
 import { world } from "mojang-minecraft";
-import { cmd, log, logfor } from './lib/GameLibrary.js';
+import { cmd, cmds, log, logfor } from './lib/GameLibrary.js';
 import { sendMessage } from './system/chat.js'
 import { AdminMenu } from "./mainMenu/admin.js";
 import { PlayerMenu } from "./mainMenu/player.js";
 import { db } from "./mainMenu/admin.js";
-import { prefix } from "./config.js";
+import { prefix, baseXP } from "./config.js";
+import { ExpDB, LevelDB } from "./system/level.js";
+import { DefMaxXp, specialLevelMappings, levelUpMsg } from "./lib/LevelDefine.js";
 
 world.events.beforeChat.subscribe(eventData => {
     eventData.cancel = true;
@@ -54,6 +56,36 @@ world.events.playerJoin.subscribe(eventData => {
     }
 
 });
+
+world.events.blockBreak.subscribe(eventData =>{
+    const player = eventData.player;
+    const block = eventData.block;
+
+    const exp = Math.round(Math.random() * baseXP);
+    const player_level = LevelDB.getRawData(player);
+    const player_exp = ExpDB.getRawData(player);
+
+    if (player_level == null){
+        player_level = 0;
+        LevelDB.setRawData(player,0);
+    }
+
+    ExpDB.addRawData(player,exp)
+
+    if (player_exp >= DefMaxXp(player_level)){
+        LevelDB.addRawData(player,1)
+        let specialText = ""
+        if(specialLevelMappings[++player_level] && specialLevelMappings[player_level].text !== ""){
+            specialText = `\n${specialLevelMappings[player_level].text}`
+            if(specialLevelMappings[player_level].handler !== []){
+                player.addTag("plugin.target");
+                cmds(specialLevelMappings[player_level].handler)
+                player.removeTag("plugin.target");
+            }
+        }
+        logfor(player, `${levelUpMsg.replace(/%1+/, String(player_level))}${specialText}`)
+    }
+})
 
 world.events.itemUse.subscribe(eventData => {
     let player = eventData.source;

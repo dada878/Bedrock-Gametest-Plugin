@@ -3,6 +3,7 @@ import { HomeSystem } from "../system/home.js"
 import { TpaSystem } from "../system/tpa.js";
 import { SpawnTp } from "../system/spawnTp.js";
 import { WarpMenu } from "../system/warp.js";
+import { LevelSystem } from "../system/level.js";
 
 export const buttons = [
     {
@@ -42,13 +43,13 @@ export const buttons = [
         handler: null
     },
     {
-        id: "exp",
+        id: "level",
         display: "等級系統",
         icon: "textures/items/experience_bottle.png",
-        handler: null
+        handler: LevelSystem
     },
 ];
 export const color = "§l§1";
 export const disableColor = "§4";
 export const disableText = "此功能已被管理員禁用";
-export const disableIcon = "textures/blocks/barrier.png"; //textures/ui/realms_red_x.png
+export const disableIcon = "textures/ui/realms_red_x.png";

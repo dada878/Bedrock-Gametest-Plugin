@@ -3,6 +3,7 @@ import { log, logfor, GetScores } from '../lib/GameLibrary.js';
 import { getData, setData } from '../lib/JsonTagDB';
 
 import { WorldDB } from "../lib/WorldDB.js";
+import { LevelDB } from './level.js';
 var db = new WorldDB("plugin_database");
 
 export function ChangeChat(player) {
@@ -32,8 +33,11 @@ export function sendMessage(player, message) {
     checkTitle(player);
 
     const title = getData(player, "selectedTitle");
+    const level = LevelDB.getNotbaseData(player);
+    
+    if (level==null) {level = 0}
 
-    log(`[${title}§r]${player.name} >> ${message}`);
+    log(`[§bLv.${level}§r][${title}§r]${player.name} >> ${message}`);
 }
 
 function checkTitle(player) {

@@ -47,4 +47,36 @@ export class WorldDB {
             } catch { break }
         }
     }
+
+    getRawData(key){
+        if (typeof key != typeof "string") {
+            key = key.name;
+        }
+        
+        const dataName = key
+
+        return GetScores(dataName,this.name)
+    }
+
+    setRawData(key , value , type){
+        if (typeof key != typeof "string") {
+            key = key.name;
+        }
+
+        const dataName = key
+        const dataValue = Number(value)
+
+        cmd(`scoreboard players set ${dataName} ${this.name} ${dataValue}`)
+    }
+    addRawData(key , value , type){
+        if (typeof key != typeof "string") {
+            key = key.name;
+        }
+
+        const dataName = key
+        const dataValue = Number(value)
+        
+        cmd(`scoreboard players add ${dataName} ${this.name} ${dataValue}`)
+    }//只能設定數字
+
 }

@@ -13,6 +13,15 @@ export function ChangeChat(player) {
 
     let hasTitles = getData(player, "hasTitles");
 
+    const tags = player.getTags();
+    for (let tag of tags) {
+
+        if (tag.startsWith("RANK:")) {
+            const rank = tag.substring(5, tag.length);
+            hasTitles.push(rank);
+        }
+    }
+
     let fm = new ui.ModalFormData();
     fm.title("稱號系統");
     fm.dropdown("選擇要配戴的稱號", hasTitles)
@@ -33,11 +42,12 @@ export function sendMessage(player, message) {
     checkTitle(player);
 
     const title = getData(player, "selectedTitle");
-    const level = LevelDB.getNotbaseData(player);
-    
-    if (level==null) {level = 0}
 
-    log(`[§bLv.${level}§r][${title}§r]${player.name} >> ${message}`);
+    // const level = LevelDB.getNotbaseData(player); TODO:暫時註解掉*
+    // if (level == null) { level = 0 }
+    // log(`[§bLv.${level}§r][${title}§r]${player.name} >> ${message}`);
+    
+    log(`[${title}§r]${player.name} >> ${message}`);
 }
 
 function checkTitle(player) {

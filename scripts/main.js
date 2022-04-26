@@ -8,6 +8,7 @@ import { prefix, baseXP } from "./config.js";
 import { ExpDB, LevelDB } from "./system/level.js";
 import { DefMaxXp, specialLevelMappings, levelUpMsg } from "./lib/LevelDefine.js";
 
+//當傳送訊息
 world.events.beforeChat.subscribe(eventData => {
     eventData.cancel = true;
     const player = eventData.sender;
@@ -45,6 +46,7 @@ world.events.beforeChat.subscribe(eventData => {
     }
 });
 
+//當玩家加入
 world.events.playerJoin.subscribe(eventData => {
     const player = eventData.player
 
@@ -57,6 +59,7 @@ world.events.playerJoin.subscribe(eventData => {
 
 });
 
+//當方塊破壞
 world.events.blockBreak.subscribe(eventData =>{
     const player = eventData.player;
     const block = eventData.block;
@@ -87,12 +90,31 @@ world.events.blockBreak.subscribe(eventData =>{
     }
 })
 
+//物品使用
 world.events.itemUse.subscribe(eventData => {
     let player = eventData.source;
     let item = eventData.item;
 
     if (item.id == "mcc:menu") PlayerMenu(player);
     else if (item.id == "mcc:admin_menu") AdminMenu(player);
+});
+
+world.events.tick.subscribe(eventData => {
+    const players = world.getPlayers();
+
+    for (let player of players) {
+        const tags = player.getTags();
+        
+        for (let tag of tags) {
+
+            if (tag.startsWith("RANK:")) {
+                let rank = tag.substring(5,tag.length);
+
+                
+            }
+        }
+    }
+
 });
 
 function enchantTest(player) {

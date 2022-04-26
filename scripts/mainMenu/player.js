@@ -2,7 +2,7 @@ import * as ui from 'mojang-minecraft-ui';
 import { GetScores, log, logfor } from '../lib/GameLibrary.js';
 import {buttons, color, disableColor, disableIcon, disableText} from "./buttons.js";
 
-const noone = ((player) => {logfor(player, ">> 本功能暫未開放！")})
+const noone = ((player) => {logfor(player, ">> §c本功能暫未開放！")})
 
 import { WorldDB } from "../lib/WorldDB.js";
 var db = new WorldDB("plugin_database");

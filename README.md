@@ -20,7 +20,6 @@ https://www.youtube.com/watch?v=PUEsoWuERq4
 - 暫無
 ### 未來規劃
 - 完善經濟系統
-- 添加透過指令操作稱號功能
 - 公會系統
 - 好友系統
 - 遊戲內自定義指令

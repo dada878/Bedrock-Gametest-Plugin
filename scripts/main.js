@@ -4,9 +4,9 @@ import { sendMessage } from './system/chat.js'
 import { AdminMenu } from "./mainMenu/admin.js";
 import { PlayerMenu } from "./mainMenu/player.js";
 import { db } from "./mainMenu/admin.js";
-import { prefix, baseXP, levelUpMsg } from "./config.js";
+import { prefix, baseXP } from "./config.js";
 import { ExpDB, LevelDB } from "./system/level.js";
-import { DefMaxXp, specialLevelMappings } from "./lib/LevelDefine.js";
+import { DefMaxXp, specialLevelMappings, levelUpMsg } from "./lib/LevelDefine.js";
 
 world.events.beforeChat.subscribe(eventData => {
     eventData.cancel = true;

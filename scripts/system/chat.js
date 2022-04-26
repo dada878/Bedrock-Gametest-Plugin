@@ -38,10 +38,12 @@ export function ChangeChat(player) {
 }
 
 export function sendMessage(player, message) {
-
     checkTitle(player);
 
     const title = getData(player, "selectedTitle");
+    const level = LevelDB.getRawData(player);
+    
+    if (level == null) {level = 0}
 
     // const level = LevelDB.getNotbaseData(player); TODO:暫時註解掉*
     // if (level == null) { level = 0 }

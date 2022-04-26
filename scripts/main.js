@@ -65,7 +65,7 @@ world.events.blockBreak.subscribe(eventData =>{
     const block = eventData.block;
 
     const exp = Math.round(Math.random() * baseXP);
-    const player_level = LevelDB.getRawData(player);
+    let player_level = LevelDB.getRawData(player);
     const player_exp = ExpDB.getRawData(player);
 
     if (player_level == null){
@@ -78,15 +78,21 @@ world.events.blockBreak.subscribe(eventData =>{
     if (player_exp >= DefMaxXp(player_level)){
         LevelDB.addRawData(player,1)
         let specialText = ""
+        let text = `${levelUpMsg.replace(/%1+/, String(player_level))}`
         if(specialLevelMappings[++player_level] && specialLevelMappings[player_level].text !== ""){
-            specialText = `\n${specialLevelMappings[player_level].text}`
+            if(`${specialLevelMappings[player_level].text}`.match(/^%/)){
+                logfor(player, `${specialLevelMappings[player_level].text}`);
+            }else{
+                logfor(player, `${text}\n${specialLevelMappings[player_level].text}`);
+            }
             if(specialLevelMappings[player_level].handler !== []){
                 player.addTag("plugin.target");
                 cmds(specialLevelMappings[player_level].handler)
                 player.removeTag("plugin.target");
             }
+        }else{
+            logfor(player, `${text}`);
         }
-        logfor(player, `${levelUpMsg.replace(/%1+/, String(player_level))}${specialText}`)
     }
 })
 

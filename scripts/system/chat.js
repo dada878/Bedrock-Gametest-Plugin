@@ -29,13 +29,12 @@ export function ChangeChat(player) {
 }
 
 export function sendMessage(player, message) {
-
     checkTitle(player);
 
     const title = getData(player, "selectedTitle");
-    const level = LevelDB.getNotbaseData(player);
+    const level = LevelDB.getRawData(player);
     
-    if (level==null) {level = 0}
+    if (level == null) {level = 0}
 
     log(`[§bLv.${level}§r][${title}§r]${player.name} >> ${message}`);
 }

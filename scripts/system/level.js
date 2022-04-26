@@ -44,7 +44,7 @@ export function addXp(player,exp) {
         LevelDB.addRawData(player, 1);
         let specialText = "";
         let text = `${levelUpMsg.replace(/%level%+/, String(player_level))}`;
-        
+
         if (specialLevelMappings[++player_level] && specialLevelMappings[player_level].text !== "") {
 
             if (`${specialLevelMappings[player_level].text}`.match(/^%/)) {
@@ -55,10 +55,12 @@ export function addXp(player,exp) {
 
             }
             if (specialLevelMappings[player_level].handler !== []) {
-                player.addTag("plugin.target");
+                for(let n = 0 ; n >= specialLevelMappings[player_level].handler.length ; n++){
+                    player.addTag("plugin.target");
 
-                cmds(specialLevelMappings[player_level].handler);
-                player.removeTag("plugin.target");
+                    cmd(specialLevelMappings[player_level].handler[n]);
+                    player.removeTag("plugin.target");
+                }
             }
 
         } else {

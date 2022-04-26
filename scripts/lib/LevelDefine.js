@@ -8,11 +8,11 @@ export const levelUpMsg = ">> §b恭喜!您升到了§aLv.%level%";
 
 export const specialLevelMappings = {
     10: {
-        text: ">> §b恭喜升級到10級！",
-        handler: ["give @a[tag=plugin.target] diamond 3", "say abc d efg hijk lmnop"]
+        text: ">> §e恭喜升級到§a10級！§r §e已派送§a等級獎勵",
+        handler : ["give @a[tag=plugin.target] diamond 3", "say abc d efg hijk lmnop"]
     },
     20: {
-        text: ">> §b恭喜升級到20級！",
-        handler: ["give @a[tag=plugin.target] emerald"]
+        text: ">> §e恭喜升級到§a20級！§r §e已派送§a等級獎勵",
+        handler: ["give @a[tag=plugin.target] emerald 3"]
     }
 }

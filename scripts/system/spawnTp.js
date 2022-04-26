@@ -11,7 +11,7 @@ export function SpawnTp(player) {
     const posY = db.getData("spawn-y");
     const posZ = db.getData("spawn-z");
 
-    if (posX == null) return logfor(player, ">> §c大廳座標尚未被設定，請找管理員使用管理員選單配置");
+    if (posX == null || posY == null || posZ == null) return logfor(player, ">> §c大廳座標尚未被設定，請找管理員使用管理員選單配置");
 
     player.runCommand(`tp ${posX} ${posY} ${posZ}`);
 }

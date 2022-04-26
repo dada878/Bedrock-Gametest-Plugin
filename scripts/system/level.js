@@ -4,12 +4,12 @@ import { cmd, GetScores, log, logfor, SetScores } from '../lib/GameLibrary.js';
 import { getData, setData } from '../lib/JsonTagDB';
 
 import { WorldDB } from "../lib/WorldDB.js";
-var expdb = new WorldDB("exp_database");
-var leveldb = new WorldDB("level_database");
+export const ExpDB = new WorldDB("xp");
+export const LevelDB = new WorldDB("level");
 
 export function LevelSystem(player){
-    level = leveldb.getNotbaseData(player);
-    exp = expdb.getNotbaseData(player);
+    level = LevelDB.getRawData(player);
+    exp = ExpDB.getRawData(player);
 
     if (level == null) { level = "0" };
 
@@ -24,6 +24,3 @@ export function LevelSystem(player){
         if (!response) return;
     });
 }
-
-export{ expdb };
-export{ leveldb };

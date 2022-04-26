@@ -1,12 +1,12 @@
 import { world } from "mojang-minecraft";
-import { cmd, log, logfor } from './lib/GameLibrary.js';
+import { cmd, cmds, log, logfor } from './lib/GameLibrary.js';
 import { sendMessage } from './system/chat.js'
 import { AdminMenu } from "./mainMenu/admin.js";
 import { PlayerMenu } from "./mainMenu/player.js";
 import { db } from "./mainMenu/admin.js";
-import { prefix } from "./config.js";
-import { expdb, leveldb } from "./system/level.js";
-import { level_difine } from "./lib/LevelDefine.js";
+import { prefix, baseXP, levelUpMsg } from "./config.js";
+import { ExpDB, LevelDB } from "./system/level.js";
+import { DefMaxXp, specialLevelMappings } from "./lib/LevelDefine.js";
 
 world.events.beforeChat.subscribe(eventData => {
     eventData.cancel = true;
@@ -57,26 +57,33 @@ world.events.playerJoin.subscribe(eventData => {
 
 });
 
-world.events.blockBreak.subscribe(eventdata =>{
-    const player = eventdata.player;
-    const block = eventdata.block;
+world.events.blockBreak.subscribe(eventData =>{
+    const player = eventData.player;
+    const block = eventData.block;
 
-    const exp = Math.round(Math.random() * 100);
-    const player_level = leveldb.getNotbaseData(player);
-    const player_exp = expdb.getNotbaseData(player);
+    const exp = Math.round(Math.random() * baseXP);
+    const player_level = LevelDB.getRawData(player);
+    const player_exp = ExpDB.getRawData(player);
 
     if (player_level == null){
         player_level = 0;
-        leveldb.NotbaseData(player,0,"set");
+        LevelDB.setRawData(player,0);
     }
 
-    expdb.NotbaseData(player,exp,"add")
+    ExpDB.addRawData(player,exp)
 
-    if (player_exp >= level_difine[player_level].exp){
-
-        leveldb.NotbaseData(player,level_difine[player_level].level,"set")
-        
-        logfor(player,level_difine[player_level].msg)
+    if (player_exp >= DefMaxXp(player_level)){
+        LevelDB.addRawData(player,1)
+        let specialText = ""
+        if(specialLevelMappings[++player_level] && specialLevelMappings[player_level].text !== ""){
+            specialText = `\n${specialLevelMappings[player_level].text}`
+            if(specialLevelMappings[player_level].handler !== []){
+                player.addTag("plugin.target");
+                cmds(specialLevelMappings[player_level].handler)
+                player.removeTag("plugin.target");
+            }
+        }
+        logfor(player, `${levelUpMsg.replace(/%1+/, String(player_level))}${specialText}`)
     }
 })
 

@@ -48,7 +48,7 @@ export class WorldDB {
         }
     }
 
-    getNotbaseData(key){
+    getRawData(key){
         if (typeof key != typeof "string") {
             key = key.name;
         }
@@ -56,9 +56,9 @@ export class WorldDB {
         const dataName = key
 
         return GetScores(dataName,this.name)
-    }//只能設定數字
+    }
 
-    NotbaseData(key , value , type){
+    setRawData(key , value , type){
         if (typeof key != typeof "string") {
             key = key.name;
         }
@@ -66,12 +66,17 @@ export class WorldDB {
         const dataName = key
         const dataValue = Number(value)
 
-        if(type == "add"){
-            cmd(`scoreboard players add ${dataName} ${this.name} ${dataValue}`)
+        cmd(`scoreboard players set ${dataName} ${this.name} ${dataValue}`)
+    }
+    addRawData(key , value , type){
+        if (typeof key != typeof "string") {
+            key = key.name;
         }
-        else if(type == "set"){
-            cmd(`scoreboard players set ${dataName} ${this.name} ${dataValue}`)
-        }
+
+        const dataName = key
+        const dataValue = Number(value)
+        
+        cmd(`scoreboard players add ${dataName} ${this.name} ${dataValue}`)
     }//只能設定數字
 
 }

@@ -10,8 +10,8 @@ export const ExpDB = new WorldDB("xp");
 export const LevelDB = new WorldDB("level");
 
 export function LevelSystem(player){
-    level = LevelDB.getRawData(player);
-    exp = ExpDB.getRawData(player);
+    let level = LevelDB.getRawData(player);
+    let exp = ExpDB.getRawData(player);
 
     if (level == null) { level = "0" };
 
@@ -40,16 +40,21 @@ export function addXp(player,exp) {
     ExpDB.addRawData(player, exp)
 
     if (player_exp >= DefMaxXp(player_level)) {
+
+        cmd(`title "${player.name}" title §b恭喜升級`);
+        cmd(`title "${player.name}" subtitle §e已經升上 §a${player_level} §e等`);
+        log(`>> §b${player.name} §e成功升到了 §b${player_level} §e等！`);
+
         ExpDB.setRawData(player, 0);
         LevelDB.addRawData(player, 1);
         let specialText = "";
         let text = `${levelUpMsg.replace(/%1+/, String(player_level))}`;
         if (specialLevelMappings[++player_level] && specialLevelMappings[player_level].text !== "") {
-            if (`${specialLevelMappings[player_level].text}`.match(/^%/)) {
-                logfor(player, `${specialLevelMappings[player_level].text}`);
-            } else {
-                logfor(player, `${text}\n${specialLevelMappings[player_level].text}`);
-            }
+            // if (`${specialLevelMappings[player_level].text}`.match(/^%/)) {
+            //     logfor(player, `${specialLevelMappings[player_level].text}`);
+            // } else {
+            //     logfor(player, `${text}\n${specialLevelMappings[player_level].text}`);
+            // }
             if (specialLevelMappings[player_level].handler !== []) {
                 player.addTag("plugin.target");
                 cmds(specialLevelMappings[player_level].handler)

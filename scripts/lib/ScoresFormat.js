@@ -1,5 +1,4 @@
 import * as base64 from "./base64"
-import { log } from "./GameLibrary";
 
 var SCORES_DECODE_CHAR = {
     'A': '11', 'B': '12', 'C': '13', 'D': '14', 'E': '15', 'F': '16', 'G': '17', 'H': '18', 'I': '19',
@@ -19,6 +18,11 @@ for (let i in SCORES_DECODE_CHAR) {
     REVERSE_SCORES_DECODE_CHAR[key] = i;
 };
 
+/**
+ * 將字串編碼成"記分板編碼"
+ * @param {string} string 字串
+ * @returns {string} 編碼後的字串
+ */
 export function encode(string) {
 
     const origin = base64.encode(string);
@@ -33,6 +37,11 @@ export function encode(string) {
     return result;
 };
 
+/**
+ * "記分板編碼"解碼成utf-8字串
+ * @param {string} string 記分板編碼
+ * @returns {string} 解碼後結果
+ */
 export function decode(string) {
 
     string = string.toString();

@@ -1,12 +1,19 @@
 import * as ui from 'mojang-minecraft-ui';
-import { log, logfor, GetScores } from '../lib/GameLibrary.js';
+import * as Minecraft from 'mojang-minecraft';
+import { log, logfor } from '../lib/GameLibrary.js';
 import { getData, setData } from '../lib/JsonTagDB';
-
 import { WorldDB } from "../lib/WorldDB.js";
 import { LevelDB } from './level.js';
+
 var db = new WorldDB("plugin_database");
 
+/**
+ * 對玩家顯示稱號選單
+ * @param {Minecraft.Player} player 玩家
+ * @returns 
+ */
 export function ChangeChat(player) {
+
     if (db.getData("title") == 1) { return logfor(player, ">> §c無法使用，此功能已被禁用") };
 
     checkTitle(player)

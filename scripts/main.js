@@ -18,10 +18,10 @@ world.events.beforeChat.subscribe(eventData => {
 
     //發送指令
     let command = message
-        .trim()
-        .slice(prefix.length)
-        .split(/ +/)[0]
-        .toLowerCase();
+        .trim() //去除兩邊空格
+        .slice(prefix.length) //刪除prefix
+        .split(/ +/)[0] //取得主指令
+        .toLowerCase(); //轉成小寫
 
     switch (command) {
         case "menu": {
@@ -74,36 +74,6 @@ world.events.itemUse.subscribe(eventData => {
     if (item.id == "mcc:menu") PlayerMenu(player);
     else if (item.id == "mcc:admin_menu") AdminMenu(player);
 });
-
-function enchantTest(player) {
-
-    //測試
-    let inv = player.getComponent("inventory").container;
-    let item = inv.getItem(0);
-
-    let enchants = item.getComponent("enchantments").enchantments;
-
-    // for (let i in enchants) {
-    //     log(i)
-    //     log(i.constructor.name)
-    // }
-
-    let iterator = enchants[Symbol.iterator]()
-
-    log(iterator.constructor.name)
-    log(enchants.enchantmentType)
-
-    for (let i in iterator) {
-        log(i.constructor.name)
-        log(i)
-    }
-
-    for (let i in enchants) {
-        log(i.constructor.name)
-        log(i)
-    }
-
-}
 
 /*
 

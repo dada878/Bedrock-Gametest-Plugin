@@ -1,9 +1,16 @@
 import { world } from "mojang-minecraft";
 import * as ui from 'mojang-minecraft-ui';
-import { cmd, logfor, GetScores } from '../lib/GameLibrary.js';
+import { cmd, logfor } from '../lib/GameLibrary.js';
 import { WorldDB } from "../lib/WorldDB.js";
+
 var db = new WorldDB("plugin_database");
 
+
+/**
+ * 
+ * @param {Minecraft.Player} player 
+ * @returns 
+ */
 export function HomeSystem(player) {
     if (db.getData("home") == 1) { return logfor(player, ">> §c無法使用，此功能已被禁用") };
 
@@ -33,7 +40,6 @@ export function HomeSystem(player) {
                 return
             }
             else {
-
 
                 let fm = new ui.ModalFormData()
 

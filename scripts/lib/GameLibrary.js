@@ -49,9 +49,9 @@ export function executeCmds(player,commands) {
 
 
 /**
- * 
+ * 執行陣列內所有指令
  * @param {string[]} commands 所有要執行的指令
- * @returns 
+ * @returns {boolean} 指令是否執行成功
  */
 export function cmds(commands){
     const conditionalRegex = /^%/;
@@ -63,6 +63,13 @@ export function cmds(commands){
     });
     return true;
 }
+
+
+/**
+ * 傳送一則訊息給玩家
+ * @param {Minecraft.Player} player 玩家
+ * @param {string} message 訊息
+ */
 export function logfor(player,message) {
     if (typeof player != typeof "string") {
         player = player.name;
@@ -70,22 +77,44 @@ export function logfor(player,message) {
     let okay_message = message.toString().replaceAll('\"',"''").replaceAll('\\',"/")
     Minecraft.world.getDimension("overworld").runCommand(`tellraw "${player}" {"rawtext":[{"text":"${okay_message}"}]}`)
 };
+
+
+/**
+ * 傳送訊息給所有玩家
+ * @param {string} message 訊息
+ */
 export function log(message) {
     let okay_message = `${message}`.replaceAll('\"',"''").replaceAll('\\',"/")
     Minecraft.world.getDimension("overworld").runCommand(`tellraw @a {"rawtext":[{"text":"${okay_message}"}]}`)
 }
+
+
+/**
+ * 取得某計分項在計分板內的值
+ * @param {string} target 記分項目
+ * @param {string} scoreboard 記分板
+ * @returns {number} 執行成功回傳分數，失敗則為null
+ */
 export function GetScores (target, scoreboard) {
     try {
         const scoreMessage = cmd(`scoreboard players operation "${target}" "${scoreboard}" = "${target}" "${scoreboard}"`);
         const scoresRegEx = [...scoreMessage.matchAll(/\d+|-\d+/g)];
         const scores = scoresRegEx[scoresRegEx.length-1];
     
-        return scores;
+        return Number(scores);
 
     } catch {
         return null;
     }
 }
+
+/**
+ * 設定某計分項在計分板內的值
+ * @param {string} target 計分項
+ * @param {string} scoreboard 記分板
+ * @param {number} scores 分數
+ * @returns 
+ */
 export function SetScores (target, scoreboard, scores) {
     return cmd(`scoreboard players set "${target}" "${scoreboard}" ${scores}`);
 }

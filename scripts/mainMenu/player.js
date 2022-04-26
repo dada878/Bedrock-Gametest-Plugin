@@ -1,8 +1,8 @@
 import * as ui from 'mojang-minecraft-ui';
 import { GetScores, log, logfor } from '../lib/GameLibrary.js';
-import {buttons, color, disableColor, disableIcon, disableText} from "./buttons.js";
+import { buttons, color, disableColor, disableIcon, disableText } from "./buttons.js";
 
-const noone = ((player) => {logfor(player, ">> §c本功能暫未開放！")})
+const noone = ((player) => { logfor(player, ">> §c本功能暫未開放！") })
 
 import { WorldDB } from "../lib/WorldDB.js";
 var db = new WorldDB("plugin_database");
@@ -14,10 +14,10 @@ export function PlayerMenu(player) {
 
     buttons.forEach((data) => {
         let buttonText, icon;
-        if(db.getData(data.id) == 1){
+        if (db.getData(data.id) == 1) {
             buttonText = `§r${color}${data.display}\n§r${disableColor}${disableText}`
             icon = disableIcon
-        }else{
+        } else {
             buttonText = `§r${color}${data.display}`
             icon = data.icon
         }

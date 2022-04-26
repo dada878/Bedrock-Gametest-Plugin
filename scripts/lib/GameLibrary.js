@@ -4,7 +4,11 @@ export function cmd(command) {
     return Minecraft.world.getDimension("overworld").runCommand(command).statusMessage
 };
 export function rawcmd(command) {
-    Minecraft.world.getDimension("overworld").runCommand(command)
+    try {
+        return { error: false, ...Minecraft.world.getDimension("overworld").runCommand(command) };
+    }catch (error) {
+        return { error: true };
+    }
 };
 export function cmds(commands){
     const conditionalRegex = /^%/;

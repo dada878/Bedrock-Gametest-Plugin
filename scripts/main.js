@@ -62,7 +62,7 @@ world.events.blockBreak.subscribe(eventData =>{
     const block = eventData.block;
 
     const exp = Math.round(Math.random() * baseXP);
-    const player_level = LevelDB.getRawData(player);
+    let player_level = LevelDB.getRawData(player);
     const player_exp = ExpDB.getRawData(player);
 
     if (player_level == null){

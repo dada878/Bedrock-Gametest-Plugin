@@ -1,6 +1,6 @@
 import { world } from "mojang-minecraft";
 import * as ui from 'mojang-minecraft-ui';
-import { cmd, GetScores, log, logfor, SetScores } from '../lib/GameLibrary.js';
+import { cmd,cmds, executeCmds, GetScores, log, logfor, SetScores } from '../lib/GameLibrary.js';
 import { getData, setData } from '../lib/JsonTagDB';
 import { DefMaxXp, specialLevelMappings, levelUpMsg } from "../lib/LevelDefine.js";
 
@@ -27,6 +27,9 @@ export function LevelSystem(player){
     });
 }
 
+/*
+
+*/
 export function addXp(player,exp) {
     // const exp = Math.round(Math.random() * baseXP);
     let player_level = LevelDB.getRawData(player);
@@ -37,31 +40,27 @@ export function addXp(player,exp) {
         LevelDB.setRawData(player, 0);
     }
 
-    ExpDB.addRawData(player, exp)
+    ExpDB.addRawData(player, exp);
 
+    // 經驗值大於所需經驗，即升級
     if (player_exp >= DefMaxXp(player_level)) {
-
-        cmd(`title "${player.name}" title §b恭喜升級`);
-        cmd(`title "${player.name}" subtitle §e已經升上 §a${player_level} §e等`);
-        log(`>> §b${player.name} §e成功升到了 §b${player_level} §e等！`);
-
+        // 歸零經驗值並添加等級
         ExpDB.setRawData(player, 0);
         LevelDB.addRawData(player, 1);
-        let specialText = "";
-        let text = `${levelUpMsg.replace(/%1+/, String(player_level))}`;
-        if (specialLevelMappings[++player_level] && specialLevelMappings[player_level].text !== "") {
-            // if (`${specialLevelMappings[player_level].text}`.match(/^%/)) {
-            //     logfor(player, `${specialLevelMappings[player_level].text}`);
-            // } else {
-            //     logfor(player, `${text}\n${specialLevelMappings[player_level].text}`);
-            // }
-            if (specialLevelMappings[player_level].handler !== []) {
-                player.addTag("plugin.target");
-                cmds(specialLevelMappings[player_level].handler)
-                player.removeTag("plugin.target");
-            }
-        } else {
-            logfor(player, `${text}`);
+        // 升級特效/音效
+        cmd(`title "${player.name}" title §b恭喜升級`);
+        cmd(`title "${player.name}" subtitle §e已經升上 §a${++player_level} §e等`);
+        log(`>> §b${player.name} §e成功升到了 §b${player_level} §e等！`);
+        cmd(`playsound random.levelup "${player.name}"`);
+        // 玩家等級的特殊等級map
+        const specialLevelData = specialLevelMappings[player_level];
+        // 若無該特殊等級資料或訊息就return
+        if (!specialLevelData || specialLevelData.text === "") return;
+        // 發送特殊等級訊息
+        logfor(player, `${specialLevelData.text}`);
+        // 如果有就執行特殊等級指令
+        if (specialLevelData.handler !== []) {
+            executeCmds(player, specialLevelData.handler);
         }
     }
 }

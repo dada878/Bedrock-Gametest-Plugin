@@ -4,15 +4,15 @@ import { levelFactor } from "../config.js"
 export function DefMaxXp(level){
     return level ** 2 * levelFactor;
 };
-export const levelUpMsg = ">> §b恭喜!您升到了§aLv.%1";
+export const levelUpMsg = ">> §b恭喜!您升到了§aLv.%l";
 
 export const specialLevelMappings = {
     10: {
-        text: ">> §b恭喜升級到10級！",
-        handler: ["give @a[tag=plugin.target] diamond 3", "say abc d efg hijk lmnop"]
+        text: ">> §a獲得10級特殊獎勵鑽石x3！",
+        handler: ["give @s diamond 3", "say hello"]
     },
     20: {
-        text: ">> §b恭喜升級到20級！",
-        handler: ["give @a[tag=plugin.target] emerald"]
+        text: ">> §a獲得20級特殊獎勵綠寶石x1！",
+        handler: ["give @s emerald"]
     }
 }

@@ -1,8 +1,21 @@
 import * as Minecraft from 'mojang-minecraft';
 
+
+/**
+ * 在主世界執行一段指令
+ * @param {string} command 要執行的指令
+ * @returns {string} 指令執行結果
+ */
 export function cmd(command) {
     return Minecraft.world.getDimension("overworld").runCommand(command).statusMessage
 };
+
+
+/**
+ * 執行指令並回傳是否成功與結果
+ * @param {string} command 要執行的指令
+ * @returns {map} \{ error:bool, result:string \}
+ */
 export function rawcmd(command) {
     try {
         return { error: false, ...Minecraft.world.getDimension("overworld").runCommand(command) };
@@ -10,6 +23,36 @@ export function rawcmd(command) {
         return { error: true };
     }
 };
+
+
+/**
+ * 以玩家的身分(execute)執行陣列內的指令
+ * @param {Minecraft.Player} player 玩家
+ * @param {string[]} commands 需要執行的所有指令
+ * @returns {boolean} 是否執行成功
+ */
+export function executeCmds(player,commands) {
+
+    if (typeof player != typeof "string") {
+        player = player.name;
+    }
+
+    const conditionalRegex = /^%/;
+    if (conditionalRegex.test(commands[0])) return false;
+    let error = false;
+    commands.forEach(cmd => {
+        if (error && conditionalRegex.test(cmd)) return false;
+        error = rawcmd(`execute ${player} ~~~ `+cmd.replace(conditionalRegex, '')).error;
+    });
+    return true;
+}
+
+
+/**
+ * 
+ * @param {string[]} commands 所有要執行的指令
+ * @returns 
+ */
 export function cmds(commands){
     const conditionalRegex = /^%/;
     if (conditionalRegex.test(commands[0])) return false;

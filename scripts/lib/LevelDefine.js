@@ -1,4 +1,4 @@
-import { cmd, log, logfor } from './lib/GameLibrary.js';
+import { cmd, log, logfor } from './GameLibrary.js';
 import { ExpDB, LevelDB } from "./system/level.js";
 import { levelFactor } from "../config.js"
 export function DefMaxXp(level){

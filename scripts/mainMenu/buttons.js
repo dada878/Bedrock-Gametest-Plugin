@@ -5,6 +5,9 @@ import { SpawnTp } from "../system/spawnTp.js";
 import { WarpMenu } from "../system/warp.js";
 import { LevelSystem } from "../system/level.js";
 
+import { logfor } from '../lib/GameLibrary.js';
+const noone = ((player) => {logfor(player, ">> §c本功能暫未開放！")})
+
 export const buttons = [
     {
         id: "spawnTp",
@@ -40,7 +43,7 @@ export const buttons = [
         id: "money",
         display: "經濟系統",
         icon: "textures/ui/MCoin.png",
-        handler: null
+        handler: noone
     },
     {
         id: "level",

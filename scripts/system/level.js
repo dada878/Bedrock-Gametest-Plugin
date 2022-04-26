@@ -43,7 +43,7 @@ export function addXp(player,exp) {
         ExpDB.setRawData(player, 0);
         LevelDB.addRawData(player, 1);
         let specialText = "";
-        let text = `${levelUpMsg.replace(/%1+/, String(player_level))}`;
+        let text = `${levelUpMsg.replace(/%level%+/, String(player_level))}`;
         if (specialLevelMappings[++player_level] && specialLevelMappings[player_level].text !== "") {
             if (`${specialLevelMappings[player_level].text}`.match(/^%/)) {
                 logfor(player, `${specialLevelMappings[player_level].text}`);

@@ -4,6 +4,9 @@ import { getData, setData } from '../lib/JsonTagDB';
 
 import { WorldDB } from "../lib/WorldDB.js";
 import { LevelDB } from './level.js';
+
+import { chatFormat } from "../config.js";
+
 var db = new WorldDB("plugin_database");
 
 export function ChangeChat(player) {
@@ -45,7 +48,12 @@ export function sendMessage(player, message) {
     
     if (level == null) {level = 0}
 
-    log(`[§bLv.${level}§r][${title}§r]${player.name} >> ${message}`);
+    log(chatFormat
+        .replace("%level%", String(level))
+        .replace("%title%", title)
+        .replace("%player%", player.nameTag ?? player.name)
+        .replace("%content%", message)
+    );
 }
 
 function checkTitle(player) {

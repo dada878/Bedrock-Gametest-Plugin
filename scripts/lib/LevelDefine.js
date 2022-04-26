@@ -4,7 +4,7 @@ import { levelFactor } from "../config.js"
 export function DefMaxXp(level){
     return level ** 2 * levelFactor;
 };
-export const levelUpMsg = ">> §b恭喜!您升到了§aLv.%1";
+export const levelUpMsg = ">> §b恭喜!您升到了§aLv.%level%";
 
 export const specialLevelMappings = {
     10: {

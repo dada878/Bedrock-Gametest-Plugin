@@ -68,7 +68,7 @@ export function AdminMenu(player) {
                         };
                         case(1): {
                             let isData = function(key){if (db.getData(key) == 1) {return false} else return true;};
-                            let boolCvt = function(key){if(key)return 1;else return 0;};
+                            let boolCvt = function(key){if(key)return 0;else return 1;}; //奇怪的bug，暫時修改
                             let fm = new ui.ModalFormData();
                             fm.title("開關功能");
                             let enableList = [];

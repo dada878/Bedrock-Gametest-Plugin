@@ -63,7 +63,9 @@ world.events.blockBreak.subscribe(eventData => {
     const player = eventData.player;
     const block = eventData.block;
 
-    addXp(player,1);
+    let exp = Math.round(Math.random() * 5)
+
+    addXp(player,exp);
 })
 
 //物品使用

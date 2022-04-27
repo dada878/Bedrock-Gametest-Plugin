@@ -1,10 +1,7 @@
 import { world } from "mojang-minecraft";
 import * as ui from 'mojang-minecraft-ui';
+import { enables } from "../config.js";
 import { cmd, logfor } from '../lib/GameLibrary.js';
-import { WorldDB } from "../lib/WorldDB.js";
-
-var db = new WorldDB("plugin_database");
-
 
 /**
  * 
@@ -12,7 +9,7 @@ var db = new WorldDB("plugin_database");
  * @returns 
  */
 export function HomeSystem(player) {
-    if (db.getData("home") == 1) { return logfor(player, ">> §c無法使用，此功能已被禁用") };
+    if (enables.getData("home") == 1) { return logfor(player, ">> §c無法使用，此功能已被禁用") };
 
     let tags = player.getTags()
 

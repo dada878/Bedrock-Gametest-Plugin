@@ -1,11 +1,10 @@
 import { world } from "mojang-minecraft";
 import * as ui from 'mojang-minecraft-ui';
+import { enables } from "../config.js";
 import { cmd, logfor, GetScores } from '../lib/GameLibrary.js';
-import { WorldDB } from "../lib/WorldDB.js";
-var db = new WorldDB("plugin_database");
 
 export function TpaSystem(player) {
-    if (db.getData("tpa") == 1) { return logfor(player, ">> §c無法使用，此功能已被禁用") };
+    if (enables.getData("tpa") == 1) { return logfor(player, ">> §c無法使用，此功能已被禁用") };
 
 
     let fm = new ui.ModalFormData();
@@ -33,7 +32,7 @@ export function TpaSystem(player) {
         }
         fm.button1(`接受`);
         fm.button2(`拒絕`);
-        logfor(player, `>> §e已對 ${target.name} 送出傳送請求`)
+        logfor(player, `>> §e已對 §b${target.name} §e送出傳送請求`)
         fm.show(target).then(response => {
             if (response.selection != 1) return logfor(player, ">> §c請求已被拒絕");
             logfor(player, ">> §a對方接受了傳送請求")

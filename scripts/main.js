@@ -3,9 +3,9 @@ import { cmd, cmds, log, logfor } from './lib/GameLibrary.js';
 import { sendMessage } from './system/chat.js'
 import { AdminMenu } from "./mainMenu/admin.js";
 import { PlayerMenu } from "./mainMenu/player.js";
-import { db } from "./mainMenu/admin.js";
 import { addXp } from "./system/level.js";
-import { prefix } from "./config.js";
+import { pluginDB, prefix } from "./config.js";
+import { WorldDB } from "./lib/WorldDB.js";
 
 //當傳送訊息
 world.events.beforeChat.subscribe(eventData => {
@@ -33,20 +33,22 @@ world.events.beforeChat.subscribe(eventData => {
             cmd(`give ${player.name} mcc:admin_menu 1 0`);
             break;
         }
-        case "getjoinmotd": {
-            logfor(player.name, db.getData("JoinMessage"));
-            break;
-        }
+        // case "getjoinmotd": {
+        //     logfor(player.name, db.getData("JoinMessage"));
+        //     break;
+        // }
         default: {
             logfor(player, ">> §c未知的指令");
             break;
         }
 
     }
+    
 });
 
 //當玩家加入
 world.events.playerJoin.subscribe(eventData => {
+    return;
     const player = eventData.player
 
     const enable = db.getData("JoinMsgOption");
@@ -70,6 +72,7 @@ world.events.blockBreak.subscribe(eventData => {
 
 //物品使用
 world.events.itemUse.subscribe(eventData => {
+
     let player = eventData.source;
     let item = eventData.item;
 

@@ -2,13 +2,8 @@ import * as ui from 'mojang-minecraft-ui';
 import * as Minecraft from 'mojang-minecraft';
 import { log, logfor } from '../lib/GameLibrary.js';
 import { getData, setData } from '../lib/JsonTagDB';
-import { WorldDB } from "../lib/WorldDB.js";
-import { LevelDB } from './level.js';
-
-import { chatFormat } from "../config.js";
-
-var db = new WorldDB("plugin_database");
-
+import { levelTable } from './level.js';
+import { chatFormat, enables } from "../config.js";
 /**
  * 對玩家顯示稱號選單
  * @param {Minecraft.Player} player 玩家
@@ -16,9 +11,9 @@ var db = new WorldDB("plugin_database");
  */
 export function ChangeChat(player) {
 
-    if (db.getData("title") == 1) { return logfor(player, ">> §c無法使用，此功能已被禁用") };
+    if (enables.getData("title") == 1) { return logfor(player, ">> §c無法使用，此功能已被禁用") };
 
-    checkTitle(player)
+    checkTitle(player);
 
     let hasTitles = getData(player, "hasTitles");
 
@@ -50,7 +45,7 @@ export function sendMessage(player, message) {
     checkTitle(player);
 
     const title = getData(player, "selectedTitle");
-    let level = LevelDB.getRawData(player);
+    let level = levelTable.getData(player.name);
     
     if (level == null) {level = 0}
 

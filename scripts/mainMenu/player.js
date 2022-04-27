@@ -1,10 +1,7 @@
 import * as ui from 'mojang-minecraft-ui';
+import { enables } from '../config.js';
 import { GetScores, log, logfor } from '../lib/GameLibrary.js';
 import { buttons, color, disableColor, disableIcon, disableText } from "./buttons.js";
-
-
-import { WorldDB } from "../lib/WorldDB.js";
-var db = new WorldDB("plugin_database");
 
 export function PlayerMenu(player) {
     let fm = new ui.ActionFormData();
@@ -13,7 +10,7 @@ export function PlayerMenu(player) {
 
     buttons.forEach((data) => {
         let buttonText, icon;
-        if (db.getData(data.id) == 1) {
+        if (enables.getData(data.id) == 1) {
             buttonText = `§r${color}${data.display}\n§r${disableColor}${disableText}`
             icon = disableIcon
         } else {

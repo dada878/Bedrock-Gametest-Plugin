@@ -1,10 +1,8 @@
 import { world } from "mojang-minecraft";
 import * as ui from 'mojang-minecraft-ui';
-import { cmd, GetScores, log, logfor, SetScores } from '../lib/GameLibrary.js';
+import { enables, pluginDB } from "../config.js";
+import { cmd, GetScores, log, logfor, rawcmd, SetScores } from '../lib/GameLibrary.js';
 import { getData, setData } from '../lib/JsonTagDB';
-
-import { WorldDB } from "../lib/WorldDB.js";
-var db = new WorldDB("plugin_database");
 
 import { buttons } from "./buttons.js";
 
@@ -32,7 +30,7 @@ export function AdminMenu(player) {
 
         switch (response.selection) {
             case (0): {
-                
+
                 let fm = new ui.ActionFormData();
                 fm.title("管理員選單");
                 fm.body("管理員專用，內有許多方便的功能");
@@ -40,50 +38,48 @@ export function AdminMenu(player) {
                 fm.button('§l§1開關功能');
 
                 fm.show(player).then(response => {
-                    switch (response.selection) { 
+                    switch (response.selection) {
                         case (0): {
-                            const x = db.getData("spawn-x") ?? 0;
-                            const y = db.getData("spawn-y") ?? 0;
-                            const z = db.getData("spawn-z") ?? 0;
+                            const setting = pluginDB.table("spawnTpSetting");
+                            const pos = setting.getData("pos") ?? "0 -60 0";
+                            const message = pluginDB.table("joinSetting").getData("message") ?? "歡迎加入！";
 
                             let fm = new ui.ModalFormData();
                             fm.title("功能設置");
-                            fm.textField("設定大廳座標(以空格隔開xyz)(支持使用~)", "0 -60 0", `${x} ${y} ${z}`);
-                            fm.textField('輸入歡迎訊息 (將作為玩家加入時的用語)','');
+                            fm.textField("設定大廳座標(以空格隔開xyz)(支持使用~)", "x y z", pos);
+                            fm.textField('輸入歡迎訊息(將作為玩家加入時的用語)', '', message);
 
                             fm.show(player).then(response => {
                                 if (!response) return;
 
                                 // 座標設定
-                                const pos = response.formValues[0].split(" ");
-                                db.setData("spawn-x", toRelativePosition(pos[0], player, "x"));
-                                db.setData("spawn-y", toRelativePosition(pos[1], player, "y"));
-                                db.setData("spawn-z", toRelativePosition(pos[2], player, "z"));
+                                setting.setData("pos", response.formValues[0].trim());
 
                                 // 加入訊息設定
-                                const msg = response.formValues[1]
-                                db.setData("JoinMessage",msg);
+                                const msg = response.formValues[1];
+                                pluginDB.table("joinSetting").setData("message", msg);
+                                logfor(player, ">> §a設定成功！");
                             });
                             break;
                         };
-                        case(1): {
-                            let isData = function(key){if (db.getData(key) == 1) {return false} else return true;};
-                            let boolCvt = function(key){if(key)return 0;else return 1;}; //奇怪的bug，暫時修改
+                        case (1): {
+                            let isData = function (key) { if (enables.getData(key) == 1) { return false } else return true; };
+                            let boolCvt = function (key) { if (key) return 0; else return 1; }; //奇怪的bug，暫時修改
                             let fm = new ui.ModalFormData();
                             fm.title("開關功能");
                             let enableList = [];
                             buttons.forEach((data, index) => {
-                                if(isData(data.id)){
+                                if (isData(data.id)) {
                                     enableList[index] = true;
-                                }else{
+                                } else {
                                     enableList[index] = false;
                                 }
-                                fm.toggle(`禁用${data.display}`, enableList[index]);
+                                fm.toggle(`啟用${data.display}`, enableList[index]);
                             });
 
                             fm.show(player).then(response => {
                                 response.formValues.forEach((data, index) => {
-                                    db.setData(buttons[index].id, boolCvt(data))
+                                    enables.setData(buttons[index].id, boolCvt(data))
                                 })
                                 logfor(player, ">> §a設定成功！");
                             });
@@ -168,8 +164,11 @@ export function AdminMenu(player) {
                     const kick_player = playerNames[response.formValues[0]];
                     const because = response.formValues[1];
 
-                    cmd(`kick "${kick_player}" ${because}`);
-                    logfor(player, ">> §a踢出成功");
+                    if (rawcmd(`kick "${kick_player}" ${because}`).error) {
+                        logfor(player, ">> §c踢出失敗");
+                    } else {
+                        logfor(player, ">> §a踢出成功");
+                    }
                 })
                 break;
 
@@ -184,14 +183,8 @@ export function AdminMenu(player) {
                 fm.show(player).then(response => {
                     if (!response) return;
 
-                    const data = db.getData("warps");
-                    let warps;
-
-                    if (data == null) {
-                        warps = {};
-                    } else {
-                        warps = JSON.parse(data);
-                    }
+                    const warpsTable = pluginDB.table("warps");
+                    let warps = warpsTable.getAllData();
 
                     let warpNames = [];
 
@@ -202,7 +195,7 @@ export function AdminMenu(player) {
                         let fm = new ui.ModalFormData();
                         fm.title("管理傳送點");
                         fm.textField("傳送點名稱", "");
-                        fm.textField("傳送點座標(以空格隔開xyz)", "0 -60 53");
+                        fm.textField("傳送點座標", "x y z");
 
                         fm.show(player).then(response => {
                             if (!response) return;
@@ -210,14 +203,13 @@ export function AdminMenu(player) {
                             const warpName = response.formValues[0];
                             const warpPos = response.formValues[1];
 
-                            warps[warpName] = warpPos;
+                            warpsTable.setData(warpName, warpPos);
 
-                            db.setData("warps", JSON.stringify(warps));
                             logfor(player, ">> §a添加成功");
                         })
                     } else if (response.selection == 1) {
 
-                        if (data == null) { return logfor(player, ">> §c本世界沒有設定任何傳送點"); }
+                        if (warpNames.length == 0) { return logfor(player, ">> §c本世界沒有設定任何傳送點"); }
 
                         let fm = new ui.ModalFormData();
                         fm.title("移除傳送點");
@@ -228,9 +220,8 @@ export function AdminMenu(player) {
 
                             const warpName = warpNames[response.formValues[0]];
 
-                            delete warps[warpName];
+                            warpsTable.deleteData(warpName);
 
-                            db.setData("warps", JSON.stringify(warps));
                             logfor(player, ">> §a移除成功");
                         })
                     }
@@ -250,9 +241,6 @@ export function AdminMenu(player) {
 
 }
 
-function give_rank() {
-
-}
 
 /**
  * @name toRelativePosition
@@ -261,13 +249,10 @@ function give_rank() {
  * @param {object} string - the string that we are parsing
  * @param {object} axis - the axis of what you are converting
  */
-function toRelativePosition(string, player, axis = "x"){
-    if(string.match(/~([0-9]{1,})?/)){
+function toRelativePosition(string, player, axis = "x") {
+    if (string.match(/~([0-9]{1,})?/)) {
         var offset = string.slice(1) * 1 //避免情況
-        if(offset) return Math.floor(player.location[axis]) + offset
+        if (offset) return Math.floor(player.location[axis]) + offset
         return Math.floor(player.location[axis])
-    }else return parseInt(string.replace(/~+/,""))
+    } else return parseInt(string.replace(/~+/, ""))
 }
-
-
-export { db }

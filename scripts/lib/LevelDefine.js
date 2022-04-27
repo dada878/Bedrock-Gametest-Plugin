@@ -1,5 +1,3 @@
-import { cmd, log, logfor } from './GameLibrary.js';
-import { ExpDB, LevelDB } from "../system/level.js";
 import { levelFactor } from "../config.js"
 export function DefMaxXp(level){
     return level ** 2 * levelFactor ;

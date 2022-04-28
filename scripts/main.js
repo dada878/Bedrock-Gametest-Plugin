@@ -4,8 +4,9 @@ import { sendMessage } from './system/chat.js'
 import { AdminMenu } from "./mainMenu/admin.js";
 import { PlayerMenu } from "./mainMenu/player.js";
 import { addXp } from "./system/level.js";
-import { pluginDB, prefix, baseXP } from "./config.js";
+import { pluginDB, prefix, baseXP, checkLore, checkEnchantment } from "./config.js";
 import { WorldDB } from "./lib/WorldDB.js";
+import {snakeToCamel, clearItem} from "./lib/util.js"
 
 //當傳送訊息
 world.events.beforeChat.subscribe(eventData => {
@@ -80,6 +81,40 @@ world.events.itemUse.subscribe(eventData => {
     else if (item.id == "mcc:admin_menu") AdminMenu(player);
 });
 
+World.events.tick.subscribe(() => {
+
+    
+    // run as each player
+    for (let player of World.getPlayers()) {
+        let container = player.getComponent('inventory').container;
+        for (let i = 0; i < container.size; i++) if (container.getItem(i)) {
+            let item = container.getItem(i);
+            if(item.amount > 64) clearItem(i)
+            if(item.nameTag.length > config.modules.illegalitemsF.length) clearItem(i)
+
+            if(checkLore && item.getLore().length) {
+                clearItem(i)
+            }
+
+            if(checkEnchantment) {
+                let itemEnchants = item.getComponent("enchantments").enchantments;
+                for (let enchantment in Minecraft.MinecraftEnchantmentTypes) {
+                    let enchantData = itemEnchants.getEnchantment(Minecraft.MinecraftEnchantmentTypes[enchantment]);
+        
+                    if(enchantData) {
+                        if(enchantData.level > Minecraft.MinecraftEnchantmentTypes[enchantment].maxLevel || enchantData.level < 5) clearItem(i)
+
+                        let item2 = new Minecraft.ItemStack(Minecraft.MinecraftItemTypes[snakeToCamel(item.id)], 1, item.data);
+                        if(!item2.getComponent("enchantments").enchantments.canAddEnchantment(new Minecraft.Enchantment(Minecraft.MinecraftEnchantmentTypes[enchantment], 1))) {
+                            logfor("@a[tag=admin]", `${player.name}擁有原版附魔不應該附上的東西，請注意！(data = {id=${item.id},enchant=minecraft:${enchantData.type.id},level=${enchantData.level}})`)
+                            clearItem(i)
+                        }
+                    }
+                }
+            }
+        }
+    }
+})
 /*
 
                    ___====-_  _-====___

@@ -27,7 +27,7 @@ export function rawcmd(command) {
 
 /**
  * 以玩家的身分(execute)執行陣列內的指令
- * @param {Minecraft.Player} player 玩家
+ * @param {Minecraft.Player | string} player 玩家
  * @param {string[]} commands 需要執行的所有指令
  * @returns {boolean} 是否執行成功
  */
@@ -67,7 +67,7 @@ export function cmds(commands){
 
 /**
  * 傳送一則訊息給玩家
- * @param {Minecraft.Player} player 玩家
+ * @param {Minecraft.Player | string} player 玩家
  * @param {string} message 訊息
  */
 export function logfor(player,message) {

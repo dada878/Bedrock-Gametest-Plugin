@@ -51,10 +51,13 @@ export function AdminMenu(player) {
 
                             fm.show(player).then(response => {
                                 if (!response) return;
-
+                                
+                                const pos = response.formValues[0].trim()
                                 // 座標設定
-                                setting.setData("pos", response.formValues[0].trim());
-
+                                // 過一次regex看看是不是有效坐標
+                                if(pos.match(/(-)?\d{1,8} (-)?\d{1,8} (-)?\d{1,8}/)) setting.setData("pos", pos);
+                                else logfor(player, ">> §c無效坐標！請重新設置");
+                                
                                 // 加入訊息設定
                                 const msg = response.formValues[1];
                                 pluginDB.table("joinSetting").setData("message", msg);
@@ -242,17 +245,3 @@ export function AdminMenu(player) {
 }
 
 
-/**
- * @name toRelativePosition
- * @description
- * @param {object} player - The player that have the Vec3
- * @param {object} string - the string that we are parsing
- * @param {object} axis - the axis of what you are converting
- */
-function toRelativePosition(string, player, axis = "x") {
-    if (string.match(/~([0-9]{1,})?/)) {
-        var offset = string.slice(1) * 1 //避免情況
-        if (offset) return Math.floor(player.location[axis]) + offset
-        return Math.floor(player.location[axis])
-    } else return parseInt(string.replace(/~+/, ""))
-}

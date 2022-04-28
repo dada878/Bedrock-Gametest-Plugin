@@ -4,7 +4,7 @@ import { sendMessage } from './system/chat.js'
 import { AdminMenu } from "./mainMenu/admin.js";
 import { PlayerMenu } from "./mainMenu/player.js";
 import { addXp } from "./system/level.js";
-import { pluginDB, prefix } from "./config.js";
+import { pluginDB, prefix, baseXP } from "./config.js";
 import { WorldDB } from "./lib/WorldDB.js";
 
 //當傳送訊息
@@ -65,7 +65,7 @@ world.events.blockBreak.subscribe(eventData => {
     const player = eventData.player;
     const block = eventData.block;
 
-    let exp = Math.round(Math.random() * 5)
+    let exp = Math.round(Math.random() * baseXP)
 
     addXp(player,exp);
 })

@@ -6,7 +6,7 @@ import { WarpMenu } from "../system/warp.js";
 import { LevelSystem } from "../system/level.js";
 
 import { logfor } from '../lib/GameLibrary.js';
-const noone = ((player) => {logfor(player, ">> §c本功能暫未開放！")})
+const noone = ((player) => { logfor(player, ">> §c本功能暫未開放！") })
 
 export const buttons = [
     {

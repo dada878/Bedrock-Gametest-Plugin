@@ -43,24 +43,29 @@ export function AdminMenu(player) {
                             const setting = pluginDB.table("spawnTpSetting");
                             const pos = setting.getData("pos") ?? "0 -60 0";
                             const message = pluginDB.table("joinSetting").getData("message") ?? "歡迎加入！";
+                            const board = pluginDB.table("moneySetting").getData("scoreboard") ?? "money";
 
                             let fm = new ui.ModalFormData();
                             fm.title("功能設置");
-                            fm.textField("設定大廳座標(以空格隔開xyz)(支持使用~)", "x y z", pos);
+                            fm.textField("設定大廳座標(以空格隔開xyz)", "x y z", pos);
                             fm.textField('輸入歡迎訊息(將作為玩家加入時的用語)', '', message);
+                            fm.textField('設置經濟系統的計分板', '', board);
 
                             fm.show(player).then(response => {
                                 if (!response) return;
                                 
-                                const pos = response.formValues[0].trim()
+                                const pos = response.formValues[0].trim();
                                 // 座標設定
                                 // 過一次regex看看是不是有效坐標
                                 if(pos.match(/(-)?\d{1,8} (-)?\d{1,8} (-)?\d{1,8}/)) setting.setData("pos", pos);
-                                else logfor(player, ">> §c無效坐標！請重新設置");
-                                
+                                else logfor(player, ">> §c無效坐標！請重新設置出生點坐標");
+
                                 // 加入訊息設定
-                                const msg = response.formValues[1];
-                                pluginDB.table("joinSetting").setData("message", msg);
+                                pluginDB.table("joinSetting").setData("message", response.formValues[1]);
+
+                                // 經濟
+                                pluginDB.table("moneySetting").setData("scoreboard", response.formValues[2]);
+
                                 logfor(player, ">> §a設定成功！");
                             });
                             break;

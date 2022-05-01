@@ -7,7 +7,7 @@ import { chatFormat, enables } from "../config.js";
 /**
  * 對玩家顯示稱號選單
  * @param {Minecraft.Player} player 玩家
- * @returns 
+ * @return none
  */
 export function ChangeChat(player) {
 

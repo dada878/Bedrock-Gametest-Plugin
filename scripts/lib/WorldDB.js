@@ -14,38 +14,28 @@ export class WorldDB {
         this.name = name;
         try { cmd(`scoreboard objectives add "${name}" dummy`); } catch { };
     }
-
-    addScoreDB(player,score){
-        cmd(`scoreboard players add "${player}" "${this.name}" ${score}`)
-    }
-
-    setScoreDB(player,score){
-        cmd(`scoreboard players set "${player}" "${this.name}" ${score}`)
-    }
-
-    getScoreDB(player){
-        return GetScores(player,this.name)
-    }
-
     /**
      * 在資料世界庫使用一個表格
      * @param {string} tableName 表格名稱 
      * @returns 創建/取得到的表格
      */
-    table(tableName) {
-        return new WorldDB_Table(this.name, tableName);
+     table(tableName) {
+        return new DBTable(this.name, tableName);
     }
-
-    scoretable(playerName){
-        return new WorldDB_Scoreboard(this.ScoreboardName);
-    };
-
+    /**
+     * 在資料世界庫使用一個分數處理器
+     * @param {string} tableName 表格名稱 
+     * @returns 創建/取得到的表格
+     */
+     raw() {
+        return new RawTable(this.name);
+    }
 }
 
 /**
  * 世界資料庫表格
  */
-class WorldDB_Table {
+class DBTable {
     constructor(dbName, tableName) {
         this.dbName = dbName;
         this.tableName = tableName;
@@ -163,5 +153,27 @@ class WorldDB_Table {
                 i++;
             } catch { break }
         }
+    }
+}
+
+class RawTable{
+    constructor(dbName, tableName) {
+        this.name = name;
+    }
+
+    setScore(target, value){
+        cmd(`scoreboard players set "${target}" "${this.name}" ${value}`)
+    }
+
+    addScore(target, value){
+        cmd(`scoreboard players add "${target}" "${this.name}" ${value}`)
+    }
+
+    removeScore(target, value){
+        cmd(`scoreboard players remove "${target}" "${this.name}" ${value}`)
+    }
+
+    getScore(player){
+        return GetScores(target, this.name)
     }
 }

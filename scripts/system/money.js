@@ -2,8 +2,9 @@ import { world } from "mojang-minecraft";
 import * as ui from 'mojang-minecraft-ui';
 import { pluginDB, minTranferLimit, maxTranferLimit } from "../config.js";
 import { cmd, GetScores, log, logfor, SetScores, AddScores } from '../lib/GameLibrary.js';
+import { WorldDB } from '../lib/WorldDB.js';
 
-export const moneyObjective = pluginDB.table("moneySetting").getData("scoreboard") ?? "money";
+export const moneyTable = new WorldDB(luginDB.table("moneySetting").getData("scoreboard") ?? "money").raw();
 
 function MoneySystem(player) {
     const worldPlayers = world.getPlayers();
@@ -40,15 +41,15 @@ function MoneySystem(player) {
                         || (response.formValues[1] < 1)
                     ) return logfor(player, `>> §c金額不能少於${minTranferLimit} / 大於${maxTranferLimit}！`);
 
-                    let money = GetScores(`"${player.name}"`, moneyObjective)
+                    let money = moneyTable.getScore(`"${player.name}"`)
                     if(isNaN(money)) return logfor(player, `>> §c未知錯誤`);
 
                     if(money < +response.formValues[1]) return logfor(player, `>> §c你沒有足夠的金幣！`);
                     
                     let target = players[response.formValues[0]];
 
-                    AddScores(`"${target.name}"`, moneyObjective, +response.formValues[1])
-                    SetScores(`"${player.name}"`, moneyObjective, money - response.formValues[1])
+                    moneyTable.addScore(`"${target.name}"`, +response.formValues[1])
+                    moneyTable.setScore(`"${player.name}"`, money - response.formValues[1])
                     logfor(player.name, ">> §a給予成功!");
                     return logfor(target.name, `>> §a你收到了${player.name}的${response.formValues[1]}$!`);
                 })

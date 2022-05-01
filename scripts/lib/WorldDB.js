@@ -15,6 +15,18 @@ export class WorldDB {
         try { cmd(`scoreboard objectives add "${name}" dummy`); } catch { };
     }
 
+    addScoreDB(player,score){
+        cmd(`scoreboard players add "${player}" "${this.name}" ${score}`)
+    }
+
+    setScoreDB(player,score){
+        cmd(`scoreboard players set "${player}" "${this.name}" ${score}`)
+    }
+
+    getScoreDB(player){
+        return GetScores(player,this.name)
+    }
+
     /**
      * 在資料世界庫使用一個表格
      * @param {string} tableName 表格名稱 
@@ -23,6 +35,11 @@ export class WorldDB {
     table(tableName) {
         return new WorldDB_Table(this.name, tableName);
     }
+
+    scoretable(playerName){
+        return new WorldDB_Scoreboard(this.ScoreboardName);
+    };
+
 }
 
 /**

@@ -8,6 +8,7 @@ import { addXp } from "./system/level.js";
 import { pluginDB, prefix, baseXP, checkLore, checkEnchantment, enables } from "./config.js";
 import { WorldDB } from "./lib/WorldDB.js";
 import {snakeToCamel, clearItem} from "./lib/util.js"
+import {levelTable,expTable} from "./system/level.js"
 
 //當傳送訊息
 world.events.beforeChat.subscribe(eventData => {
@@ -38,6 +39,14 @@ world.events.beforeChat.subscribe(eventData => {
             case "admin_menu": {
                 if (!player.hasTag("admin")) return logfor(player.name, '§c您沒有權限! 需要 "admin" Tag');
                 cmd(`give ${player.name} mcc:admin_menu 1 0`);
+                break;
+            }
+            case "testlevel": {
+                levelTable.addScore(player, 1);
+                break;
+            }
+            case "testexp": {
+                expTable.addScore(player, 1);
                 break;
             }
             // case "getjoinmotd": {

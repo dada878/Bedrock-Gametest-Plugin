@@ -21,30 +21,33 @@ world.events.beforeChat.subscribe(eventData => {
     else {
 
     //發送指令
-    let command = message
-        .trim() //去除兩邊空格
-        .slice(prefix.length) //刪除prefix
-        .split(/ +/)[0] //取得主指令
-        .toLowerCase(); //轉成小寫
+        let command = message
+            .trim() //去除兩邊空格
+            .slice(prefix.length) //刪除prefix
+            .split(/ +/)[0] //取得主指令
+            .toLowerCase(); //轉成小寫
 
-    switch (command) {
-        case "menu": {
-            cmd(`give ${player.name} mcc:menu 1 0`);
-            break;
-        }
-        case "admin_menu": {
-            if (!player.hasTag("admin")) return logfor(player.name, '§c您沒有權限! 需要 "admin" Tag');
-            cmd(`give ${player.name} mcc:admin_menu 1 0`);
-            break;
-        }
-        case "getjoinmotd": {
-            logfor(player, pluginDB.table("joinSetting").getData("message"));
-            break;
-        }
-        default: {
-            logfor(player, ">> §c未知的指令");
-            break;
-        }
+        switch (command) {
+            case "help": {
+                logfor(player,"======§b<§e指令清單§b>§r======\n-menu -取的玩家選單\n-admin_menu -取得管理員選單")
+            }
+            case "menu": {
+                cmd(`give ${player.name} mcc:menu 1 0`);
+                break;
+            }
+            case "admin_menu": {
+                if (!player.hasTag("admin")) return logfor(player.name, '§c您沒有權限! 需要 "admin" Tag');
+                cmd(`give ${player.name} mcc:admin_menu 1 0`);
+                break;
+            }
+            // case "getjoinmotd": {
+            //     logfor(player.name, db.getData("JoinMessage"));
+            //     break;
+            // }
+            default: {
+                logfor(player, ">> §c未知的指令");
+                break;
+            }
 
         }
     }

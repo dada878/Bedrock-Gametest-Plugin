@@ -88,6 +88,7 @@ world.events.itemUse.subscribe(eventData => {
 });
 
 world.events.tick.subscribe(() => {
+    return;
     for (let player of world.getPlayers()) {
         let container = player.getComponent('inventory').container;
         for (let i = 0; i < container.size; i++) if (container.getItem(i)) {

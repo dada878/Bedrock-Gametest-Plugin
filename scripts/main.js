@@ -1,10 +1,11 @@
 import { world } from "mojang-minecraft";
+import * as Minecraft from 'mojang-minecraft';
 import { cmd, cmds, log, logfor } from './lib/GameLibrary.js';
 import { sendMessage } from './system/chat.js'
 import { AdminMenu } from "./mainMenu/admin.js";
 import { PlayerMenu } from "./mainMenu/player.js";
 import { addXp } from "./system/level.js";
-import { pluginDB, prefix, baseXP, checkLore, checkEnchantment } from "./config.js";
+import { pluginDB, prefix, baseXP, checkLore, checkEnchantment, enables } from "./config.js";
 import { WorldDB } from "./lib/WorldDB.js";
 import {snakeToCamel, clearItem} from "./lib/util.js"
 
@@ -84,16 +85,18 @@ world.events.itemUse.subscribe(eventData => {
 });
 
 world.events.tick.subscribe(() => {
-    for (let player of World.getPlayers()) {
+    for (let player of world.getPlayers()) {
         let container = player.getComponent('inventory').container;
         for (let i = 0; i < container.size; i++) if (container.getItem(i)) {
             let item = container.getItem(i);
             if(item.amount > 64) clearItem(i)
-            if(item.nameTag.length > 32) clearItem(i)
+
+            //TODO:item.nameTag 疑似取得不到，原因待釐清
+            // if(item.nameTag.length > 32) clearItem(i)
 
             if(checkLore && item.getLore().length) {
-                logfor("@a[tag=admin]", `${player.name}擁有高於原版附魔的附魔，請注意！(data = {id=${item.id},lore=${item.getLore()}})`)
-                clearItem(i)
+                logfor("@a[tag=admin]", `>> §6${player.name} §c持有非法物品(id=${item.id},lore=${item.getLore()})`)
+                clearItem(player, i);
             }
 
             if(checkEnchantment) {
@@ -103,14 +106,14 @@ world.events.tick.subscribe(() => {
         
                     if(enchantData) {
                         if(enchantData.level > Minecraft.MinecraftEnchantmentTypes[enchantment].maxLevel || enchantData.level < 5){
-                            logfor("@a[tag=admin]", `${player.name}擁有高於原版附魔的附魔，請注意！(data = {id=${item.id},enchant=minecraft:${enchantData.type.id},level=${enchantData.level}})`)
-                            clearItem(i)
+                            logfor("@a[tag=admin]",`>> §6${player.name}§c 物品附魔等級異常(id=${item.id},enchant=${enchantData.type.id},level=${enchantData.level})`);
+                            clearItem(player, i);
                         }
 
                         let item2 = new Minecraft.ItemStack(Minecraft.MinecraftItemTypes[snakeToCamel(item.id)], 1, item.data);
                         if(!item2.getComponent("enchantments").enchantments.canAddEnchantment(new Minecraft.Enchantment(Minecraft.MinecraftEnchantmentTypes[enchantment], 1))) {
-                            logfor("@a[tag=admin]", `${player.name}擁有原版附魔不應該附上的東西，請注意！(data = {id=${item.id},enchant=minecraft:${enchantData.type.id},level=${enchantData.level}})`)
-                            clearItem(i)
+                            logfor("@a[tag=admin]", `>> §6${player.name}§c 附魔物品類型異常(id=${item.id},enchant=${enchantData.type.id},level=${enchantData.level})`);
+                            clearItem(player, i);
                         }
                     }
                 }

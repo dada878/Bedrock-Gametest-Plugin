@@ -157,8 +157,8 @@ class DBTable {
 }
 
 class RawTable{
-    constructor(dbName, tableName) {
-        this.name = name;
+    constructor(DB_Name) {
+        this.name = DB_Name;
     }
 
     setScore(target, value){
@@ -174,6 +174,6 @@ class RawTable{
     }
 
     getScore(player){
-        return GetScores(target, this.name)
+        return GetScores(this.name, player.name)
     }
 }

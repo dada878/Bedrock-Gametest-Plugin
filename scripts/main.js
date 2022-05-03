@@ -4,8 +4,9 @@ import { sendMessage } from './system/chat.js'
 import { AdminMenu } from "./mainMenu/admin.js";
 import { PlayerMenu } from "./mainMenu/player.js";
 import { addXp } from "./system/level.js";
-import { pluginDB, prefix, baseXP, enables } from "./config.js";
+import { pluginDB, prefix, baseXP, checkLore, checkEnchantment } from "./config.js";
 import { WorldDB } from "./lib/WorldDB.js";
+import {snakeToCamel, clearItem} from "./lib/util.js"
 
 //當傳送訊息
 world.events.beforeChat.subscribe(eventData => {
@@ -14,7 +15,9 @@ world.events.beforeChat.subscribe(eventData => {
     const message = eventData.message;
 
     // 發送訊息
-    if (!message.startsWith(prefix)) return sendMessage(player, message);
+    if (!message.startsWith(prefix)) sendMessage(player, message);
+
+    else {
 
     //發送指令
     let command = message
@@ -42,8 +45,8 @@ world.events.beforeChat.subscribe(eventData => {
             break;
         }
 
+        }
     }
-    
 });
 
 //當玩家加入
@@ -80,6 +83,41 @@ world.events.itemUse.subscribe(eventData => {
     else if (item.id == "mcc:admin_menu") AdminMenu(player);
 });
 
+world.events.tick.subscribe(() => {
+    for (let player of World.getPlayers()) {
+        let container = player.getComponent('inventory').container;
+        for (let i = 0; i < container.size; i++) if (container.getItem(i)) {
+            let item = container.getItem(i);
+            if(item.amount > 64) clearItem(i)
+            if(item.nameTag.length > 32) clearItem(i)
+
+            if(checkLore && item.getLore().length) {
+                logfor("@a[tag=admin]", `${player.name}擁有高於原版附魔的附魔，請注意！(data = {id=${item.id},lore=${item.getLore()}})`)
+                clearItem(i)
+            }
+
+            if(checkEnchantment) {
+                let itemEnchants = item.getComponent("enchantments").enchantments;
+                for (let enchantment in Minecraft.MinecraftEnchantmentTypes) {
+                    let enchantData = itemEnchants.getEnchantment(Minecraft.MinecraftEnchantmentTypes[enchantment]);
+        
+                    if(enchantData) {
+                        if(enchantData.level > Minecraft.MinecraftEnchantmentTypes[enchantment].maxLevel || enchantData.level < 5){
+                            logfor("@a[tag=admin]", `${player.name}擁有高於原版附魔的附魔，請注意！(data = {id=${item.id},enchant=minecraft:${enchantData.type.id},level=${enchantData.level}})`)
+                            clearItem(i)
+                        }
+
+                        let item2 = new Minecraft.ItemStack(Minecraft.MinecraftItemTypes[snakeToCamel(item.id)], 1, item.data);
+                        if(!item2.getComponent("enchantments").enchantments.canAddEnchantment(new Minecraft.Enchantment(Minecraft.MinecraftEnchantmentTypes[enchantment], 1))) {
+                            logfor("@a[tag=admin]", `${player.name}擁有原版附魔不應該附上的東西，請注意！(data = {id=${item.id},enchant=minecraft:${enchantData.type.id},level=${enchantData.level}})`)
+                            clearItem(i)
+                        }
+                    }
+                }
+            }
+        }
+    }
+})
 /*
 
                    ___====-_  _-====___

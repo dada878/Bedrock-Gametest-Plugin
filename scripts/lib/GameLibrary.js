@@ -4,10 +4,11 @@ import * as Minecraft from 'mojang-minecraft';
 /**
  * 在主世界執行一段指令
  * @param {string} command 要執行的指令
+ * @param {string} dimension opt - 執行維度
  * @returns {string} 指令執行結果
  */
-export function cmd(command) {
-    return Minecraft.world.getDimension("overworld").runCommand(command).statusMessage
+export function cmd(command, dimension = "overworld") {
+    return Minecraft.world.getDimension(dimension).runCommand(command).statusMessage
 };
 
 
@@ -116,5 +117,16 @@ export function GetScores (target, scoreboard) {
  * @returns 
  */
 export function SetScores (target, scoreboard, scores) {
+    return cmd(`scoreboard players set "${target}" "${scoreboard}" ${scores}`);
+}
+
+/**
+ * 增加某計分項在計分板內的值
+ * @param {string} target 計分項
+ * @param {string} scoreboard 記分板
+ * @param {number} scores 分數
+ * @returns 
+ */
+ export function AddScores (target, scoreboard, scores) {
     return cmd(`scoreboard players set "${target}" "${scoreboard}" ${scores}`);
 }

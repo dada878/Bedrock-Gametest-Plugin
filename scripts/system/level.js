@@ -3,24 +3,25 @@ import * as ui from 'mojang-minecraft-ui';
 import { pluginDB } from '../config.js';
 import { cmd, cmds, executeCmds, GetScores, log, logfor, SetScores } from '../lib/GameLibrary.js';
 import { DefMaxXp, specialLevelMappings, levelUpMsg } from "../lib/LevelDefine.js";
+import { WorldDB } from '../lib/WorldDB.js';
 
-export const expTable = pluginDB.table("exp");
-export const levelTable = pluginDB.table("level");
+export const expTable = new WorldDB("exp").raw();
+export const levelTable = new WorldDB("level").raw();
 
 /**
  * 對玩家顯示等即系統選單
  * @param {Minecraft.Player} player 玩家
  */
 export function LevelSystem(player) {
-    let level = levelTable.getData(player.name);
-    let exp = expTable.getData(player.name);
+    let level = levelTable.getScore(player.name);
+    let exp = expTable.getScore(player.name);
 
     if (level == null) { level = "0" };
 
     let fm = new ui.ActionFormData();
     fm.title(`等級系統`);
     fm.body(`您目前為§aLv.${level}(${exp}/${DefMaxXp(level)})§r\n\n等級獎勵:`);
-    fm.button(`查看等級排名`,);
+    //fm.button(`查看等級排名`,);
 
     fm.show(player).then(response => {
         if (!response) return;
@@ -36,22 +37,23 @@ export function LevelSystem(player) {
 export function addXp(player, exp) {
     // 取得經驗值與等級並定義玩家名稱
     const playerName = player.name;
-    let player_level = levelTable.getData(playerName);
-    let player_exp = expTable.getData(playerName);
+    
+    let player_level = levelTable.getScore(playerName);
+    let player_exp = expTable.getScore(playerName);
 
     // 若玩家等即尚未初始化則歸零
     if (player_level == null) {
         player_level = 0;
-        levelTable.setData(playerName, 0);
+        levelTable.setScore(playerName, 0);
     }
 
     //添加經驗值
-    expTable.setData(playerName, player_exp + exp);
+    expTable.setScore(playerName, player_exp + exp);
     // 經驗值大於所需經驗，即升級
     if (player_exp >= DefMaxXp(player_level)) {
         // 歸零經驗值並添加等級
-        expTable.setData(playerName, 0);
-        levelTable.setData(playerName, player_level + 1);
+        expTable.setScore(playerName, 0);
+        levelTable.setScore(playerName, player_level + 1);
         // 升級特效/音效
         cmd(`title "${playerName}" title §b恭喜升級`);
         cmd(`title "${playerName}" subtitle §e已經升上 §a${++player_level} §e等`);

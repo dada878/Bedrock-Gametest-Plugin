@@ -7,7 +7,7 @@ import { chatFormat, enables } from "../config.js";
 /**
  * 對玩家顯示稱號選單
  * @param {Minecraft.Player} player 玩家
- * @returns 
+ * @return none
  */
 export function ChangeChat(player) {
 
@@ -45,7 +45,7 @@ export function sendMessage(player, message) {
     checkTitle(player);
 
     const title = getData(player, "selectedTitle");
-    let level = levelTable.getData(player.name);
+    let level = levelTable.getScoreDB(player.name);
     
     if (level == null) {level = 0}
 

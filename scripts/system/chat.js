@@ -45,7 +45,7 @@ export function sendMessage(player, message) {
     checkTitle(player);
 
     const title = getData(player, "selectedTitle");
-    let level = levelTable.getScoreDB(player.name);
+    let level = levelTable.getScore(player.name);
     
     if (level == null) {level = 0}
 

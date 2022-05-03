@@ -4,7 +4,7 @@ import { sendMessage } from './system/chat.js'
 import { AdminMenu } from "./mainMenu/admin.js";
 import { PlayerMenu } from "./mainMenu/player.js";
 import { addXp } from "./system/level.js";
-import { pluginDB, prefix, baseXP } from "./config.js";
+import { pluginDB, prefix, baseXP, enables } from "./config.js";
 import { WorldDB } from "./lib/WorldDB.js";
 
 //當傳送訊息
@@ -33,10 +33,10 @@ world.events.beforeChat.subscribe(eventData => {
             cmd(`give ${player.name} mcc:admin_menu 1 0`);
             break;
         }
-        // case "getjoinmotd": {
-        //     logfor(player.name, db.getData("JoinMessage"));
-        //     break;
-        // }
+        case "getjoinmotd": {
+            logfor(player, pluginDB.table("joinSetting").getData("message"));
+            break;
+        }
         default: {
             logfor(player, ">> §c未知的指令");
             break;
@@ -48,14 +48,14 @@ world.events.beforeChat.subscribe(eventData => {
 
 //當玩家加入
 world.events.playerJoin.subscribe(eventData => {
-    return;
     const player = eventData.player
 
-    const enable = db.getData("JoinMsgOption");
-    const msg = db.getData("JoinMessage");
-
-    if (enable == 1) {
+    const enable = enables.getData("JoinMsgOption");
+    const msg = pluginDB.table("joinSetting").getData("message");
+    
+    if (enables.getData("") == 1) {
         logfor(player, msg);
+        
     }
 
 });

@@ -42,12 +42,12 @@ export function AdminMenu(player) {
                         case (0): {
                             const setting = pluginDB.table("spawnTpSetting");
                             const pos = setting.getData("pos") ?? "0 -60 0";
-                            const message = pluginDB.table("joinSetting").getData("message") ?? "歡迎加入！";
+                            const message = pluginDB.table("joinSetting").getData("message") ?? "歡迎%player%加入！";
 
                             let fm = new ui.ModalFormData();
                             fm.title("功能設置");
-                            fm.textField("設定大廳座標(以空格隔開xyz)(支持使用~)", "x y z", pos);
-                            fm.textField('輸入歡迎訊息(將作為玩家加入時的用語)', '', message);
+                            fm.textField("設定大廳座標(支持使用~)", "x y z", pos);
+                            fm.textField('玩家加入歡迎訊息(以%player%表示加入的玩家，留空則不發送加入訊息)', '', message);
 
                             fm.show(player).then(response => {
                                 if (!response) return;

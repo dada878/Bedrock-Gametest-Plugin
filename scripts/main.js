@@ -27,6 +27,9 @@ world.events.beforeChat.subscribe(eventData => {
             .toLowerCase(); //轉成小寫
 
         switch (command) {
+            case "help": {
+                logfor(player,"======§b<§e指令清單§b>§r======\n-menu -取的玩家選單\n-admin_menu -取得管理員選單")
+            }
             case "menu": {
                 cmd(`give ${player.name} mcc:menu 1 0`);
                 break;
@@ -83,8 +86,8 @@ world.events.itemUse.subscribe(eventData => {
     else if (item.id == "mcc:admin_menu") AdminMenu(player);
 });
 
-World.events.tick.subscribe(() => {
-    for (let player of World.getPlayers()) {
+world.events.tick.subscribe(() => {
+    for (let player of world.getPlayers()) {
         let container = player.getComponent('inventory').container;
         for (let i = 0; i < container.size; i++) if (container.getItem(i)) {
             let item = container.getItem(i);

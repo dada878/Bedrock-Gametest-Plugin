@@ -20,7 +20,7 @@ export function cmd(command, dimension = "overworld") {
 export function rawcmd(command) {
     try {
         return { error: false, ...Minecraft.world.getDimension("overworld").runCommand(command) };
-    }catch (error) {
+    } catch (error) {
         return { error: true };
     }
 };
@@ -32,7 +32,7 @@ export function rawcmd(command) {
  * @param {string[]} commands 需要執行的所有指令
  * @returns {boolean} 是否執行成功
  */
-export function executeCmds(player,commands) {
+export function executeCmds(player, commands) {
 
     if (typeof player != typeof "string") {
         player = player.name;
@@ -43,7 +43,7 @@ export function executeCmds(player,commands) {
     let error = false;
     commands.forEach(cmd => {
         if (error && conditionalRegex.test(cmd)) return false;
-        error = rawcmd(`execute ${player} ~~~ `+cmd.replace(conditionalRegex, '')).error;
+        error = rawcmd(`execute ${player} ~~~ ` + cmd.replace(conditionalRegex, '')).error;
     });
     return true;
 }
@@ -54,7 +54,7 @@ export function executeCmds(player,commands) {
  * @param {string[]} commands 所有要執行的指令
  * @returns {boolean} 指令是否執行成功
  */
-export function cmds(commands){
+export function cmds(commands) {
     const conditionalRegex = /^%/;
     if (conditionalRegex.test(commands[0])) return false;
     let error = false;
@@ -71,12 +71,18 @@ export function cmds(commands){
  * @param {Minecraft.Player | string} player 玩家
  * @param {string} message 訊息
  */
-export function logfor(player,message) {
-    if (typeof player != typeof "string") {
-        player = player.name;
-    }
-    let okay_message = message.toString().replaceAll('\"',"''").replaceAll('\\',"/")
-    Minecraft.world.getDimension("overworld").runCommand(`tellraw "${player}" {"rawtext":[{"text":"${okay_message}"}]}`)
+export function logfor(player, message) {
+    try {
+        if (typeof player != typeof "string") {
+            player = player.name;
+        }
+        let okay_message = message.toString().replaceAll('\"', "''").replaceAll('\\', "/")
+        if (player.includes("@")) {
+            Minecraft.world.getDimension("overworld").runCommand(`tellraw ${player} {"rawtext":[{"text":"${okay_message}"}]}`)
+        } else {
+            Minecraft.world.getDimension("overworld").runCommand(`tellraw "${player}" {"rawtext":[{"text":"${okay_message}"}]}`)
+        }
+    } catch { }
 };
 
 
@@ -85,7 +91,7 @@ export function logfor(player,message) {
  * @param {string} message 訊息
  */
 export function log(message) {
-    let okay_message = `${message}`.replaceAll('\"',"''").replaceAll('\\',"/")
+    let okay_message = `${message}`.replaceAll('\"', "''").replaceAll('\\', "/")
     Minecraft.world.getDimension("overworld").runCommand(`tellraw @a {"rawtext":[{"text":"${okay_message}"}]}`)
 }
 
@@ -96,12 +102,12 @@ export function log(message) {
  * @param {string} scoreboard 記分板
  * @returns {number} 執行成功回傳分數，失敗則為null
  */
-export function GetScores (target, scoreboard) {
+export function GetScores(target, scoreboard) {
     try {
         const scoreMessage = cmd(`scoreboard players operation "${target}" "${scoreboard}" = "${target}" "${scoreboard}"`);
         const scoresRegEx = [...scoreMessage.matchAll(/\d+|-\d+/g)];
-        const scores = scoresRegEx[scoresRegEx.length-1];
-    
+        const scores = scoresRegEx[scoresRegEx.length - 1];
+
         return Number(scores);
 
     } catch {
@@ -116,7 +122,7 @@ export function GetScores (target, scoreboard) {
  * @param {number} scores 分數
  * @returns 
  */
-export function SetScores (target, scoreboard, scores) {
+export function SetScores(target, scoreboard, scores) {
     return cmd(`scoreboard players set "${target}" "${scoreboard}" ${scores}`);
 }
 
@@ -127,6 +133,6 @@ export function SetScores (target, scoreboard, scores) {
  * @param {number} scores 分數
  * @returns 
  */
- export function AddScores (target, scoreboard, scores) {
+export function AddScores(target, scoreboard, scores) {
     return cmd(`scoreboard players set "${target}" "${scoreboard}" ${scores}`);
 }

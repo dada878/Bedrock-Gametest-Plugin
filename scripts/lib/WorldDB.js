@@ -156,7 +156,10 @@ class DBTable {
     }
 }
 
-class RawTable {
+/**
+ * 純記分板資料庫系統
+ */
+export class ScoreboardDB {
     constructor(DB_Name) {
         this.name = DB_Name;
     }

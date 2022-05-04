@@ -3,10 +3,10 @@ import * as ui from 'mojang-minecraft-ui';
 import { pluginDB } from '../config.js';
 import { cmd, cmds, executeCmds, GetScores, log, logfor, SetScores } from '../lib/GameLibrary.js';
 import { DefMaxXp, specialLevelMappings, levelUpMsg } from "../lib/LevelDefine.js";
-import { WorldDB } from '../lib/WorldDB.js';
+import { ScoreboardDB, WorldDB } from '../lib/WorldDB.js';
 
-export const expTable = new WorldDB("exp").raw();
-export const levelTable = new WorldDB("level").raw();
+export const expTable = new ScoreboardDB("exp");
+export const levelTable = new ScoreboardDB("level");
 
 /**
  * 對玩家顯示等即系統選單

@@ -21,10 +21,12 @@ export function LevelSystem(player) {
     let fm = new ui.ActionFormData();
     fm.title(`等級系統`);
     fm.body(`您目前為§aLv.${level}(${exp}/${DefMaxXp(level)})§r\n\n等級獎勵:`);
-    //fm.button(`查看等級排名`,);
+    fm.button(`查看等級排名`);
 
     fm.show(player).then(response => {
         if (!response) return;
+
+        if (response.selection == 0) {};
     });
 }
 

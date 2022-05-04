@@ -162,6 +162,7 @@ class DBTable {
 export class ScoreboardDB {
     constructor(DB_Name) {
         this.name = DB_Name;
+        try { cmd(`scoreboard objectives add "${DB_Name}" dummy`); } catch { };
     }
 
     setScore(target, value) {

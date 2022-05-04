@@ -48,15 +48,15 @@ export function addXp(player, exp) {
     }
 
     //添加經驗值
-    expTable.setScore(playerName, player_exp + exp);
+    expTable.addScore(playerName, exp);
     // 經驗值大於所需經驗，即升級
     if (player_exp >= DefMaxXp(player_level)) {
         // 歸零經驗值並添加等級
+        levelTable.addScore(playerName, 1);
         expTable.setScore(playerName, 0);
-        levelTable.setScore(playerName, player_level + 1);
         // 升級特效/音效
         cmd(`title "${playerName}" title §b恭喜升級`);
-        cmd(`title "${playerName}" subtitle §e已經升上 §a${++player_level} §e等`);
+        cmd(`title "${playerName}" subtitle §e已經升上 §a${player_level} §e等`);
         log(`>> §b${playerName} §e成功升到了 §b${player_level} §e等！`);
         cmd(`playsound random.levelup "${playerName}"`);
         // 玩家等級的特殊等級map

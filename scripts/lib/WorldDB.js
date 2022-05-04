@@ -1,6 +1,6 @@
 import * as scores from "./ScoresFormat.js"
 import * as base64 from "./base64.js"
-import { cmd, GetScores } from "./GameLibrary.js";
+import { cmd, GetScores, log } from "./GameLibrary.js";
 
 /**
  * 世界資料庫系統
@@ -19,7 +19,7 @@ export class WorldDB {
      * @param {string} tableName 表格名稱 
      * @returns 創建/取得到的表格
      */
-     table(tableName) {
+    table(tableName) {
         return new DBTable(this.name, tableName);
     }
     /**
@@ -27,7 +27,7 @@ export class WorldDB {
      * @param {string} tableName 表格名稱 
      * @returns 創建/取得到的表格
      */
-     raw() {
+    raw() {
         return new RawTable(this.name);
     }
 }
@@ -156,24 +156,24 @@ class DBTable {
     }
 }
 
-class RawTable{
+class RawTable {
     constructor(DB_Name) {
         this.name = DB_Name;
     }
 
-    setScore(target, value){
-        cmd(`scoreboard players set "${target}" "${this.name}" ${value}`)
+    setScore(target, value) {
+        cmd(`scoreboard players set "${target}" "${this.name}" ${value}`);
     }
 
-    addScore(target, value){
-        cmd(`scoreboard players add "${target}" "${this.name}" ${value}`)
+    addScore(target, value) {
+        cmd(`scoreboard players add "${target}" "${this.name}" ${value}`);
     }
 
-    removeScore(target, value){
-        cmd(`scoreboard players remove "${target}" "${this.name}" ${value}`)
+    removeScore(target, value) {
+        cmd(`scoreboard players remove "${target}" "${this.name}" ${value}`);
     }
 
-    getScore(player){
-        return GetScores(this.name, player.name)
+    getScore(target) {
+        return GetScores(target, this.name);
     }
 }

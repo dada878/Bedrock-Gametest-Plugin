@@ -88,7 +88,6 @@ world.events.itemUse.subscribe(eventData => {
 });
 
 world.events.tick.subscribe(() => {
-    return;
     for (let player of world.getPlayers()) {
         let container = player.getComponent('inventory').container;
         for (let i = 0; i < container.size; i++) if (container.getItem(i)) {
@@ -109,7 +108,7 @@ world.events.tick.subscribe(() => {
                     let enchantData = itemEnchants.getEnchantment(Minecraft.MinecraftEnchantmentTypes[enchantment]);
         
                     if(enchantData) {
-                        if(enchantData.level > Minecraft.MinecraftEnchantmentTypes[enchantment].maxLevel || enchantData.level < 5){
+                        if(enchantData.level > Minecraft.MinecraftEnchantmentTypes[enchantment].maxLevel || enchantData.level > 5){
                             logfor("@a[tag=admin]",`>> §6${player.name}§c 物品附魔等級異常(id=${item.id},enchant=${enchantData.type.id},level=${enchantData.level})`);
                             clearItem(player, i);
                         }

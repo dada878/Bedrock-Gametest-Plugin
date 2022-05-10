@@ -53,7 +53,7 @@ export function ShopSystem(player) {
                                 `give ${player.name} ${item.id} ${response.formValues[0]} `
                             ])
                             logfor(player, `>> 成功購買${count}個${item.display}!`)
-                            moneyTable.removeScore(player, count * price)
+                            moneyTable.removeScore(player, count * item.price)
                         })
                     }
                 })

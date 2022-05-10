@@ -5,6 +5,7 @@ import { SpawnTp } from "../system/spawnTp.js";
 import { WarpMenu } from "../system/warp.js";
 import { LevelSystem } from "../system/level.js";
 import { MoneySystem } from "../system/money.js";
+import { ShopSystem } from "../system/money.js";
 
 import { logfor } from '../lib/GameLibrary.js';
 const noone = ((player) => { logfor(player, ">> §c本功能暫未開放！") })
@@ -50,7 +51,7 @@ export const buttons = [
         id: "shop",
         display: "商店系統",
         icon: "textures/ui/MCoin.png",
-        handler: noone
+        handler: ShopSystem
     },
     {
         id: "level",

@@ -32,7 +32,7 @@ export function ShopSystem(player) {
         
         switch(response.selection){
             case (0): {
-                let fm = new ui.ModalFormData();
+                let fm = new ui.ActionFormData();
                 fm.title("購買");
                 buyableItems.forEach((f) => {fm.button(f.displayName, f.icon ?? "")})
 

@@ -47,7 +47,7 @@ export function ShopSystem(player) {
                         let fm = new ui.ModalFormData();
                         fm.slider("你要買多少個？", 0, maxCount, 1, maxCount);
 
-                        fm.show(player).then((response) => {console.warn(response)})
+                        fm.show(player).then((response) => {console.warn(response.formValues[0])})
                     }
                 })
             }

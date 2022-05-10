@@ -1,6 +1,6 @@
 import { world } from "mojang-minecraft";
 import * as ui from 'mojang-minecraft-ui';
-import { pluginDB, minTranferLimit, maxTranferLimit } from "../config.js";
+import { pluginDB } from "../config.js";
 import { cmd, GetScores, log, logfor, SetScores, AddScores } from '../lib/GameLibrary.js';
 import { WorldDB } from '../lib/WorldDB.js';
 
@@ -35,11 +35,6 @@ export function MoneySystem(player) {
                 fm.show(player).then(response => {
                     if (!response || response.isCanceled) return;
                     if (!response.formValues[1] || isNaN(response.formValues[1])) return logfor(player, ">> §c金額必須為數字！");
-                    if (
-                        (!response.formValues[1] < minTranferLimit && minTranferLimit > 1)
-                        || (response.formValues[1] > maxTranferLimit && maxTranferLimit > 1)
-                        || (response.formValues[1] < 1)
-                    ) return logfor(player, `>> §c金額不能少於${minTranferLimit} / 大於${maxTranferLimit}！`);
 
                     let money = moneyTable.getScore(`"${player.name}"`)
                     if(isNaN(money)) return logfor(player, `>> §c未知錯誤`);

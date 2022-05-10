@@ -4,6 +4,7 @@ import { pluginDB } from "../config.js";
 import { cmd, log, logfor, cmds, strify } from '../lib/GameLibrary.js';
 import { WorldDB } from '../lib/WorldDB.js';
 
+export const maxSelect = 128
 export const moneyTable = new WorldDB(pluginDB.table("moneySetting").getData("scoreboard") ?? "money").raw();
 
 export const buyableItems = [
@@ -60,7 +61,7 @@ export function ShopSystem(player) {
                         const maxCount = money / item.price
                         if(moneyTable.getScore(player) < item.price) return logfor(player, `>> 你沒有足夠的金錢買一個${item.display}!`)
                         let fm = new ui.ModalFormData();
-                        fm.slider("你要買多少個？", 0, maxCount, 1, maxCount);
+                        fm.slider("你要買多少個？", 0, maxCount > maxSelect ? maxSelect : maxCount, 1, maxCount);
 
                         fm.show(player).then((response) => {
                             let count = response.formValues[0] 

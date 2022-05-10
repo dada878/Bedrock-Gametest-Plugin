@@ -82,6 +82,7 @@ world.events.blockBreak.subscribe(eventData => {
 
     let exp = Math.round(Math.random() * baseXP)
 
+    if (enables.getData("level") == 1) return;
     addXp(player,exp);
 })
 
@@ -94,6 +95,24 @@ world.events.itemUse.subscribe(eventData => {
     if (item.id == "mcc:menu") PlayerMenu(player);
     else if (item.id == "mcc:admin_menu") AdminMenu(player);
 });
+
+//檢測擊殺生物
+Minecraft.world.events.entityHit.subscribe(eventData => {
+    const player = eventData.entity;
+    const target = eventData.hitEntity;
+
+    if (!target) return;
+
+    let hp = target.getComponent("health");
+
+    if (!hp) return;
+    if (hp.current > 0) return;
+    
+    if (enables.getData("level") == 1) return;
+
+    let exp = Math.round(Math.random() * baseXP * 5);
+    addXp(player, exp);
+})
 
 world.events.tick.subscribe(() => {
     for (let player of world.getPlayers()) {

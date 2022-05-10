@@ -1,22 +1,22 @@
 import { world } from "mojang-minecraft";
 import * as ui from 'mojang-minecraft-ui';
 import { pluginDB } from "../config.js";
-import { cmd, log, logfor } from '../lib/GameLibrary.js';
+import { cmd, log, logfor, cmds } from '../lib/GameLibrary.js';
 import { WorldDB } from '../lib/WorldDB.js';
 
 export const moneyTable = new WorldDB(pluginDB.table("moneySetting").getData("scoreboard") ?? "money").raw();
 
 export const buyableItems = [
     {
-        displayName: '§7鐵錠',
-        item: 'minecraft:iron_ingot',
+        display: '§7鐵錠',
+        id: 'minecraft:iron_ingot',
         price: 300
     },
 ]
 export const sellableItems = [
     {
-        displayName: '§7鐵錠',
-        item: 'minecraft:iron_ingot',
+        display: '§7鐵錠',
+        id: 'minecraft:iron_ingot',
         price: 250
     },
 ]
@@ -34,7 +34,7 @@ export function ShopSystem(player) {
             case (0): {
                 let fm = new ui.ActionFormData();
                 fm.title("購買");
-                buyableItems.forEach((f) => {fm.button(f.displayName, f.icon ?? "")})
+                buyableItems.forEach((f) => {fm.button(f.display, f.icon ?? "")})
 
                 fm.show(player).then(response => {
                     if (!response || response.isCanceled) return;
@@ -43,11 +43,17 @@ export function ShopSystem(player) {
                         const item = buyableItems[response.selection]
                         let money = moneyTable.getScore(player)
                         const maxCount = money / item.price
-                        if(moneyTable.getScore(player) < item.price) return logfor(player, `>> 你沒有足夠的金錢買一個${item.displayName}!`)
+                        if(moneyTable.getScore(player) < item.price) return logfor(player, `>> 你沒有足夠的金錢買一個${item.display}!`)
                         let fm = new ui.ModalFormData();
                         fm.slider("你要買多少個？", 0, maxCount, 1, maxCount);
 
-                        fm.show(player).then((response) => {console.warn(response.formValues[0])})
+                        fm.show(player).then((response) => {
+                            cmds([
+                                `give ${player.name} ${item.id} ${response.formValues[0]} `
+                            ])
+                            logfor(player, `>> 成功購買${response.formValues[0]}個${item.display}!`)
+                            moneyTable.removeScore(player, response.formValues[0] * price)
+                        })
                     }
                 })
             }

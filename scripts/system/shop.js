@@ -4,7 +4,7 @@ import { pluginDB, minTranferLimit, maxTranferLimit } from "../config.js";
 import { cmd, GetScores, log, logfor, SetScores, AddScores } from '../lib/GameLibrary.js';
 import { WorldDB } from '../lib/WorldDB.js';
 
-export const moneyTable = new WorldDB(luginDB.table("moneySetting").getData("scoreboard") ?? "money").raw();
+export const moneyTable = new WorldDB(pluginDB.table("moneySetting").getData("scoreboard") ?? "money").raw();
 
 export const buyableItems = [
     {

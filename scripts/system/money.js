@@ -36,7 +36,7 @@ export function MoneySystem(player) {
                     if (!response || response.isCanceled) return;
                     if (!response.formValues[1] || isNaN(response.formValues[1])) return logfor(player, ">> §c金額必須為數字！");
 
-                    let money = moneyTable.getScore(`"${player.name}"`)
+                    let money = moneyTable.getScore(player)
                     if(isNaN(money)) return logfor(player, `>> §c未知錯誤`);
 
                     if(money < +response.formValues[1]) return logfor(player, `>> §c你沒有足夠的金幣！`);

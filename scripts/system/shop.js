@@ -1,7 +1,7 @@
 import { world } from "mojang-minecraft";
 import * as ui from 'mojang-minecraft-ui';
 import { pluginDB } from "../config.js";
-import { cmd, log, logfor, cmds } from '../lib/GameLibrary.js';
+import { cmd, log, logfor, cmds, strify } from '../lib/GameLibrary.js';
 import { WorldDB } from '../lib/WorldDB.js';
 
 export const moneyTable = new WorldDB(pluginDB.table("moneySetting").getData("scoreboard") ?? "money").raw();
@@ -43,7 +43,7 @@ export function ShopSystem(player) {
                         const item = buyableItems[response.selection]
                         let money = moneyTable.getScore(player)
                         const maxCount = money / item.price
-                        if(moneyTable.getScore(player) < item.price) return logfor(player, `>> 你沒有足夠的金錢買一個${item.display}!`)
+                        if(moneyTable.getScore(strify(player.name)) < item.price) return logfor(player, `>> 你沒有足夠的金錢買一個${item.display}!`)
                         let fm = new ui.ModalFormData();
                         fm.slider("你要買多少個？", 0, maxCount, 1, maxCount);
 
@@ -52,7 +52,7 @@ export function ShopSystem(player) {
                                 `give ${player.name} ${item.id} ${response.formValues[0]} `
                             ])
                             logfor(player, `>> 成功購買${response.formValues[0]}個${item.display}!`)
-                            moneyTable.removeScore(player, response.formValues[0] * price)
+                            moneyTable.removeScore(strify(player.name), response.formValues[0] * price)
                         })
                     }
                 })

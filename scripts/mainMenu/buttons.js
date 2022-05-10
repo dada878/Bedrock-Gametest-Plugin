@@ -9,6 +9,7 @@ import { ShopSystem } from "../system/shop.js";
 
 import { logfor } from '../lib/GameLibrary.js';
 const noone = ((player) => { logfor(player, ">> §c本功能暫未開放！") })
+const disable = ((player) => { logfor(player, ">> §c本功能已被暫時關閉！") })
 
 export const buttons = [
     {
@@ -45,7 +46,7 @@ export const buttons = [
         id: "money",
         display: "經濟系統",
         icon: "textures/ui/MCoin.png",
-        handler: MoneySystem
+        handler: disable
     },
     {
         id: "shop",

@@ -136,3 +136,11 @@ export function SetScores(target, scoreboard, scores) {
 export function AddScores(target, scoreboard, scores) {
     return cmd(`scoreboard players set "${target}" "${scoreboard}" ${scores}`);
 }
+
+/**
+ * stringfy a string
+ * @returns string
+ */
+ export function strify(str) {
+     return '"'+str+'"'
+}

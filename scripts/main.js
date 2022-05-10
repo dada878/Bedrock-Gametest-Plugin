@@ -7,7 +7,6 @@ import { PlayerMenu } from "./mainMenu/player.js";
 import { addXp } from "./system/level.js";
 import { pluginDB, prefix, baseXP, checkLore, checkEnchantment, enables } from "./config.js";
 import { WorldDB } from "./lib/WorldDB.js";
-import {snakeToCamel, clearItem} from "./lib/util.js"
 import {levelTable,expTable} from "./system/level.js"
 
 //當傳送訊息

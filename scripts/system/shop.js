@@ -43,16 +43,17 @@ export function ShopSystem(player) {
                         const item = buyableItems[response.selection]
                         let money = moneyTable.getScore(player)
                         const maxCount = money / item.price
-                        if(moneyTable.getScore(strify(player.name)) < item.price) return logfor(player, `>> 你沒有足夠的金錢買一個${item.display}!`)
+                        if(moneyTable.getScore(player) < item.price) return logfor(player, `>> 你沒有足夠的金錢買一個${item.display}!`)
                         let fm = new ui.ModalFormData();
                         fm.slider("你要買多少個？", 0, maxCount, 1, maxCount);
 
                         fm.show(player).then((response) => {
+                            let count = response.formValues[0] 
                             cmds([
                                 `give ${player.name} ${item.id} ${response.formValues[0]} `
                             ])
-                            logfor(player, `>> 成功購買${response.formValues[0]}個${item.display}!`)
-                            moneyTable.removeScore(strify(player.name), response.formValues[0] * price)
+                            logfor(player, `>> 成功購買${count}個${item.display}!`)
+                            moneyTable.removeScore(player, count * price)
                         })
                     }
                 })

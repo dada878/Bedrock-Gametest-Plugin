@@ -12,6 +12,21 @@ export const buyableItems = [
         id: 'minecraft:iron_ingot',
         price: 300
     },
+    {
+        display: '§b鑽石',
+        id: 'minecraft:diamond',
+        price: 500
+    },
+    {
+        display: '§a綠寶石',
+        id: 'minecraft:emerald',
+        price: 750
+    },
+    {
+        display: '§d下屆合金',
+        id: 'minecraft:netherite_ingot',
+        price: 1000
+    },
 ]
 export const sellableItems = [
     {

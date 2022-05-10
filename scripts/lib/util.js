@@ -22,3 +22,16 @@ export function clearItem(player, slot){
         } catch(error) { }
     }
 }
+
+export function getItemCount(id, data, player) {
+    let itemCount = [];
+    const data = ServerBuild.runCommand(`clear "${player}" ${id} ${data ? data : '0'} 0`);
+    if (data.error)
+        return itemCount;
+    data.playerTest.forEach(element => {
+        const count = parseInt(element.match(/(?<=.*?\().+?(?=\))/)[0]);
+        const player = element.match(/^.*(?= \(\d+\))/)[0];
+        itemCount.push({ player, count });
+    });
+    return itemCount ? itemCount : [];
+}

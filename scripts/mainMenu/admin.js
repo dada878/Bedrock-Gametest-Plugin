@@ -17,7 +17,7 @@ export function AdminMenu(player) {
     fm.button('§l§1管理傳送點', 'textures/ui/worldsIcon.png');
 
     fm.show(player).then(response => {
-        if (!response) return;
+        if (!response || response.isCanceled) return;
 
         const worldPlayers = world.getPlayers();
         let players = [];
@@ -52,7 +52,7 @@ export function AdminMenu(player) {
                             fm.textField('設置經濟系統的計分板', '', board);
 
                             fm.show(player).then(response => {
-                                if (!response) return;
+                                if (!response || response.isCanceled) return;
                                 
                                 const pos = response.formValues[0].trim();
                                 // 座標設定
@@ -105,7 +105,7 @@ export function AdminMenu(player) {
                 fm.textField("輸入稱號", "");
 
                 fm.show(player).then(response => {
-                    if (!response) return;
+                    if (!response || response.isCanceled) return;
                     if (!response.formValues[1]) return logfor(player, ">> §c稱號欄位不能為空");
 
                     let target = players[response.formValues[0]];
@@ -131,7 +131,7 @@ export function AdminMenu(player) {
                 fm.dropdown("選擇目標玩家", playerNames);
 
                 fm.show(player).then(response => {
-                    if (!response) return;
+                    if (!response || response.isCanceled) return;
 
                     let target = players[response.formValues[0]];
                     let hasTitles = getData(target, "hasTitles");
@@ -141,7 +141,7 @@ export function AdminMenu(player) {
                     fm.dropdown("選擇要移除的稱號", hasTitles);
 
                     fm.show(player).then(response => {
-                        if (!response) return;
+                        if (!response || response.isCanceled) return;
 
                         let selectedTitle = getData(player, "selectedTitle");
 
@@ -168,7 +168,7 @@ export function AdminMenu(player) {
                 fm.textField("輸入理由(可留空)", "");
 
                 fm.show(player).then(response => {
-                    if (!response) return;
+                    if (!response || response.isCanceled) return;
                     const kick_player = playerNames[response.formValues[0]];
                     const because = response.formValues[1];
 
@@ -189,7 +189,7 @@ export function AdminMenu(player) {
                 fm.button("§l§1移除傳送點");
 
                 fm.show(player).then(response => {
-                    if (!response) return;
+                    if (!response || response.isCanceled) return;
 
                     const warpsTable = pluginDB.table("warps");
                     let warps = warpsTable.getAllData();
@@ -206,7 +206,7 @@ export function AdminMenu(player) {
                         fm.textField("傳送點座標", "x y z");
 
                         fm.show(player).then(response => {
-                            if (!response) return;
+                            if (!response || response.isCanceled) return;
 
                             const warpName = response.formValues[0];
                             const warpPos = response.formValues[1];
@@ -224,7 +224,7 @@ export function AdminMenu(player) {
                         fm.dropdown("選擇要移除的傳送點", warpNames);
 
                         fm.show(player).then(response => {
-                            if (!response) return;
+                            if (!response || response.isCanceled) return;
 
                             const warpName = warpNames[response.formValues[0]];
 

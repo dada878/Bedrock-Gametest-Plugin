@@ -6,7 +6,7 @@ import { WorldDB } from '../lib/WorldDB.js';
 
 export const moneyTable = new WorldDB(luginDB.table("moneySetting").getData("scoreboard") ?? "money").raw();
 
-function MoneySystem(player) {
+export function MoneySystem(player) {
     const worldPlayers = world.getPlayers();
     let players = [];
     let playerNames = [];
@@ -23,7 +23,7 @@ function MoneySystem(player) {
     fm.button('§l§1簽到');
 
     fm.show(player).then(response => {
-        if(!response) return;
+        if (!response || response.isCanceled) { return };
         
         switch(response.selection){
             case (0): {
@@ -33,7 +33,7 @@ function MoneySystem(player) {
                 fm.textField("輸入付款的數額", "");
 
                 fm.show(player).then(response => {
-                    if (!response) return;
+                    if (!response || response.isCanceled) return;
                     if (!response.formValues[1] || isNaN(response.formValues[1])) return logfor(player, ">> §c金額必須為數字！");
                     if (
                         (!response.formValues[1] < minTranferLimit && minTranferLimit > 1)

@@ -28,7 +28,7 @@ export class WorldDB {
      * @returns 創建/取得到的表格
      */
     raw() {
-        return new RawTable(this.name);
+        return new ScoreboardDB(this.name);
     }
 }
 
@@ -160,24 +160,28 @@ class DBTable {
  * 純記分板資料庫系統
  */
 export class ScoreboardDB {
-    constructor(DB_Name) {
-        this.name = DB_Name;
-        try { cmd(`scoreboard objectives add "${DB_Name}" dummy`); } catch { };
+    constructor(DBName) {
+        this.name = DBName;
+        try { cmd(`scoreboard objectives add "${DBName}" dummy`); } catch { };
     }
 
     setScore(target, value) {
+        if(target.name) target = target.name
         cmd(`scoreboard players set "${target}" "${this.name}" ${value}`);
     }
 
     addScore(target, value) {
+        if(target.name) target = target.name
         cmd(`scoreboard players add "${target}" "${this.name}" ${value}`);
     }
 
     removeScore(target, value) {
+        if(target.name) target = target.name
         cmd(`scoreboard players remove "${target}" "${this.name}" ${value}`);
     }
 
     getScore(target) {
+        if(target.name) target = target.name
         return GetScores(target, this.name);
     }
 }

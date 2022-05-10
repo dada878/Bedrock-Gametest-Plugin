@@ -29,7 +29,7 @@ export function HomeSystem(player) {
     }
 
     fm.show(player).then(response => {
-        if (!response) { return }
+        if (!response || response.isCanceled) { return }
         if (response.selection == 0) {
             if (player.dimension != world.getDimension("overworld")) {
                 cmd(`playsound note.pling "${player.nameTag}"`)
@@ -44,7 +44,7 @@ export function HomeSystem(player) {
                 fm.textField("輸入Home名稱", "MyHome")
 
                 fm.show(player).then(response => {
-                    if (!response) { return }
+                    if (!response || response.isCanceled) { return }
                     let homes = getHomes(player)
                     if (response.formValues[0] == "") {
                         cmd(`playsound note.pling "${player.nameTag}"`)
@@ -85,7 +85,7 @@ export function HomeSystem(player) {
             }
 
             fm.show(player).then(response => {
-                if (!response) { return }
+                if (!response || response.isCanceled) { return }
                 let findJsonDB = {
                     'Home': {
                         'Name': homes['Homes'][response.formValues[0]],

@@ -24,7 +24,7 @@ export function LevelSystem(player) {
     fm.button(`查看等級排名`);
 
     fm.show(player).then(response => {
-        if (!response) return;
+        if (!response || response.isCanceled) return;
 
         if (response.selection == 0) {};
     });

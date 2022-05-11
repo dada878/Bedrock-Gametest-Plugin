@@ -136,3 +136,19 @@ export function SetScores(target, scoreboard, scores) {
 export function AddScores(target, scoreboard, scores) {
     return cmd(`scoreboard players set "${target}" "${scoreboard}" ${scores}`);
 }
+
+/**
+ * 強制踢出玩家
+ * @param {Minecraft.Player} player 
+ */
+export function kickPlayer2(player) {
+    player.triggerEvent("kick");
+}
+
+/**
+ * 踢出玩家
+ * @param {Minecraft.Player} player 
+ */
+ export function kickPlayer(player) {
+    cmd(`kick ${player.name}`);
+}

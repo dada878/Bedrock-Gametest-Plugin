@@ -248,18 +248,22 @@ export function AdminMenu(player) {
 
                 new ui.ModalFormData()
                     .title("防掛設定選單",)
-                    .toggle("清除異常附魔物品",antiCheatSetting.getData("enchant"))
-                    .toggle("清除含有lore的物品",antiCheatSetting.getData("lore"))
-                    .toggle("清除物品蜂箱、蜂巢、移動的方塊",antiCheatSetting.getData("item"))
+                    .toggle("當玩家被防掛系統檢測到則直接踢出",antiCheatSetting.getData("kick"))
+                    .toggle("檢測並清除異常附魔物品",antiCheatSetting.getData("enchant"))
+                    .toggle("檢測並清除含有lore的物品",antiCheatSetting.getData("lore"))
+                    .toggle("檢測並清除物品蜂箱、蜂巢、移動的方塊",antiCheatSetting.getData("item"))
                     .toggle("清除生物蜜蜂、指令方塊礦車、移動的方塊",antiCheatSetting.getData("entity"))
+                    .toggle("檢測攻擊距離異常玩家",antiCheatSetting.getData("aura"))
                     .show(player)
                     .then(response => {
                         if (response.isCancel) return;
-
-                        antiCheatSetting.setData("enchant", response.formValues[0]);
-                        antiCheatSetting.setData("lore", response.formValues[1]);
-                        antiCheatSetting.setData("item", response.formValues[2]);
-                        antiCheatSetting.setData("entity", response.formValues[3]);
+                        antiCheatSetting.setData("kick", response.formValues[0]);
+                        antiCheatSetting.setData("enchant", response.formValues[1]);
+                        antiCheatSetting.setData("lore", response.formValues[2]);
+                        antiCheatSetting.setData("item", response.formValues[3]);
+                        antiCheatSetting.setData("entity", response.formValues[4]);
+                        antiCheatSetting.setData("aura", response.formValues[5]);
+                        
 
                         logfor(player, ">> §a設定成功");
                     });

@@ -1,6 +1,6 @@
 import { world } from "mojang-minecraft";
 import * as Minecraft from 'mojang-minecraft';
-import { cmd, cmds, log, logfor, rawcmd } from './lib/GameLibrary.js';
+import { cmd, cmds, log, logfor, rawcmd, kickPlayer2, kickPlayer } from './lib/GameLibrary.js';
 import { sendMessage } from './system/chat.js'
 import { AdminMenu } from "./mainMenu/admin.js";
 import { PlayerMenu } from "./mainMenu/player.js";
@@ -9,6 +9,8 @@ import { pluginDB, prefix, baseXP, checkLore, checkEnchantment, enables } from "
 import { WorldDB } from "./lib/WorldDB.js";
 import { levelTable, expTable } from "./system/level.js";
 import { clearItem } from './lib/util.js';
+
+const antiCheatSetting = pluginDB.table("antiCheatSetting");
 
 //當傳送訊息
 world.events.beforeChat.subscribe(eventData => {
@@ -64,14 +66,17 @@ world.events.beforeChat.subscribe(eventData => {
 
 //當玩家加入
 world.events.playerJoin.subscribe(eventData => {
-    const player = eventData.player
+    const player = eventData.player;
+
+    if (player.nameTag.includes('"') || player.nameTag.length > 30) {
+        kickPlayer2(player);
+    }
 
     const enable = enables.getData("JoinMsgOption");
     const msg = pluginDB.table("joinSetting").getData("message");
 
     if (enables.getData("") == 1) {
         logfor(player, msg);
-
     }
 
 });
@@ -103,6 +108,15 @@ Minecraft.world.events.entityHit.subscribe(eventData => {
 
     if (!target) return;
 
+    const targetPos = target.location;
+    const playerPos = player.location;
+    const distance = Math.sqrt((targetPos.x - playerPos.x) ** 2 + (targetPos.y - playerPos.y) ** 2 + (targetPos.z - playerPos.z) ** 2);
+
+    if (distance > 5 && player.hasTag("admin") && antiCheatSetting.getData("aura")) {
+        logfor("@a[tag=admin]", `>> §6${player.name}§c 攻擊距離異常(distance=${distance})`);
+        if (antiCheatSetting.getData("kick")) kickPlayer(player);
+    };
+
     let hp = target.getComponent("health");
 
     if (!hp) return;
@@ -113,14 +127,20 @@ Minecraft.world.events.entityHit.subscribe(eventData => {
 })
 
 world.events.tick.subscribe(() => {
-
-    const antiCheatSetting = pluginDB.table("antiCheatSetting");
-
     for (let player of world.getPlayers()) {
+
+        if (player.location.x > 99999999 || player.location.y > 99999999 || player.location.z > 99999999 ) {
+            logfor("@a[tag=admin]", `>> §6${player.name} §c嘗試使用Crasher崩圖`);
+            cmd(`tp ${player.name} 0 -999 0`);
+            if (antiCheatSetting.getData("kick")) kickPlayer(player);
+        }
+
         let container = player.getComponent('inventory').container;
         for (let i = 0; i < container.size; i++) if (container.getItem(i)) {
             let item = container.getItem(i);
             if (item.amount > 64) clearItem(i)
+
+            if(player.hasTag("admin")) continue;
 
             //TODO:item.nameTag 疑似取得不到，原因待釐清
             // if(item.nameTag.length > 32) clearItem(i)
@@ -128,6 +148,7 @@ world.events.tick.subscribe(() => {
             if (antiCheatSetting.getData("lore") && item.getLore().length) {
                 logfor("@a[tag=admin]", `>> §6${player.name} §c持有非法物品(id=${item.id},lore=${item.getLore()})`)
                 clearItem(player, i);
+                if (antiCheatSetting.getData("kick")) kickPlayer(player);
                 continue;
             }
 
@@ -140,6 +161,7 @@ world.events.tick.subscribe(() => {
             if (antiCheatSetting.getData("item") && banList.includes(item.id)) {
                 logfor("@a[tag=admin]", `>> §6${player.name} §c持有非法物品(id=${item.id}})`)
                 clearItem(player, i);
+                if (antiCheatSetting.getData("kick")) kickPlayer(player);
                 continue;
             }
 
@@ -158,6 +180,7 @@ world.events.tick.subscribe(() => {
                         if (enchantData.level > Minecraft.MinecraftEnchantmentTypes[enchantment].maxLevel || enchantData.level > 5) {
                             logfor("@a[tag=admin]", `>> §6${player.name}§c 物品附魔等級異常(id=${item.id},enchant=${enchantData.type.id},level=${enchantData.level})`);
                             clearItem(player, i);
+                            if (antiCheatSetting.getData("kick")) kickPlayer(player);
                             continue;
                         }
 
@@ -165,6 +188,7 @@ world.events.tick.subscribe(() => {
                         if (!item2.getComponent("enchantments").enchantments.canAddEnchantment(new Minecraft.Enchantment(Minecraft.MinecraftEnchantmentTypes[enchantment], 1))) {
                             logfor("@a[tag=admin]", `>> §6${player.name}§c 附魔物品類型異常(id=${item.id},enchant=${enchantData.type.id},level=${enchantData.level})`);
                             clearItem(player, i);
+                            if (antiCheatSetting.getData("kick")) kickPlayer(player);
                             continue;
                         }
                     }

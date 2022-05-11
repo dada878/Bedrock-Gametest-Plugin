@@ -1,13 +1,14 @@
 import { world } from "mojang-minecraft";
 import * as Minecraft from 'mojang-minecraft';
-import { cmd, cmds, log, logfor } from './lib/GameLibrary.js';
+import { cmd, cmds, log, logfor, rawcmd } from './lib/GameLibrary.js';
 import { sendMessage } from './system/chat.js'
 import { AdminMenu } from "./mainMenu/admin.js";
 import { PlayerMenu } from "./mainMenu/player.js";
 import { addXp } from "./system/level.js";
 import { pluginDB, prefix, baseXP, checkLore, checkEnchantment, enables } from "./config.js";
 import { WorldDB } from "./lib/WorldDB.js";
-import {levelTable,expTable} from "./system/level.js"
+import { levelTable, expTable } from "./system/level.js";
+import { clearItem } from './lib/util.js';
 
 //當傳送訊息
 world.events.beforeChat.subscribe(eventData => {
@@ -20,7 +21,7 @@ world.events.beforeChat.subscribe(eventData => {
 
     else {
 
-    //發送指令
+        //發送指令
         let command = message
             .trim() //去除兩邊空格
             .slice(prefix.length) //刪除prefix
@@ -29,7 +30,7 @@ world.events.beforeChat.subscribe(eventData => {
 
         switch (command) {
             case "help": {
-                logfor(player,"======§b<§e指令清單§b>§r======\n§e-menu §a-取的玩家選單\n§e-admin_menu §a-取得管理員選單")
+                logfor(player, "======§b<§e指令清單§b>§r======\n§e-menu §a-取的玩家選單\n§e-admin_menu §a-取得管理員選單")
             }
             case "menu": {
                 cmd(`give ${player.name} mcc:menu 1 0`);
@@ -67,10 +68,10 @@ world.events.playerJoin.subscribe(eventData => {
 
     const enable = enables.getData("JoinMsgOption");
     const msg = pluginDB.table("joinSetting").getData("message");
-    
+
     if (enables.getData("") == 1) {
         logfor(player, msg);
-        
+
     }
 
 });
@@ -82,8 +83,7 @@ world.events.blockBreak.subscribe(eventData => {
 
     let exp = Math.round(Math.random() * baseXP)
 
-    if (enables.getData("level") == 1) return;
-    addXp(player,exp);
+    addXp(player, exp);
 })
 
 //物品使用
@@ -107,43 +107,65 @@ Minecraft.world.events.entityHit.subscribe(eventData => {
 
     if (!hp) return;
     if (hp.current > 0) return;
-    
-    if (enables.getData("level") == 1) return;
 
     let exp = Math.round(Math.random() * baseXP * 5);
     addXp(player, exp);
 })
 
 world.events.tick.subscribe(() => {
+
+    const antiCheatSetting = pluginDB.table("antiCheatSetting");
+
     for (let player of world.getPlayers()) {
         let container = player.getComponent('inventory').container;
         for (let i = 0; i < container.size; i++) if (container.getItem(i)) {
             let item = container.getItem(i);
-            if(item.amount > 64) clearItem(i)
+            if (item.amount > 64) clearItem(i)
 
             //TODO:item.nameTag 疑似取得不到，原因待釐清
             // if(item.nameTag.length > 32) clearItem(i)
 
-            if(checkLore && item.getLore().length) {
+            if (antiCheatSetting.getData("lore") && item.getLore().length) {
                 logfor("@a[tag=admin]", `>> §6${player.name} §c持有非法物品(id=${item.id},lore=${item.getLore()})`)
                 clearItem(player, i);
+                continue;
             }
 
-            if(checkEnchantment) {
+            const banList = [
+                "minecraft:beehive",
+                "minecraft:bee_nest",
+                "minecraft:moving_block",
+            ];
+
+            if (antiCheatSetting.getData("item") && banList.includes(item.id)) {
+                logfor("@a[tag=admin]", `>> §6${player.name} §c持有非法物品(id=${item.id}})`)
+                clearItem(player, i);
+                continue;
+            }
+
+            if (antiCheatSetting.getData("entity")) {
+                rawcmd("kill @e[type=npc]");
+                rawcmd("kill @e[type=bee]");
+                rawcmd("kill @e[type=command_block_minecart]");
+            }
+
+            if (antiCheatSetting.getData("enchant")) {
                 let itemEnchants = item.getComponent("enchantments").enchantments;
                 for (let enchantment in Minecraft.MinecraftEnchantmentTypes) {
                     let enchantData = itemEnchants.getEnchantment(Minecraft.MinecraftEnchantmentTypes[enchantment]);
-        
-                    if(enchantData) {
-                        if(enchantData.level > Minecraft.MinecraftEnchantmentTypes[enchantment].maxLevel || enchantData.level > 5){
-                            logfor("@a[tag=admin]",`>> §6${player.name}§c 物品附魔等級異常(id=${item.id},enchant=${enchantData.type.id},level=${enchantData.level})`);
+
+                    if (enchantData) {
+                        if (enchantData.level > Minecraft.MinecraftEnchantmentTypes[enchantment].maxLevel || enchantData.level > 5) {
+                            logfor("@a[tag=admin]", `>> §6${player.name}§c 物品附魔等級異常(id=${item.id},enchant=${enchantData.type.id},level=${enchantData.level})`);
                             clearItem(player, i);
+                            continue;
                         }
 
                         let item2 = new Minecraft.ItemStack(Minecraft.MinecraftItemTypes[snakeToCamel(item.id)], 1, item.data);
-                        if(!item2.getComponent("enchantments").enchantments.canAddEnchantment(new Minecraft.Enchantment(Minecraft.MinecraftEnchantmentTypes[enchantment], 1))) {
+                        if (!item2.getComponent("enchantments").enchantments.canAddEnchantment(new Minecraft.Enchantment(Minecraft.MinecraftEnchantmentTypes[enchantment], 1))) {
                             logfor("@a[tag=admin]", `>> §6${player.name}§c 附魔物品類型異常(id=${item.id},enchant=${enchantData.type.id},level=${enchantData.level})`);
                             clearItem(player, i);
+                            continue;
                         }
                     }
                 }

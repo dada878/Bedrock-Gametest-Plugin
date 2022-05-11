@@ -15,6 +15,7 @@ export function AdminMenu(player) {
     fm.button('§l§1移除稱號', 'textures/ui/mute_on.png');
     fm.button('§l§1踢出玩家', 'textures/ui/anvil_icon.png');
     fm.button('§l§1管理傳送點', 'textures/ui/worldsIcon.png');
+    fm.button('§l§1防掛設定', 'textures/ui/absorption_effect.png');
 
     fm.show(player).then(response => {
         if (!response) return;
@@ -241,8 +242,29 @@ export function AdminMenu(player) {
                     logfor(player, ">> §a踢出成功");
                 })
                 break;
-            } default: {
+            } case(5): {
 
+                const antiCheatSetting = pluginDB.table("antiCheatSetting");
+
+                new ui.ModalFormData()
+                    .title("防掛設定選單",)
+                    .toggle("清除異常附魔物品",antiCheatSetting.getData("enchant"))
+                    .toggle("清除含有lore的物品",antiCheatSetting.getData("lore"))
+                    .toggle("清除物品蜂箱、蜂巢、移動的方塊",antiCheatSetting.getData("item"))
+                    .toggle("清除生物蜜蜂、指令方塊礦車、移動的方塊",antiCheatSetting.getData("entity"))
+                    .show(player)
+                    .then(response => {
+                        if (response.isCancel) return;
+
+                        antiCheatSetting.setData("enchant", response.formValues[0]);
+                        antiCheatSetting.setData("lore", response.formValues[1]);
+                        antiCheatSetting.setData("item", response.formValues[2]);
+                        antiCheatSetting.setData("entity", response.formValues[3]);
+
+                        logfor(player, ">> §a設定成功");
+                    });
+            } default: {
+                
             }
         }
     })

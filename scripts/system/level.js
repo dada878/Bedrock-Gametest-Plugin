@@ -40,6 +40,7 @@ export function LevelSystem(player) {
  * @returns 
  */
 export function addXp(player, exp) {
+    if (enables.getData("level") == 1) return;
     // 取得經驗值與等級並定義玩家名稱
     const playerName = player.name;
     

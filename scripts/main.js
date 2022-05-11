@@ -8,7 +8,7 @@ import { addXp } from "./system/level.js";
 import { pluginDB, prefix, baseXP, checkLore, checkEnchantment, enables } from "./config.js";
 import { WorldDB } from "./lib/WorldDB.js";
 import { levelTable, expTable } from "./system/level.js";
-import { clearItem } from './lib/util.js';
+import { clearItem, snakeToCamel } from './lib/util.js';
 
 const antiCheatSetting = pluginDB.table("antiCheatSetting");
 
@@ -112,7 +112,7 @@ Minecraft.world.events.entityHit.subscribe(eventData => {
     const playerPos = player.location;
     const distance = Math.sqrt((targetPos.x - playerPos.x) ** 2 + (targetPos.y - playerPos.y) ** 2 + (targetPos.z - playerPos.z) ** 2);
 
-    if (distance > 5 && player.hasTag("admin") && antiCheatSetting.getData("aura")) {
+    if (distance > 5 && !player.hasTag("admin") && antiCheatSetting.getData("aura")) {
         logfor("@a[tag=admin]", `>> §6${player.name}§c 攻擊距離異常(distance=${distance})`);
         if (antiCheatSetting.getData("kick")) kickPlayer(player);
     };

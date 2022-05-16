@@ -72,8 +72,8 @@ export function AdminMenu(player) {
                             break;
                         };
                         case (1): {
-                            let isData = function (key) { if (enables.getData(key) == 1) { return false } else return true; };
-                            let boolCvt = function (key) { if (key) return 0; else return 1; }; //奇怪的bug，暫時修改
+                            let isData = function (key) { return enables.getData(key) == 1 ? false : true; };
+                            let boolCvt = function (key) { return key ? 0 : 1; }; //奇怪的bug，暫時修改
                             let fm = new ui.ModalFormData();
                             fm.title("開關功能");
                             let enableList = [];

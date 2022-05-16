@@ -97,7 +97,7 @@ export function AdminMenu(player) {
                     }
                 })
                 return;
-                break;
+                
             }
             case (1): {
                 let fm = new ui.ModalFormData();

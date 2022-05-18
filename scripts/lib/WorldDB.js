@@ -283,7 +283,11 @@ export class ScoreboardDB {
 
     setScore(target, value) {
         if (this.isPlayerScoreboard) {
-            cmd(`scoreboard players set ${target.name} "${this.name}" ${value}`);
+            if (target.name.includes(" ")) {
+                cmd(`scoreboard players set "${target.name}" "${this.name}" ${value}`);
+            } else {
+                cmd(`scoreboard players set ${target.name} "${this.name}" ${value}`);
+            }
         } else {
             cmd(`scoreboard players set "${target}" "${this.name}" ${value}`);
         }
@@ -291,7 +295,11 @@ export class ScoreboardDB {
 
     addScore(target, value) {
         if (this.isPlayerScoreboard) {
-            cmd(`scoreboard players add ${target.name} "${this.name}" ${value}`);
+            if (target.name.includes(" ")) {
+                cmd(`scoreboard players add "${target.name}" "${this.name}" ${value}`);
+            } else {
+                cmd(`scoreboard players add ${target.name} "${this.name}" ${value}`);
+            }
         } else {
             cmd(`scoreboard players add "${target}" "${this.name}" ${value}`);
         }
@@ -299,7 +307,11 @@ export class ScoreboardDB {
 
     removeScore(target, value) {
         if (this.isPlayerScoreboard) {
-            cmd(`scoreboard players remove ${target.name} "${this.name}" ${value}`);
+            if (target.name.includes(" ")) {
+                cmd(`scoreboard players remove "${target.name}" "${this.name}" ${value}`);
+            } else {
+                cmd(`scoreboard players remove ${target.name} "${this.name}" ${value}`);
+            }
         } else {
             cmd(`scoreboard players remove "${target}" "${this.name}" ${value}`);
         }

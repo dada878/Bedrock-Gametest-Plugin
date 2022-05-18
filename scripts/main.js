@@ -9,6 +9,7 @@ import { pluginDB, prefix, baseXP, checkLore, checkEnchantment, enables } from "
 import { WorldDB } from "./lib/WorldDB.js";
 import { levelTable, expTable } from "./system/level.js";
 import { clearItem, snakeToCamel } from './lib/util.js';
+import * as detect from './system/tool.js'
 
 const antiCheatSetting = pluginDB.table("antiCheatSetting");
 

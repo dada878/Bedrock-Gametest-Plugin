@@ -48,7 +48,5 @@ export const checkEnchantment = true
  export const signinReward = 599
 
 
-
-
-export const pluginDB = new WorldDB.table("plugin_database");
-export const enables = pluginDB.table("enable");
+ export var worldDB_table_cache = {};
+ export var tableDB_cache = {}; 

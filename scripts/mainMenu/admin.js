@@ -15,6 +15,7 @@ export function AdminMenu(player) {
     fm.button('§l§1移除稱號', 'textures/ui/mute_on.png');
     fm.button('§l§1踢出玩家', 'textures/ui/anvil_icon.png');
     fm.button('§l§1管理傳送點', 'textures/ui/worldsIcon.png');
+    fm.button('§l§1防掛設定', 'textures/ui/absorption_effect.png');
 
     fm.show(player).then(response => {
         if (!response || response.isCanceled) return;
@@ -71,8 +72,8 @@ export function AdminMenu(player) {
                             break;
                         };
                         case (1): {
-                            let isData = function (key) { if (enables.getData(key) == 1) { return false } else return true; };
-                            let boolCvt = function (key) { if (key) return 0; else return 1; }; //奇怪的bug，暫時修改
+                            let isData = function (key) { return enables.getData(key) == 1 ? false : true; };
+                            let boolCvt = function (key) { return key ? 0 : 1; }; //奇怪的bug，暫時修改
                             let fm = new ui.ModalFormData();
                             fm.title("開關功能");
                             let enableList = [];
@@ -96,7 +97,7 @@ export function AdminMenu(player) {
                     }
                 })
                 return;
-                break;
+                
             }
             case (1): {
                 let fm = new ui.ModalFormData();
@@ -241,8 +242,33 @@ export function AdminMenu(player) {
                     logfor(player, ">> §a踢出成功");
                 })
                 break;
-            } default: {
+            } case(5): {
 
+                const antiCheatSetting = pluginDB.table("antiCheatSetting");
+
+                new ui.ModalFormData()
+                    .title("防掛設定選單",)
+                    .toggle("當玩家被防掛系統檢測到則直接踢出",antiCheatSetting.getData("kick"))
+                    .toggle("檢測並清除異常附魔物品",antiCheatSetting.getData("enchant"))
+                    .toggle("檢測並清除含有lore的物品",antiCheatSetting.getData("lore"))
+                    .toggle("檢測並清除物品蜂箱、蜂巢、移動的方塊",antiCheatSetting.getData("item"))
+                    .toggle("清除生物蜜蜂、指令方塊礦車、移動的方塊",antiCheatSetting.getData("entity"))
+                    .toggle("檢測攻擊距離異常玩家",antiCheatSetting.getData("aura"))
+                    .show(player)
+                    .then(response => {
+                        if (response.isCancel) return;
+                        antiCheatSetting.setData("kick", response.formValues[0]);
+                        antiCheatSetting.setData("enchant", response.formValues[1]);
+                        antiCheatSetting.setData("lore", response.formValues[2]);
+                        antiCheatSetting.setData("item", response.formValues[3]);
+                        antiCheatSetting.setData("entity", response.formValues[4]);
+                        antiCheatSetting.setData("aura", response.formValues[5]);
+                        
+
+                        logfor(player, ">> §a設定成功");
+                    });
+            } default: {
+                
             }
         }
     })

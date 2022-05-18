@@ -138,9 +138,17 @@ export function AddScores(target, scoreboard, scores) {
 }
 
 /**
- * stringfy a string
- * @returns string
+ * 強制踢出玩家
+ * @param {Minecraft.Player} player 
  */
- export function strify(str) {
-     return '"'+str+'"'
+export function kickPlayer2(player) {
+    player.triggerEvent("kick");
+}
+
+/**
+ * 踢出玩家
+ * @param {Minecraft.Player} player 
+ */
+ export function kickPlayer(player) {
+    cmd(`kick ${player.name}`);
 }

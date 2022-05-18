@@ -1,6 +1,6 @@
 import * as Minecraft from 'mojang-minecraft';
 import * as ui from 'mojang-minecraft-ui';
-import { pluginDB } from '../config.js';
+import { enables, pluginDB } from '../config.js';
 import { cmd, cmds, executeCmds, GetScores, log, logfor, SetScores } from '../lib/GameLibrary.js';
 import { DefMaxXp, specialLevelMappings, levelUpMsg } from "../lib/LevelDefine.js";
 import { ScoreboardDB, WorldDB } from '../lib/WorldDB.js';
@@ -13,6 +13,9 @@ export const levelTable = new ScoreboardDB("level");
  * @param {Minecraft.Player} player 玩家
  */
 export function LevelSystem(player) {
+
+    if (enables.getData("level") == 1) { return logfor(player, ">> §c無法使用，此功能已被禁用") };
+
     let level = levelTable.getScore(player.name);
     let exp = expTable.getScore(player.name);
 
@@ -37,6 +40,7 @@ export function LevelSystem(player) {
  * @returns 
  */
 export function addXp(player, exp) {
+    if (enables.getData("level") == 1) return;
     // 取得經驗值與等級並定義玩家名稱
     const playerName = player.name;
     

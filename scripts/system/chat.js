@@ -58,10 +58,10 @@ export function sendMessage(player, message) {
 }
 
 function checkTitle(player) {
-    if (getData(player, "hasTitles") == null) {
+    if (getData(player, "hasTitles") === null) {
         setData(player, "hasTitles", ["§a玩家"]);
     }
-    if (getData(player, "selectedTitle") == null) {
+    if (getData(player, "selectedTitle") === null) {
         setData(player, "selectedTitle", getData(player, "hasTitles")[0]);
     }
 }

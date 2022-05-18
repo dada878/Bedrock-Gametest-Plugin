@@ -1,7 +1,7 @@
 import { world } from "mojang-minecraft";
 import * as ui from 'mojang-minecraft-ui';
 import { pluginDB } from "../config.js";
-import { cmd, log, logfor, cmds, strify } from '../lib/GameLibrary.js';
+import { cmd, log, logfor, cmds } from '../lib/GameLibrary.js';
 import { WorldDB } from '../lib/WorldDB.js';
 
 export const maxSelect = 128

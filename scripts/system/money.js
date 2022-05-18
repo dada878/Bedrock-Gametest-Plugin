@@ -2,9 +2,10 @@ import { world } from "mojang-minecraft";
 import * as ui from 'mojang-minecraft-ui';
 import { pluginDB } from "../config.js";
 import { cmd, GetScores, log, logfor, SetScores, AddScores } from '../lib/GameLibrary.js';
-import { WorldDB } from '../lib/WorldDB.js';
+import { WorldDB, ScoreboardDB } from '../lib/WorldDB.js';
 
-export const moneyTable = new ScoreboardDB(pluginDB.table("moneySetting").getData("scoreboard") ?? "money");
+const dbName = pluginDB.table("moneySetting").getData("scoreboard") ?? "money";
+export const moneyTable = new ScoreboardDB(dbName);
 
 export function MoneySystem(player) {
     const worldPlayers = world.getPlayers();

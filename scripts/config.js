@@ -50,5 +50,5 @@ export const checkEnchantment = true
 
 
 
-export const pluginDB = new WorldDB.table("plugin_database");
+export const pluginDB = new WorldDB("plugin_database");
 export const enables = pluginDB.table("enable");

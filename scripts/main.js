@@ -6,7 +6,7 @@ import { AdminMenu } from "./mainMenu/admin.js";
 import { PlayerMenu } from "./mainMenu/player.js";
 import { addXp } from "./system/level.js";
 import { pluginDB, prefix, baseXP, checkLore, checkEnchantment, enables } from "./config.js";
-import { WorldDB } from "./lib/WorldDB.js";
+import { WorldDB, ScoreboardDB } from "./lib/WorldDB.js";
 import { levelTable, expTable } from "./system/level.js";
 import { clearItem, snakeToCamel } from './lib/util.js';
 import * as detect from './system/tool.js'

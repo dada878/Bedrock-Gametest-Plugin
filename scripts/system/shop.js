@@ -5,7 +5,7 @@ import { cmd, log, logfor, cmds, strify } from '../lib/GameLibrary.js';
 import { WorldDB } from '../lib/WorldDB.js';
 
 export const maxSelect = 128
-export const moneyTable = new WorldDB(pluginDB.table("moneySetting").getData("scoreboard") ?? "money").raw();
+export const moneyTable = new ScoreboardDB(pluginDB.table("moneySetting").getData("scoreboard") ?? "money");
 
 export const buyableItems = [
     {
@@ -75,7 +75,7 @@ export function ShopSystem(player) {
                 })
             }
             case (1): {
-                return; // TODO
+                return; // WIP
             }
         }
     });

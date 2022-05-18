@@ -4,7 +4,7 @@ import { pluginDB } from "../config.js";
 import { cmd, GetScores, log, logfor, SetScores, AddScores } from '../lib/GameLibrary.js';
 import { WorldDB } from '../lib/WorldDB.js';
 
-export const moneyTable = new WorldDB(pluginDB.table("moneySetting").getData("scoreboard") ?? "money").raw();
+export const moneyTable = new ScoreboardDB(pluginDB.table("moneySetting").getData("scoreboard") ?? "money");
 
 export function MoneySystem(player) {
     const worldPlayers = world.getPlayers();

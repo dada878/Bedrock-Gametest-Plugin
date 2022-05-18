@@ -33,7 +33,7 @@ world.events.beforeChat.subscribe(eventData => {
 
         switch (command) {
             case "help": {
-                logfor(player, "======§b<§e指令清單§b>§r======\n§e-menu §a-取的玩家選單\n§e-admin_menu §a-取得管理員選單")
+                logfor(player, "======§b<§e指令清單§b>§r======\n§e-menu §a-取得玩家選單\n§e-admin_menu §a-取得管理員選單")
             }
             case "menu": {
                 cmd(`give ${player.name} mcc:menu 1 0`);

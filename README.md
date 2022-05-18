@@ -1,3 +1,6 @@
+# Bedrock-Gametest-Plugin
+[![e](https://img.shields.io/badge/Minecraft_Verison-Bedrock_1.18.30+-brightgreen.svg)](https://github.com/dada909090/Bedrock-Gametest-Plugin)
+
 ### 簡介
 
 > 支援手機及Win10！

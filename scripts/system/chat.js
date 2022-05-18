@@ -31,7 +31,7 @@ export function ChangeChat(player) {
     fm.dropdown("選擇要配戴的稱號", hasTitles)
 
     fm.show(player).then(response => {
-        if (!response) return;
+        if (!response || response.isCanceled) return;
 
         let tagId = response.formValues[0];
 

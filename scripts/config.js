@@ -47,17 +47,6 @@ export const checkEnchantment = true
  */
  export const signinReward = 599
 
-/**
- * @readonly
- * @description 匯款最低下限
- */
- export const minTranferLimit = 100
-
- /**
- * @readonly
- * @description 匯款最高下限
- */
-  export const maxTranferLimit = 50000
 
 
 

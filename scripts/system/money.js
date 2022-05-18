@@ -1,12 +1,12 @@
 import { world } from "mojang-minecraft";
 import * as ui from 'mojang-minecraft-ui';
-import { pluginDB, minTranferLimit, maxTranferLimit } from "../config.js";
+import { pluginDB } from "../config.js";
 import { cmd, GetScores, log, logfor, SetScores, AddScores } from '../lib/GameLibrary.js';
 import { WorldDB } from '../lib/WorldDB.js';
 
-export const moneyTable = new WorldDB(luginDB.table("moneySetting").getData("scoreboard") ?? "money").raw();
+export const moneyTable = new WorldDB(pluginDB.table("moneySetting").getData("scoreboard") ?? "money").raw();
 
-function MoneySystem(player) {
+export function MoneySystem(player) {
     const worldPlayers = world.getPlayers();
     let players = [];
     let playerNames = [];
@@ -23,7 +23,7 @@ function MoneySystem(player) {
     fm.button('§l§1簽到');
 
     fm.show(player).then(response => {
-        if(!response) return;
+        if (!response || response.isCanceled) { return };
         
         switch(response.selection){
             case (0): {
@@ -33,15 +33,10 @@ function MoneySystem(player) {
                 fm.textField("輸入付款的數額", "");
 
                 fm.show(player).then(response => {
-                    if (!response) return;
+                    if (!response || response.isCanceled) return;
                     if (!response.formValues[1] || isNaN(response.formValues[1])) return logfor(player, ">> §c金額必須為數字！");
-                    if (
-                        (!response.formValues[1] < minTranferLimit && minTranferLimit > 1)
-                        || (response.formValues[1] > maxTranferLimit && maxTranferLimit > 1)
-                        || (response.formValues[1] < 1)
-                    ) return logfor(player, `>> §c金額不能少於${minTranferLimit} / 大於${maxTranferLimit}！`);
 
-                    let money = moneyTable.getScore(`"${player.name}"`)
+                    let money = moneyTable.getScore(player)
                     if(isNaN(money)) return logfor(player, `>> §c未知錯誤`);
 
                     if(money < +response.formValues[1]) return logfor(player, `>> §c你沒有足夠的金幣！`);

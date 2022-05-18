@@ -22,6 +22,14 @@ export class WorldDB {
      * @returns 創建/取得到的表格
      */
     table(tableName) {
+        return new DBTable(this.name, tableName);
+    }
+    /**
+     * 在資料世界庫使用一個分數處理器
+     * @param {string} tableName 表格名稱 
+     * @returns 創建/取得到的表格
+     */
+    raw() {
         return new WorldDB_Table(this.name, tableName);
     }
 }

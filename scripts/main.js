@@ -4,10 +4,9 @@ import { cmd, cmds, log, logfor, rawcmd, kickPlayer2, kickPlayer } from './lib/G
 import { sendMessage } from './system/chat.js'
 import { AdminMenu } from "./mainMenu/admin.js";
 import { PlayerMenu } from "./mainMenu/player.js";
-import { addXp } from "./system/level.js";
+import { addXp, levelTable, expTable  } from "./system/level.js";
 import { pluginDB, prefix, baseXP, checkLore, checkEnchantment, enables, nameCheckRegex } from "./config.js";
 import { WorldDB, ScoreboardDB } from "./lib/WorldDB.js";
-import { levelTable, expTable } from "./system/level.js";
 import { clearItem, snakeToCamel } from './lib/util.js';
 import { DefMaxXp } from "./lib/LevelDefine.js";
 import * as detect from './system/tool.js'

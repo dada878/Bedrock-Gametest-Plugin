@@ -52,6 +52,7 @@ export const buttons = [
         handler: LevelSystem
     },
 ];
+
 export const color = "§l§1";
 export const disableColor = "§4";
 export const disableText = "此功能已被管理員禁用";

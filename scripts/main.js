@@ -9,6 +9,7 @@ import { pluginDB, prefix, baseXP, checkLore, checkEnchantment, enables } from "
 import { WorldDB } from "./lib/WorldDB.js";
 import { levelTable, expTable } from "./system/level.js";
 import { clearItem, snakeToCamel } from './lib/util.js';
+import { DefMaxXp } from "./lib/LevelDefine.js";
 
 const antiCheatSetting = pluginDB.table("antiCheatSetting");
 
@@ -32,7 +33,8 @@ world.events.beforeChat.subscribe(eventData => {
 
         switch (command) {
             case "help": {
-                logfor(player, "======§b<§e指令清單§b>§r======\n§e-menu §a-取的玩家選單\n§e-admin_menu §a-取得管理員選單")
+                logfor(player, "======§b<§e指令清單§b>§r======\n§e-menu §a-取得玩家選單\n§e-admin_menu §a-取得管理員選單");
+                break;
             }
             case "menu": {
                 cmd(`give ${player.name} mcc:menu 1 0`);
@@ -89,6 +91,7 @@ world.events.blockBreak.subscribe(eventData => {
     let exp = Math.round(Math.random() * baseXP)
 
     addXp(player, exp);
+
 })
 
 //物品使用
@@ -123,7 +126,14 @@ Minecraft.world.events.entityHit.subscribe(eventData => {
     if (hp.current > 0) return;
 
     let exp = Math.round(Math.random() * baseXP * 5);
+
     addXp(player, exp);
+
+    const level_now = levelTable.getScore(player.name);
+    const exp_now = expTable.getScore(player.name);
+
+    logfor(player,`§e您獲得了 §b${exp} §e經驗值! \n目前等級為 §bLv.${level_now} §a(${exp_now}/${DefMaxXp(level_now)})`);
+
 })
 
 world.events.tick.subscribe(() => {

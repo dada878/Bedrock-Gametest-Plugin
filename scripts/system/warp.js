@@ -25,7 +25,7 @@ export function WarpMenu(player) {
     if (count == 0) return logfor(player, ">> §c本世界沒有設定任何傳送點");
 
     fm.show(player).then(response => {
-        if (!response) return;
+        if (!response || response.isCanceled) return;
         player.runCommand(`tp ${pos[response.selection]}`);
         logfor(player, ">> §e傳送成功");
     })

@@ -365,11 +365,7 @@ export function encode (str, asciiOnly) {
   if (notString) {
     return encodeFromBytes(str);
   } else {
-    if (!asciiOnly && /[^\x00-\x7F]/.test(str)) {
-      return utf8Base64Encode(str);
-    } else {
-      return btoa(str);
-    }
+    return !asciiOnly && /[^\x00-\x7F]/.test(str) ? utf8Base64Encode(str) : btoa(str);
   }
 };
 

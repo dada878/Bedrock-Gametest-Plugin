@@ -21,7 +21,7 @@ export function PlayerMenu(player) {
     })
 
     fm.show(player).then(response => {
-        if (!response) return;
+        if (!response || response.isCanceled) return;
 
         buttons[response.selection].handler(player);
     })

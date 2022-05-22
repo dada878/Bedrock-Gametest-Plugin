@@ -7,7 +7,7 @@ import { chatFormat, enables } from "../config.js";
 /**
  * 對玩家顯示稱號選單
  * @param {Minecraft.Player} player 玩家
- * @return none
+ * @return void
  */
 export function ChangeChat(player) {
 
@@ -31,7 +31,7 @@ export function ChangeChat(player) {
     fm.dropdown("選擇要配戴的稱號", hasTitles)
 
     fm.show(player).then(response => {
-        if (!response) return;
+        if (!response || response.isCanceled) return;
 
         let tagId = response.formValues[0];
 
@@ -58,10 +58,10 @@ export function sendMessage(player, message) {
 }
 
 function checkTitle(player) {
-    if (getData(player, "hasTitles") == null) {
+    if (getData(player, "hasTitles") === null) {
         setData(player, "hasTitles", ["§a玩家"]);
     }
-    if (getData(player, "selectedTitle") == null) {
+    if (getData(player, "selectedTitle") === null) {
         setData(player, "selectedTitle", getData(player, "hasTitles")[0]);
     }
 }

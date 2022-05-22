@@ -1,3 +1,8 @@
+# Bedrock-Gametest-Plugin
+[![version](https://img.shields.io/badge/Minecraft_Version-Bedrock_1.18.30+-brightgreen.svg)](https://youtu.be/oHg5SJYRHA0)
+[![downloads](https://img.shields.io/github/downloads/dada909090/Bedrock-Gametest-Plugin/total?color=blue)](https://github.com/dada909090/Bedrock-Gametest-Plugin/releases/tag/Alpha)
+[![forks](https://img.shields.io/github/forks/dada909090/Bedrock-Gametest-Plugin?style=flat)](https://github.com/dada909090/Bedrock-Gametest-Plugin/network/members)
+[![stars](https://img.shields.io/github/stars/dada909090/Bedrock-Gametest-Plugin?style=flat)](https://youtu.be/oHg5SJYRHA0)
 ### 簡介
 
 > 支援手機及Win10！

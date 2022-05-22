@@ -45,20 +45,13 @@ export const checkEnchantment = true
  * @readonly
  * @description 簽到獎勵
  */
- export const signinReward = 599
+export const signinReward = 599
 
 /**
  * @readonly
- * @description 匯款最低下限
+ * @description Name Checking
  */
- export const minTranferLimit = 100
-
- /**
- * @readonly
- * @description 匯款最高下限
- */
-  export const maxTranferLimit = 50000
-
+export const nameCheckRegex = /[^A-Za-z0-9_]/gm
 
 
 export const pluginDB = new WorldDB("plugin_database");

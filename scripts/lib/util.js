@@ -1,3 +1,4 @@
+import {rawcmd} from "./GameLibrary.js"
 // thanks https://stackoverflow.com/a/52551910 and https://stackoverflow.com/a/7224605
 /**
  * @name snakeToCamel
@@ -21,4 +22,17 @@ export function clearItem(player, slot){
                 else player.runCommand(`replaceitem entity @s slot.inventory ${slot - 9} air 1`);
         } catch(error) { }
     }
+}
+
+export function getItemCount(id, data, player) {
+    let itemCount = [];
+    const dat = rawcmd(`clear "${player}" ${id} ${data ? data : '0'} 0`);
+    if (dat.error)
+        return itemCount;
+    dat.playerTest.forEach(element => {
+        const count = parseInt(element.match(/(?<=.*?\().+?(?=\))/)[0]);
+        const player = element.match(/^.*(?= \(\d+\))/)[0];
+        itemCount.push({ player, count });
+    });
+    return itemCount ? itemCount : [];
 }

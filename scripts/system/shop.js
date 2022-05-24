@@ -2,6 +2,7 @@ import { world } from "mojang-minecraft";
 import * as ui from 'mojang-minecraft-ui';
 import { pluginDB } from "../config.js";
 import { cmd, log, logfor, cmds } from '../lib/GameLibrary.js';
+import { getItemCount } from '../lib/util.js';
 import { WorldDB, ScoreboardDB } from '../lib/WorldDB.js';
 
 export const maxSelect = 128
@@ -62,7 +63,7 @@ export function ShopSystem(player) {
                         const maxCount = money / item.price
                         if(moneyTable.getScore(player) < item.price) return logfor(player, `>> 你沒有足夠的金錢買一個${item.display}!`)
                         let fm = new ui.ModalFormData();
-                        fm.slider("你要買多少個？", 0, maxCount > maxSelect ? maxSelect : maxCount, 1, maxCount);
+                        fm.slider("你要買多少個？", 0, Math.min(maxCount, maxSelect), 1, maxCount);
 
                         fm.show(player).then((response) => {
                             let count = response.formValues[0] 
@@ -76,7 +77,29 @@ export function ShopSystem(player) {
                 })
             }
             case (1): {
-                return; // WIP
+                let fm = new ui.ActionFormData();
+                fm.title("出售");
+                sellableItems.forEach((f) => {fm.button(f.display, f.icon ?? "")})
+                fm.show(player).then(response => {
+                    if (!response || response.isCanceled) return;
+
+                    if(sellableItems[response.selection]){
+                        const item = sellableItems[response.selection]
+                        const count = getItemCount(item.id, item.data ?? 0, player)[0]?.count || 0;
+                        if(count) return logfor(player, `>> 你沒有足夠的金錢買一個${item.display}!`)
+                        let fm = new ui.ModalFormData();
+                        fm.slider("你要出售多少個？", 0, Math.min(count, maxSelect), 1, count);
+                        fm.show(player).then((response) => {
+                            let count = response.formValues[0] 
+                            cmds([
+                                `clear ${player.name} ${item.id} ${response.formValues[0]}`
+                            ])
+                            logfor(player, `>> 成功出售${count}個${item.display}!`)
+                            moneyTable.addScore(player, count * item.price)
+                        })
+                    }
+                })
+                return;
             }
         }
     });

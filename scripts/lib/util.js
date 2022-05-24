@@ -24,7 +24,7 @@ export function clearItem(player, slot){
     }
 }
 
-export function getItemCount(id, data, player) {
+export function getItemCount(id, data, player) { //from WrapperCord, thanks!
     let itemCount = [];
     const dat = rawcmd(`clear "${player}" ${id} ${data ? data : '0'} 0`);
     if (dat.error)

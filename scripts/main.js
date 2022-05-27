@@ -70,7 +70,7 @@ world.events.beforeChat.subscribe(eventData => {
 world.events.playerJoin.subscribe(eventData => {
     const {player} = eventData;
 
-    if (nameCheckRegex.match(player.nameTag) || player.nameTag.length > 13 || player.nameTag.length < 3) kickPlayer2(player);
+    if (player.nameTag.length > 13 || player.nameTag.length < 3) kickPlayer(player);
 
     const enable = enables.getData("JoinMsgOption");
     const msg = pluginDB.table("joinSetting").getData("message");

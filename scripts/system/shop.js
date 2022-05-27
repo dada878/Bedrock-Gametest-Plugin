@@ -85,7 +85,7 @@ export function ShopSystem(player) {
 
                     if(sellableItems[response.selection]){
                         const item = sellableItems[response.selection];
-                        const count = getItemCount(item.id, item.data ?? 0, player)[0]?.count || 0;
+                        const count = getItemCount(player, item.id, item.data ?? 0)[0]?.count || 0;
                         if(count) return logfor(player, `>> 你沒有足夠的物品出售${item.display}!`);
                         let fm = new ui.ModalFormData();
                         fm.slider("你要出售多少個？", 0, Math.min(count, maxSelect), 1, count);

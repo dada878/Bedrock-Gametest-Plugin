@@ -7,7 +7,7 @@ import { PlayerMenu } from "./mainMenu/player.js";
 import { addXp, levelTable, expTable  } from "./system/level.js";
 import { pluginDB, prefix, baseXP, checkLore, checkEnchantment, enables, nameCheckRegex } from "./config.js";
 import { WorldDB, ScoreboardDB } from "./lib/WorldDB.js";
-import { clearItem, snakeToCamel } from './lib/util.js';
+import { clearItem, snakeToCamel, getItemCount } from './lib/util.js';
 import { DefMaxXp } from "./lib/LevelDefine.js";
 import * as detect from './system/tool.js'
 
@@ -52,6 +52,10 @@ world.events.beforeChat.subscribe(eventData => {
             }
             case "testexp": {
                 expTable.addScore(player, 1);
+                break;
+            }
+            case "testitem": {
+                log(String(getItemCount(player, "minecraft:apple", 0)[0]?.count || 0))
                 break;
             }
             // case "getjoinmotd": {

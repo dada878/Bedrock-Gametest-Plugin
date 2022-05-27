@@ -24,12 +24,12 @@ export function clearItem(player, slot){
     }
 }
 
-export function getItemCount(id, data, player) { //from WrapperCord, thanks!
+export function getItemCount(player, id, data) { //from WrapperCord, thanks!
     let itemCount = [];
-    const dat = rawcmd(`clear "${player}" ${id} ${data ? data : '0'} 0`);
+    const dat = cmd(`clear "${player}" ${id} ${data ? data : '0'} 0`);
     if (dat.error)
         return itemCount;
-    dat.playerTest.forEach(element => {
+    dat.forEach(element => {
         const count = parseInt(element.match(/(?<=.*?\().+?(?=\))/)[0]);
         const player = element.match(/^.*(?= \(\d+\))/)[0];
         itemCount.push({ player, count });

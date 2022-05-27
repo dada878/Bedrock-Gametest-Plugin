@@ -53,12 +53,5 @@ export const signinReward = 599
  */
 export const nameCheckRegex = /[^A-Za-z0-9_]/gm
 
-/**
- * @readonly
- * @description Swear checking
- */
- expor
-export const swearCheck = /[NnFf][IiAa]g?(g)(.{0,})/gm
-
 export const pluginDB = new WorldDB("plugin_database");
 export const enables = pluginDB.table("enable");

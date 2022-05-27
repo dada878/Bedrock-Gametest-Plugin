@@ -1,4 +1,4 @@
-import {rawcmd} from "./GameLibrary.js"
+import {rawcmd, cmd, cmds} from "./GameLibrary.js"
 // thanks https://stackoverflow.com/a/52551910 and https://stackoverflow.com/a/7224605
 /**
  * @name snakeToCamel

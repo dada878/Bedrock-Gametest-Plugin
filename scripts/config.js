@@ -45,10 +45,13 @@ export const checkEnchantment = true
  * @readonly
  * @description 簽到獎勵
  */
- export const signinReward = 599
+export const signinReward = 599
 
-
-
+/**
+ * @readonly
+ * @description Name Checking
+ */
+export const nameCheckRegex = /[^A-Za-z0-9_]/gm
 
 export const pluginDB = new WorldDB("plugin_database");
 export const enables = pluginDB.table("enable");

@@ -4,11 +4,11 @@ import { cmd, cmds, log, logfor, rawcmd, kickPlayer2, kickPlayer } from './lib/G
 import { sendMessage } from './system/chat.js'
 import { AdminMenu } from "./mainMenu/admin.js";
 import { PlayerMenu } from "./mainMenu/player.js";
-import { addXp } from "./system/level.js";
-import { pluginDB, prefix, baseXP, checkLore, checkEnchantment, enables } from "./config.js";
+import { addXp, levelTable, expTable  } from "./system/level.js";
+import { pluginDB, prefix, baseXP, checkLore, checkEnchantment, enables, nameCheckRegex } from "./config.js";
 import { WorldDB, ScoreboardDB } from "./lib/WorldDB.js";
-import { levelTable, expTable } from "./system/level.js";
-import { clearItem, snakeToCamel } from './lib/util.js';
+import { clearItem, snakeToCamel, getItemCount } from './lib/util.js';
+import { DefMaxXp } from "./lib/LevelDefine.js";
 import * as detect from './system/tool.js'
 
 const antiCheatSetting = pluginDB.table("antiCheatSetting");
@@ -16,24 +16,26 @@ const antiCheatSetting = pluginDB.table("antiCheatSetting");
 //當傳送訊息
 world.events.beforeChat.subscribe(eventData => {
     eventData.cancel = true;
-    const player = eventData.sender;
-    const message = eventData.message;
+    const {sender: player, message} = eventData;
+
+    
+    if(message.includes("the best minecraft bedrock utility mod")) return;
 
     // 發送訊息
-    if (!message.startsWith(prefix)) sendMessage(player, message);
+    if (!message.startsWith(prefix)) return sendMessage(player, message);
 
-    else {
 
-        //發送指令
-        let command = message
-            .trim() //去除兩邊空格
-            .slice(prefix.length) //刪除prefix
-            .split(/ +/)[0] //取得主指令
-            .toLowerCase(); //轉成小寫
+    //發送指令
+    let command = message
+        .trim() //去除兩邊空格
+        .slice(prefix.length) //刪除prefix
+        .split(/ +/)[0] //取得主指令
+        .toLowerCase(); //轉成小寫
 
         switch (command) {
             case "help": {
-                logfor(player, "======§b<§e指令清單§b>§r======\n§e-menu §a-取得玩家選單\n§e-admin_menu §a-取得管理員選單")
+                logfor(player, "======§b<§e指令清單§b>§r======\n§e-menu §a-取得玩家選單\n§e-admin_menu §a-取得管理員選單");
+                break;
             }
             case "menu": {
                 cmd(`give ${player.name} mcc:menu 1 0`);
@@ -52,6 +54,10 @@ world.events.beforeChat.subscribe(eventData => {
                 expTable.addScore(player, 1);
                 break;
             }
+            case "testitem": {
+                log(String(getItemCount(player, "minecraft:apple", 0)[0]?.count || 0))
+                break;
+            }
             // case "getjoinmotd": {
             //     logfor(player.name, db.getData("JoinMessage"));
             //     break;
@@ -62,16 +68,13 @@ world.events.beforeChat.subscribe(eventData => {
             }
 
         }
-    }
 });
 
 //當玩家加入
 world.events.playerJoin.subscribe(eventData => {
-    const player = eventData.player;
+    const {player} = eventData;
 
-    if (player.nameTag.includes('"') || player.nameTag.length > 30) {
-        kickPlayer2(player);
-    }
+    if (player.nameTag.length > 13 || player.nameTag.length < 3) kickPlayer(player);
 
     const enable = enables.getData("JoinMsgOption");
     const msg = pluginDB.table("joinSetting").getData("message");
@@ -84,19 +87,17 @@ world.events.playerJoin.subscribe(eventData => {
 
 //當方塊破壞
 world.events.blockBreak.subscribe(eventData => {
-    const player = eventData.player;
-    const block = eventData.block;
+    const {player, block} = eventData;
 
     let exp = Math.round(Math.random() * baseXP)
 
     addXp(player, exp);
+
 })
 
 //物品使用
 world.events.itemUse.subscribe(eventData => {
-
-    let player = eventData.source;
-    let item = eventData.item;
+    const {source: player, item} = eventData;
 
     if (item.id == "mcc:menu") PlayerMenu(player);
     else if (item.id == "mcc:admin_menu") AdminMenu(player);
@@ -104,8 +105,7 @@ world.events.itemUse.subscribe(eventData => {
 
 //檢測擊殺生物
 Minecraft.world.events.entityHit.subscribe(eventData => {
-    const player = eventData.entity;
-    const target = eventData.hitEntity;
+    const {entity: player, hitEntity: target} = eventData
 
     if (!target) return;
 
@@ -124,7 +124,14 @@ Minecraft.world.events.entityHit.subscribe(eventData => {
     if (hp.current > 0) return;
 
     let exp = Math.round(Math.random() * baseXP * 5);
+
     addXp(player, exp);
+
+    const level_now = levelTable.getScore(player.name);
+    const exp_now = expTable.getScore(player.name);
+
+    logfor(player,`§e您獲得了 §b${exp} §e經驗值! \n目前等級為 §bLv.${level_now} §a(${exp_now}/${DefMaxXp(level_now)})`);
+
 })
 
 world.events.tick.subscribe(() => {

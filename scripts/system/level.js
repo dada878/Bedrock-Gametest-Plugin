@@ -13,13 +13,12 @@ export const levelTable = new ScoreboardDB("level");
  * @param {Minecraft.Player} player 玩家
  */
 export function LevelSystem(player) {
-
-    if (enables.getData("level") == 1) { return logfor(player, ">> §c無法使用，此功能已被禁用") };
+    if (enables.getData("level") == 1) return logfor(player, ">> §c無法使用，此功能已被禁用");
 
     let level = levelTable.getScore(player.name);
     let exp = expTable.getScore(player.name);
 
-    if (level == null) { level = "0" };
+    if (level == null) level = "0";
 
     let fm = new ui.ActionFormData();
     fm.title(`等級系統`);

@@ -10,6 +10,7 @@ Minecraft.world.events.entityHit.subscribe(eventData => {
     const target = eventData.hitEntity;
 
     if (!target) return;
+    if (player.id != "minecraft:player") return;
 
     let cps = playerCPS[player.name] ?? 0;
     cps++;
